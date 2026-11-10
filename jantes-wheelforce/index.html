@@ -77,7 +77,7 @@
   .pastilles span { font-size: 13px; font-weight: 600; padding: 5px 11px; border-radius: 999px; background: var(--clair); }
   .tuile .lien { margin-top: 14px; font-size: 15px; }
   .coloris { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--gris); margin-top: 8px; }
-  .coloris i { width: 12px; height: 12px; border-radius: 50%; background: conic-gradient(#C9CACC 0 33%, #1D1D1F 0 66%, #A88A63 0); box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  .coloris i { flex: none; width: 12px; height: 12px; border-radius: 50%; background: conic-gradient(#C9CACC 0 33%, #1D1D1F 0 66%, #A88A63 0); box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
 
   /* Technologies */
   .noir { background: #000; color: #F5F5F7; }
@@ -394,7 +394,7 @@
   </div>
 </article>
 
-<script src="assets/wheelforce.js"></script>
+<script src="assets/wheelforce.js?v=2026-11-10b"></script>
 <script>
   const $ = id => document.getElementById(id);
   const T = window.TECHNOS, W = window.WHEELFORCE;
@@ -411,7 +411,7 @@
     el.style.transitionDelay = `${n * 70}ms`;
     el.innerHTML = `<p class="techno">${T[j.techno].nom}</p><h3>${j.nom}</h3><p class="finition">${j.finition}</p>
       <div class="roue"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"><img class="survol" src="assets/galeries/${j.id}/01.jpg" alt="" loading="lazy"></div>
-      <div class="pastilles">${pastilles(j)}</div><p class="coloris"><i></i>Plusieurs coloris<span class="long"> disponibles</span></p><span class="lien">En savoir plus</span>`;
+      <div class="pastilles">${pastilles(j)}</div><p class="coloris"><i></i><span>Plusieurs coloris<span class="long"> disponibles</span></span></p><span class="lien">En savoir plus</span>`;
     el.addEventListener("click", () => montrerSurLeMur(i));
     el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); montrerSurLeMur(i); } });
     $("gamme-grille").appendChild(el);
