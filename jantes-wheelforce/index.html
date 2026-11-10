@@ -113,25 +113,95 @@
     transform: translate(-50%, -46%) scale(.97); opacity: 0; pointer-events: none; transition: transform .55s var(--ease), opacity .4s var(--ease);
   }
   .fiche.ouverte { transform: translate(-50%, -50%); opacity: 1; pointer-events: auto; }
-  .media { background: var(--clair); position: relative; display: flex; flex-direction: column; min-height: 0; }
-  .vues { display: flex; gap: 4px; padding: 18px; justify-content: center; }
-  .vues button { padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gris); transition: background .3s, color .3s; }
+  .media { background: var(--clair); position: relative; min-height: 0; overflow: hidden; transition: background .6s var(--ease); }
+  .media.sombre { background: #0B0B0C; }
+  .vues { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 5; display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .5s; }
+  .vues button { padding: 7px 15px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gris); transition: background .3s, color .3s; }
   .vues button[aria-pressed="true"] { background: var(--texte); color: #fff; }
-  .scene { flex: 1; min-height: 0; position: relative; display: grid; place-items: center; padding: 8px 28px 20px; }
-  .scene .principale { width: 100%; max-width: 460px; aspect-ratio: 1; object-fit: contain; transition: opacity .35s; }
-  .scene .principale.photo { object-fit: cover; border-radius: 18px; }
-  .scene .principale.dessin { cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; }
-  .miniatures { display: none; gap: 8px; justify-content: center; padding: 0 18px 18px; }
-  .miniatures.visibles { display: flex; }
-  .miniatures button { width: 56px; height: 56px; border-radius: 12px; overflow: hidden; border: 2px solid transparent; background: #fff; }
-  .miniatures button[aria-pressed="true"] { border-color: var(--texte); }
-  .miniatures img { width: 100%; height: 100%; object-fit: cover; }
-  .astuce { text-align: center; font-size: 12px; color: var(--gris); padding-bottom: 16px; }
+  .media.sombre .vues { background: rgba(40,40,42,.55); }
+  .media.sombre .vues button { color: #A1A1A6; }
+  .media.sombre .vues button[aria-pressed="true"] { background: #fff; color: var(--texte); }
+  .scene-dessin { position: absolute; inset: 0; display: grid; place-items: center; padding: 70px 28px 48px; transition: opacity .5s var(--ease); }
+  .scene-dessin img { width: 100%; max-width: 460px; aspect-ratio: 1; object-fit: contain; cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; }
+  .astuce { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; font-size: 12px; color: var(--gris); }
+  .media.sombre .scene-dessin { opacity: 0; pointer-events: none; }
+  .media .galerie { opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
+  .media.sombre .galerie { opacity: 1; pointer-events: auto; }
+
+  /* Galerie photo : fondu enchaîné, zoom lent, progression façon story */
+  .galerie { position: absolute; inset: 0; user-select: none; touch-action: pan-y; cursor: zoom-in; }
+  .diapo { position: absolute; inset: 0; overflow: hidden; opacity: 0; transition: opacity 1s var(--ease); }
+  .diapo.active { opacity: 1; }
+  .diapo img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.001); transition: transform 7s linear; -webkit-user-drag: none; }
+  .diapo.active img { transform: scale(1.07); }
+  .diapo.studio { background: #F5F5F7; }
+  .diapo.studio img { object-fit: contain; padding: 14%; transform: none !important; }
+  .galerie::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; background: linear-gradient(transparent, rgba(0,0,0,.55)); pointer-events: none; }
+  .galerie::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 24%; background: linear-gradient(rgba(0,0,0,.35), transparent); pointer-events: none; z-index: 1; }
+  .progression { position: absolute; top: 64px; left: 20px; right: 20px; display: flex; gap: 4px; z-index: 3; }
+  .progression i { flex: 1; height: 2px; border-radius: 2px; background: rgba(255,255,255,.3); position: relative; overflow: hidden; cursor: pointer; }
+  .progression i::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; bottom: -8px; }
+  .progression i::after { content: ""; position: absolute; inset: 0; background: #fff; transform-origin: left; transform: scaleX(0); }
+  .progression i.vue::after { transform: scaleX(1); }
+  .progression i.encours::after { animation: remplir 5s linear forwards; }
+  .galerie.pause .progression i.encours::after { animation-play-state: paused; }
+  .galerie.fixe .progression i.encours::after { animation: none; transform: scaleX(1); }
+  @keyframes remplir { to { transform: scaleX(1); } }
+  .bas { position: absolute; left: 22px; right: 18px; bottom: 18px; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fff; }
+  .compteur { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: .02em; }
+  .compteur span { color: rgba(255,255,255,.55); }
+  .boutons { display: flex; gap: 8px; }
+  .boutons button { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; display: grid; place-items: center; transition: background .3s, transform .3s var(--ease); }
+  .boutons button:hover { background: rgba(255,255,255,.3); transform: scale(1.06); }
+
+  /* Visionneuse plein écran */
+  .visionneuse { position: fixed; inset: 0; z-index: 40; background: #000; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
+  .visionneuse.ouverte { opacity: 1; pointer-events: auto; }
+  .vis-haut { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 20px; color: #fff; font-family: "Poppins"; }
+  .vis-haut strong { font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
+  .vis-haut strong span { color: #A1A1A6; font-weight: 500; margin-left: 6px; }
+  .vis-haut button { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; display: grid; place-items: center; }
+  .vis-scene { flex: 1; min-height: 0; position: relative; }
+  .vis-scene .galerie { cursor: default; }
+  .vis-scene .galerie::before, .vis-scene .galerie::after { display: none; }
+  .vis-scene .diapo img { object-fit: contain; }
+  .vis-scene .diapo.active img { transform: scale(1.02); }
+  .vis-scene .diapo.studio { background: #000; }
+  .vis-scene .diapo.studio img { background: #F5F5F7; padding: 0; height: auto; max-height: 100%; width: auto; max-width: 100%; position: absolute; inset: 0; margin: auto; border-radius: 6px; }
+  .vis-scene .progression { top: 0; left: 20px; right: 20px; }
+  .vis-scene .bas { bottom: 50%; transform: translateY(50%); left: 16px; right: 16px; pointer-events: none; }
+  .vis-scene .compteur { display: none; }
+  .vis-scene .boutons { width: 100%; justify-content: space-between; }
+  .vis-scene .boutons button { pointer-events: auto; width: 46px; height: 46px; }
+  .vis-miniatures { display: flex; gap: 8px; padding: 14px 20px 22px; overflow-x: auto; justify-content: safe center; scrollbar-width: none; }
+  .vis-miniatures::-webkit-scrollbar { display: none; }
+  .vis-miniatures button { flex: none; width: 60px; height: 60px; border-radius: 10px; overflow: hidden; opacity: .4; transition: opacity .3s, outline-color .3s; outline: 2px solid transparent; outline-offset: 2px; }
+  .vis-miniatures button[aria-current="true"] { opacity: 1; outline-color: #fff; }
+  .vis-miniatures img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* En situation : carrousel horizontal */
+  .entete-ligne { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: clamp(28px, 4vw, 44px); }
+  .entete-ligne h2 { font-size: clamp(34px, 5.4vw, 56px); font-weight: 700; line-height: 1.05; }
+  .entete-ligne p { margin-top: 10px; font-size: clamp(17px, 2vw, 21px); color: var(--gris); }
+  .entete-ligne .boutons button { background: var(--clair); color: var(--texte); }
+  .entete-ligne .boutons button:hover { background: var(--filet); }
+  .piste { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none;
+    padding: 0 max(16px, calc((100vw - 1120px) / 2 + 40px)); scroll-padding: 0 max(16px, calc((100vw - 1120px) / 2 + 40px)); }
+  .piste::-webkit-scrollbar { display: none; }
+  .carte-photo { flex: none; width: clamp(260px, 30vw, 400px); aspect-ratio: 4 / 5; border-radius: 26px; overflow: hidden; position: relative; scroll-snap-align: start; cursor: zoom-in; background: #111; }
+  .carte-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease); }
+  .carte-photo:hover img { transform: scale(1.05); }
+  .carte-photo::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.6)); }
+  .carte-photo p { position: absolute; left: 22px; bottom: 20px; z-index: 1; color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 19px; letter-spacing: -.01em; }
+  .carte-photo p span { display: block; font-weight: 500; font-size: 14px; color: rgba(255,255,255,.75); margin-top: 2px; }
+
   .infos { padding: clamp(26px, 4vw, 48px); overflow-y: auto; }
   .infos-haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
   .infos .techno { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gris); }
   .fermer { width: 36px; height: 36px; border-radius: 50%; background: var(--clair); display: grid; place-items: center; flex: none; transition: background .3s; }
   .fermer:hover { background: var(--filet); }
+  button:focus:not(:focus-visible) { outline: none; }
+  button:focus-visible { outline: 2px solid var(--vert); outline-offset: 2px; }
   .infos h3 { font-size: clamp(32px, 4vw, 44px); font-weight: 700; margin-top: 4px; line-height: 1.05; }
   .infos .finition { font-size: 19px; color: var(--gris); margin-top: 4px; font-family: "Poppins"; font-weight: 500; letter-spacing: -.01em; }
   .infos .accroche { font-size: 17px; line-height: 1.5; margin-top: 18px; }
@@ -179,7 +249,9 @@
     .barre nav { display: none; }
     .fiche { grid-template-columns: 1fr; top: auto; bottom: 0; left: 0; width: 100%; max-height: 92svh; border-radius: 24px 24px 0 0; overflow-y: auto; transform: translateY(100%); }
     .fiche.ouverte { transform: none; }
-    .scene .principale { max-width: 300px; }
+    .media { height: 56svh; }
+    .scene-dessin img { max-width: 300px; }
+    .entete-ligne .boutons { display: none; }
     .infos { overflow: visible; }
   }
   @media (max-width: 600px) {
@@ -198,7 +270,7 @@
 <header class="barre">
   <div class="cadre">
     <strong>WheelForce</strong>
-    <nav><a href="#gamme">Gamme</a><a href="#comparer">Comparer</a><a href="#technologies">Technologies</a></nav>
+    <nav><a href="#gamme">Gamme</a><a href="#situation">En situation</a><a href="#comparer">Comparer</a><a href="#technologies">Technologies</a></nav>
     <img src="assets/evox-logo-noir.svg" alt="EVOX Performance">
   </div>
 </header>
@@ -224,7 +296,15 @@
   </div>
 </section>
 
-<section class="section" id="comparer">
+<section class="section" id="situation">
+  <div class="cadre entete-ligne">
+    <div><h2>En situation.</h2><p>Montées sur Audi, BMW, Mercedes et Toyota.</p></div>
+    <div class="boutons"><button id="piste-prec" aria-label="Photos précédentes"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2 4 7l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="piste-suiv" aria-label="Photos suivantes"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="m5 2 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+  </div>
+  <div class="piste" id="piste"></div>
+</section>
+
+<section class="section gris" id="comparer">
   <div class="cadre">
     <div class="entete">
       <h2>Comparer les modèles.</h2>
@@ -269,16 +349,20 @@
   </div>
   <p class="visite-legende" id="visite-legende"></p>
 </div>
+<div class="visionneuse" id="visionneuse" role="dialog" aria-modal="true" aria-label="Photos" aria-hidden="true">
+  <div class="vis-haut"><strong id="vis-titre"></strong><button id="vis-fermer" aria-label="Fermer"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>
+  <div class="vis-scene"><div class="galerie" id="galerie-pleine"></div></div>
+  <div class="vis-miniatures" id="vis-mini"></div>
+</div>
 <div class="voile" id="voile"></div>
 <article class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
-  <div class="media">
+  <div class="media" id="media">
     <div class="vues" role="group" aria-label="Vue">
-      <button data-vue="dessin" aria-pressed="true">Dessin</button>
-      <button data-vue="photos" aria-pressed="false">Photos</button>
+      <button data-vue="photos" aria-pressed="true">Photos</button>
+      <button data-vue="dessin" aria-pressed="false">Dessin</button>
     </div>
-    <div class="scene"><img class="principale dessin" id="f-img" alt="" draggable="false"></div>
-    <div class="miniatures" id="f-mini"></div>
-    <p class="astuce" id="f-astuce">Faites glisser pour tourner la jante</p>
+    <div class="scene-dessin"><img id="f-img" alt="" draggable="false"><p class="astuce">Faites glisser pour tourner la jante</p></div>
+    <div class="galerie" id="galerie-fiche"></div>
   </div>
   <div class="infos">
     <div class="infos-haut">
@@ -311,7 +395,7 @@
     el.setAttribute("aria-label", `${j.nom} ${j.finition}`);
     el.style.transitionDelay = `${i * 70}ms`;
     el.innerHTML = `<p class="techno">${T[j.techno].nom}</p><h3>${j.nom}</h3><p class="finition">${j.finition}</p>
-      <div class="roue"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"><img class="survol" src="assets/photos/${j.id}-1.jpg" alt="" loading="lazy"></div>
+      <div class="roue"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"><img class="survol" src="assets/galeries/${j.id}/01.jpg" alt="" loading="lazy"></div>
       <div class="pastilles">${pastilles(j)}</div><span class="lien">En savoir plus</span>`;
     el.addEventListener("click", () => montrerSurLeMur(i));
     el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); montrerSurLeMur(i); } });
@@ -337,23 +421,120 @@
   const heroImg = $("hero-img");
   addEventListener("scroll", () => { heroImg.style.transform = `rotate(${scrollY * .12}deg)`; }, { passive: true });
 
+  // Photos d'une jante (c = sur voiture, s = studio)
+  const deux = n => String(n).padStart(2, "0");
+  const photosDe = j => [...j.galerie].map((t, k) => ({ src: `assets/galeries/${j.id}/${deux(k + 1)}.jpg`, studio: t === "s", alt: `${j.nom} ${j.finition}, photo ${k + 1}` }));
+  const fleche = d => `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="${d < 0 ? "M9 2 4 7l5 5" : "m5 2 5 5-5 5"}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  // Galerie : fondu enchaîné, zoom lent, défilement auto (5 s), glisser pour changer
+  function creerGalerie(racine, { auto = false, auClic = null, auChangement = null } = {}) {
+    racine.innerHTML = `<div class="diapos"></div><div class="progression"></div>
+      <div class="bas"><p class="compteur"></p><div class="boutons"><button class="g-prec" aria-label="Photo précédente">${fleche(-1)}</button><button class="g-suiv" aria-label="Photo suivante">${fleche(1)}</button></div></div>`;
+    const diapos = racine.querySelector(".diapos"), prog = racine.querySelector(".progression"), compteur = racine.querySelector(".compteur");
+    let photos = [], i = 0, minuteur = null, actif = false, survol = false;
+    racine.classList.toggle("fixe", !auto);
+    function planifier() {
+      clearTimeout(minuteur);
+      if (auto && actif && !survol && photos.length > 1) minuteur = setTimeout(() => aller(i + 1), 5000);
+    }
+    function aller(k) {
+      if (!photos.length) return;
+      i = (k + photos.length) % photos.length;
+      [...diapos.children].forEach((d, n) => d.classList.toggle("active", n === i));
+      [...prog.children].forEach((b, n) => { b.classList.toggle("vue", n < i); b.classList.remove("encours"); });
+      void prog.offsetWidth;
+      prog.children[i].classList.add("encours");
+      compteur.innerHTML = `${deux(i + 1)} <span>/ ${deux(photos.length)}</span>`;
+      const suivante = photos[(i + 1) % photos.length]; if (suivante) new Image().src = suivante.src;
+      auChangement && auChangement(i);
+      planifier();
+    }
+    function charger(liste, depart = 0) {
+      photos = liste;
+      diapos.innerHTML = liste.map(p => `<div class="diapo${p.studio ? " studio" : ""}"><img src="${p.src}" alt="${p.alt}" draggable="false"></div>`).join("");
+      prog.innerHTML = liste.map(() => "<i></i>").join("");
+      [...prog.children].forEach((b, n) => b.onclick = e => { e.stopPropagation(); aller(n); });
+      aller(depart);
+    }
+    racine.querySelector(".g-prec").onclick = e => { e.stopPropagation(); aller(i - 1); };
+    racine.querySelector(".g-suiv").onclick = e => { e.stopPropagation(); aller(i + 1); };
+    racine.addEventListener("mouseenter", () => { survol = true; racine.classList.add("pause"); clearTimeout(minuteur); });
+    racine.addEventListener("mouseleave", () => { survol = false; racine.classList.remove("pause"); planifier(); });
+    let x0 = null;
+    racine.addEventListener("pointerdown", e => { x0 = e.clientX; });
+    racine.addEventListener("pointerup", e => {
+      if (x0 === null || e.target.closest("button, .progression")) { x0 = null; return; }
+      const dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) aller(i + (dx < 0 ? 1 : -1));
+      else if (auClic) auClic(i);
+    });
+    return {
+      charger, aller,
+      demarrer() { actif = true; racine.classList.remove("pause"); aller(i); },
+      arreter() { actif = false; clearTimeout(minuteur); racine.classList.add("pause"); },
+      get index() { return i; }
+    };
+  }
+
+  // Visionneuse plein écran
+  const visionneuse = $("visionneuse");
+  const galeriePleine = creerGalerie($("galerie-pleine"), { auChangement: k => {
+    $("vis-mini").querySelectorAll("button").forEach((b, n) => { b.setAttribute("aria-current", n === k); if (n === k) b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }); });
+  } });
+  let visionneuseOuverte = false;
+  function ouvrirVisionneuse(j, depart = 0) {
+    const photos = photosDe(j);
+    $("vis-titre").innerHTML = `${j.nom}<span>${j.finition}</span>`;
+    $("vis-mini").innerHTML = photos.map((p, n) => `<button aria-label="Photo ${n + 1}"><img src="${p.src}" alt="" loading="lazy"></button>`).join("");
+    $("vis-mini").querySelectorAll("button").forEach((b, n) => b.onclick = () => galeriePleine.aller(n));
+    galeriePleine.charger(photos, depart);
+    galerieFiche.arreter();
+    visionneuse.classList.add("ouverte"); visionneuse.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    visionneuseOuverte = true;
+  }
+  function fermerVisionneuse() {
+    visionneuse.classList.remove("ouverte"); visionneuse.setAttribute("aria-hidden", "true");
+    visionneuseOuverte = false;
+    if (fiche.classList.contains("ouverte")) { if (vue === "photos") galerieFiche.demarrer(); } else document.body.style.overflow = "";
+  }
+  $("vis-fermer").onclick = fermerVisionneuse;
+
+  // En situation : les plus belles photos sur voiture, en carrousel
+  (() => {
+    const ordre = ["cf3", "raceone", "cf4", "race2", "he1", "race3"].map(id => W.find(j => j.id === id));
+    const cartes = [];
+    for (let tour = 0; tour < 3; tour++) ordre.forEach(j => {
+      const k = [...j.galerie].map((t, n) => t === "c" ? n : -1).filter(n => n >= 0)[tour];
+      if (k !== undefined && (tour < 2 || j.galerie.length > 8)) cartes.push([j, k]);
+    });
+    $("piste").innerHTML = cartes.map(([j, k]) => `<figure class="carte-photo" tabindex="0" role="button" aria-label="Voir les photos ${j.nom}">
+      <img src="assets/galeries/${j.id}/${deux(k + 1)}.jpg" alt="${j.nom} ${j.finition} montée" loading="lazy"><p>${j.nom}<span>${j.finition}</span></p></figure>`).join("");
+    $("piste").querySelectorAll(".carte-photo").forEach((c, n) => {
+      const [j, k] = cartes[n];
+      c.onclick = () => ouvrirVisionneuse(j, k);
+      c.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrirVisionneuse(j, k); } };
+    });
+    const pas = () => $("piste").querySelector(".carte-photo").offsetWidth + 20;
+    $("piste-prec").onclick = () => $("piste").scrollBy({ left: -pas() });
+    $("piste-suiv").onclick = () => $("piste").scrollBy({ left: pas() });
+  })();
+
   // Fiche produit
-  const fiche = $("fiche"), voile = $("voile"), img = $("f-img");
-  let actuel = 0, vue = "dessin", photo = 1, angle = 0, dernierFocus = null;
+  const fiche = $("fiche"), voile = $("voile"), img = $("f-img"), media = $("media");
+  const galerieFiche = creerGalerie($("galerie-fiche"), { auto: true, auClic: k => ouvrirVisionneuse(W[actuel], k) });
+  let actuel = 0, vue = "photos", angle = 0, dernierFocus = null;
   function afficher() {
     const j = W[actuel];
-    img.classList.toggle("dessin", vue === "dessin");
-    img.classList.toggle("photo", vue === "photos");
-    img.style.rotate = vue === "dessin" ? `${angle}deg` : "0deg";
-    img.src = vue === "dessin" ? `assets/dessins/${j.id}.png` : `assets/photos/${j.id}-${photo}.jpg`;
-    img.alt = `${j.nom} ${j.finition} — ${vue}`;
+    media.classList.toggle("sombre", vue === "photos");
+    img.style.rotate = `${angle}deg`;
+    img.src = `assets/dessins/${j.id}.png`;
+    img.alt = `Dessin de la jante ${j.nom}`;
     document.querySelectorAll(".vues button").forEach(b => b.setAttribute("aria-pressed", b.dataset.vue === vue));
-    $("f-mini").classList.toggle("visibles", vue === "photos");
-    $("f-mini").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k + 1 === photo));
-    $("f-astuce").style.visibility = vue === "dessin" ? "visible" : "hidden";
+    if (vue === "photos" && fiche.classList.contains("ouverte")) galerieFiche.demarrer(); else galerieFiche.arreter();
   }
   function remplir(i) {
-    const j = W[i]; actuel = i; angle = 0; photo = 1;
+    const j = W[i]; actuel = i; angle = 0;
     $("f-techno").textContent = T[j.techno].nom;
     $("f-nom").textContent = j.nom;
     $("f-finition").textContent = j.finition;
@@ -363,8 +544,7 @@
     $("f-concave").textContent = j.concave;
     $("f-entraxes").textContent = j.entraxes;
     $("f-compat").innerHTML = j.compat.map(c => `<li>${c}</li>`).join("");
-    $("f-mini").innerHTML = [1, 2, 3, 4].map(k => `<button aria-label="Photo ${k}"><img src="assets/photos/${j.id}-${k}.jpg" alt=""></button>`).join("");
-    $("f-mini").querySelectorAll("button").forEach((b, k) => b.onclick = () => { photo = k + 1; afficher(); });
+    galerieFiche.charger(photosDe(j));
     afficher();
   }
   // Sur le mur : vue d'ensemble, cercle sur la jante, zoom de la caméra, puis la fiche
@@ -405,14 +585,15 @@
   visite.addEventListener("click", finirVisite);
 
   function ouvrir(i) {
-    dernierFocus = document.activeElement; vue = "dessin";
-    remplir(i);
-    fiche.classList.add("ouverte"); voile.classList.add("ouvert"); fiche.setAttribute("aria-hidden", "false");
+    dernierFocus = document.activeElement; vue = "photos";
+    fiche.classList.add("ouverte");
+    remplir(i); voile.classList.add("ouvert"); fiche.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     setTimeout(() => $("fermer").focus(), 60);
   }
   function fermer() {
     fiche.classList.remove("ouverte"); voile.classList.remove("ouvert"); fiche.setAttribute("aria-hidden", "true");
+    galerieFiche.arreter();
     document.body.style.overflow = "";
     dernierFocus && dernierFocus.focus();
   }
@@ -422,6 +603,12 @@
   $("suiv").onclick = () => remplir((actuel + 1) % W.length);
   addEventListener("keydown", e => {
     if (enVisite !== null && (e.key === "Escape" || e.key === "Enter")) return finirVisite();
+    if (visionneuseOuverte) {
+      if (e.key === "Escape") fermerVisionneuse();
+      if (e.key === "ArrowRight") galeriePleine.aller(galeriePleine.index + 1);
+      if (e.key === "ArrowLeft") galeriePleine.aller(galeriePleine.index - 1);
+      return;
+    }
     if (!fiche.classList.contains("ouverte")) return;
     if (e.key === "Escape") fermer();
     if (e.key === "ArrowRight") $("suiv").click();
