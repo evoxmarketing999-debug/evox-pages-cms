@@ -1,5 +1,5 @@
 // Gamme WheelForce présentée chez EVOX — infos reprises des fiches produit evox-performance.com (sans prix).
-// id : nom des fichiers dans rendus/, dessins/ et photos/ (id-1.jpg … id-4.jpg)
+// id : nom des fichiers dans dessins/ et photos/ (id-1.jpg … id-4.jpg)
 window.TECHNOS = {
   forged: { nom: "Full Forged", detail: "Aluminium T6061 Aerospace Grade, structure complexe usinée sur 5 axes." },
   flow: { nom: "Flowforming", detail: "Monobloc chauffé, étiré et compacté sur un axe rotatif : surface homogène, résistance et poids proches d’une jante forgée." },

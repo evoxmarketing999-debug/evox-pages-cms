@@ -26,6 +26,8 @@
   .lien { font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
   .lien::after { content: "›"; font-size: 1.25em; line-height: 1; transition: transform .3s var(--ease); }
   .lien:hover::after { transform: translateX(3px); }
+  .retour::after { content: none; }
+  .retour::before { content: "‹"; font-size: 1.25em; line-height: 1; }
   .lien:hover { text-decoration: underline; text-decoration-color: var(--vert); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
   /* Barre */
@@ -44,13 +46,8 @@
   .hero p.intro { font-size: clamp(19px, 2.4vw, 26px); font-family: "Poppins"; font-weight: 500; letter-spacing: -.015em; color: var(--texte); margin: 14px auto 0; max-width: 720px; line-height: 1.25; }
   .hero .liens { display: flex; justify-content: center; gap: 28px; margin-top: 22px; font-size: 17px; }
   .hero-roue { width: min(620px, 86vw); aspect-ratio: 1; margin: clamp(32px, 6vw, 56px) auto 0; position: relative; }
-  .hero-roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 40px 60px rgba(0,0,0,.18)); will-change: transform; }
+  .hero-roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; will-change: transform; }
   .hero-sol { height: 1px; background: linear-gradient(90deg, transparent, var(--filet), transparent); margin-top: -2px; }
-
-  /* Chiffres */
-  .chiffres { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: clamp(48px, 7vw, 80px) 0; text-align: center; }
-  .chiffres b { display: block; font-family: "Poppins"; font-weight: 600; font-size: clamp(28px, 4vw, 44px); letter-spacing: -.03em; }
-  .chiffres span { display: block; margin-top: 6px; font-size: 14px; color: var(--gris); line-height: 1.4; }
 
   /* Gamme */
   .section { padding: clamp(64px, 9vw, 112px) 0; }
@@ -71,8 +68,9 @@
   .tuile h3 { font-size: 28px; font-weight: 600; margin-top: 6px; }
   .tuile .finition { font-size: 15px; color: var(--gris); margin-top: 2px; }
   .tuile .roue { width: 82%; aspect-ratio: 1; margin: 22px 0 20px; position: relative; }
-  .tuile .roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: rotate 1.4s var(--ease), scale 1s var(--ease); filter: drop-shadow(0 18px 24px rgba(0,0,0,.14)); }
-  .tuile:hover .roue img { rotate: 40deg; scale: 1.03; }
+  .tuile .roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .5s var(--ease), scale .8s var(--ease); }
+  .tuile .roue .survol { object-fit: cover; border-radius: 18px; opacity: 0; scale: .96; }
+  .tuile:hover .roue .survol, .tuile:focus-visible .roue .survol { opacity: 1; scale: 1; }
   .pastilles { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
   .pastilles span { font-size: 13px; font-weight: 600; padding: 5px 11px; border-radius: 999px; background: var(--clair); }
   .tuile .lien { margin-top: 18px; font-size: 15px; }
@@ -122,7 +120,7 @@
   .scene { flex: 1; min-height: 0; position: relative; display: grid; place-items: center; padding: 8px 28px 20px; }
   .scene .principale { width: 100%; max-width: 460px; aspect-ratio: 1; object-fit: contain; transition: opacity .35s; }
   .scene .principale.photo { object-fit: cover; border-radius: 18px; }
-  .scene .principale.rendu { filter: drop-shadow(0 24px 34px rgba(0,0,0,.16)); cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; }
+  .scene .principale.dessin { cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; }
   .miniatures { display: none; gap: 8px; justify-content: center; padding: 0 18px 18px; }
   .miniatures.visibles { display: flex; }
   .miniatures button { width: 56px; height: 56px; border-radius: 12px; overflow: hidden; border: 2px solid transparent; background: #fff; }
@@ -151,7 +149,7 @@
 
   @media (max-width: 900px) {
     .gamme, .technos { grid-template-columns: 1fr 1fr; }
-    .atouts, .chiffres { grid-template-columns: 1fr 1fr; }
+    .atouts { grid-template-columns: 1fr 1fr; }
     .barre nav { display: none; }
     .fiche { grid-template-columns: 1fr; top: auto; bottom: 0; left: 0; width: 100%; max-height: 92svh; border-radius: 24px 24px 0 0; overflow-y: auto; transform: translateY(100%); }
     .fiche.ouverte { transform: none; }
@@ -174,7 +172,7 @@
 <header class="barre">
   <div class="cadre">
     <strong>WheelForce</strong>
-    <nav><a href="#gamme">Gamme</a><a href="#technologies">Technologies</a><a href="#comparer">Comparer</a></nav>
+    <nav><a href="#gamme">Gamme</a><a href="#comparer">Comparer</a><a href="#technologies">Technologies</a></nav>
     <img src="assets/evox-logo-noir.svg" alt="EVOX Performance">
   </div>
 </header>
@@ -186,16 +184,9 @@
     <p class="intro">Six designs fabriqués en Allemagne. Certifiés TÜV.</p>
     <div class="liens"><a class="lien" href="#gamme">Découvrir la gamme</a><a class="lien" href="#comparer">Comparer</a></div>
   </div>
-  <div class="hero-roue"><img id="hero-img" src="assets/rendus/cf3.png" alt="Jante WheelForce CF.3-FF R Satin Bronze"></div>
+  <div class="hero-roue"><img id="hero-img" src="assets/dessins/cf3.png" alt="Dessin de la jante WheelForce CF.3-FF R"></div>
   <div class="hero-sol"></div>
 </section>
-
-<div class="cadre chiffres">
-  <div><b>6</b><span>designs</span></div>
-  <div><b>19" à 22"</b><span>diamètres disponibles</span></div>
-  <div><b>TÜV</b><span>collection certifiée</span></div>
-  <div><b>Inclus</b><span>centres de roue et boulonnerie</span></div>
-</div>
 
 <section class="section gris" id="gamme">
   <div class="cadre">
@@ -204,6 +195,15 @@
       <p>Choisissez une jante pour voir ses dimensions, sa fabrication et ses compatibilités.</p>
     </div>
     <div class="gamme" id="gamme-grille"></div>
+  </div>
+</section>
+
+<section class="section" id="comparer">
+  <div class="cadre">
+    <div class="entete">
+      <h2>Comparer les modèles.</h2>
+    </div>
+    <div class="table-defile"><table id="tableau"></table></div>
   </div>
 </section>
 
@@ -223,15 +223,6 @@
   </div>
 </section>
 
-<section class="section" id="comparer">
-  <div class="cadre">
-    <div class="entete">
-      <h2>Comparer les modèles.</h2>
-    </div>
-    <div class="table-defile"><table id="tableau"></table></div>
-  </div>
-</section>
-
 <footer class="pied">
   <div class="cadre">
     <div>
@@ -247,11 +238,10 @@
 <article class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
   <div class="media">
     <div class="vues" role="group" aria-label="Vue">
-      <button data-vue="rendu" aria-pressed="true">Rendu</button>
-      <button data-vue="dessin" aria-pressed="false">Dessin</button>
+      <button data-vue="dessin" aria-pressed="true">Dessin</button>
       <button data-vue="photos" aria-pressed="false">Photos</button>
     </div>
-    <div class="scene"><img class="principale rendu" id="f-img" alt="" draggable="false"></div>
+    <div class="scene"><img class="principale dessin" id="f-img" alt="" draggable="false"></div>
     <div class="miniatures" id="f-mini"></div>
     <p class="astuce" id="f-astuce">Faites glisser pour tourner la jante</p>
   </div>
@@ -266,12 +256,10 @@
       <div><dt>Fabrication</dt><dd id="f-fab"></dd></div>
       <div><dt>Concavité</dt><dd id="f-concave"></dd></div>
       <div><dt>Entraxes</dt><dd id="f-entraxes"></dd></div>
-      <div><dt>Finition</dt><dd id="f-fin2"></dd></div>
-      <div><dt>Certification</dt><dd>Collection certifiée TÜV, centres de roue et boulonnerie inclus</dd></div>
     </dl>
     <div class="compat"><h4>Compatibilités principales</h4><ul id="f-compat"></ul></div>
     <p class="note">Montage à confirmer selon le véhicule, la largeur et le déport. Renseignez-vous auprès de notre équipe.</p>
-    <div class="nav-fiche"><button class="lien" id="prec">Précédente</button><button class="lien" id="suiv">Suivante</button></div>
+    <div class="nav-fiche"><button class="lien retour" id="prec">Précédente</button><button class="lien" id="suiv">Suivante</button></div>
   </div>
 </article>
 
@@ -288,7 +276,7 @@
     el.setAttribute("aria-label", `${j.nom} ${j.finition}`);
     el.style.transitionDelay = `${i * 70}ms`;
     el.innerHTML = `<p class="techno">${T[j.techno].nom}</p><h3>${j.nom}</h3><p class="finition">${j.finition}</p>
-      <div class="roue"><img src="assets/rendus/${j.id}.png" alt="" loading="lazy"></div>
+      <div class="roue"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"><img class="survol" src="assets/photos/${j.id}-1.jpg" alt="" loading="lazy"></div>
       <div class="pastilles">${pastilles(j)}</div><span class="lien">En savoir plus</span>`;
     el.addEventListener("click", () => ouvrir(i));
     el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrir(i); } });
@@ -305,9 +293,9 @@
   });
 
   // Tableau comparatif
-  const lignes = [["Fabrication", j => T[j.techno].nom], ["Finition", j => j.finition], ["Diamètres", j => j.diametres.join(" · ")],
-                  ["Entraxes", j => j.entraxes], ["Concavité", j => j.concave], ["TÜV", () => "Oui"]];
-  $("tableau").innerHTML = `<thead><tr><th></th>${W.map(j => `<th><img src="assets/rendus/${j.id}.png" alt=""><strong>${j.nom}</strong><span>${j.finition}</span></th>`).join("")}</tr></thead>
+  const lignes = [["Fabrication", j => T[j.techno].nom], ["Diamètres", j => j.diametres.join(" · ")],
+                  ["Entraxes", j => j.entraxes], ["Concavité", j => j.concave]];
+  $("tableau").innerHTML = `<thead><tr><th></th>${W.map(j => `<th><img src="assets/dessins/${j.id}.png" alt=""><strong>${j.nom}</strong><span>${j.finition}</span></th>`).join("")}</tr></thead>
     <tbody>${lignes.map(([nom, f]) => `<tr><th>${nom}</th>${W.map(j => `<td>${f(j)}</td>`).join("")}</tr>`).join("")}</tbody>`;
 
   // Rotation douce de la jante d'ouverture au défilement
@@ -316,18 +304,18 @@
 
   // Fiche produit
   const fiche = $("fiche"), voile = $("voile"), img = $("f-img");
-  let actuel = 0, vue = "rendu", photo = 1, angle = 0, dernierFocus = null;
+  let actuel = 0, vue = "dessin", photo = 1, angle = 0, dernierFocus = null;
   function afficher() {
     const j = W[actuel];
-    img.classList.toggle("rendu", vue === "rendu");
+    img.classList.toggle("dessin", vue === "dessin");
     img.classList.toggle("photo", vue === "photos");
-    img.style.rotate = vue === "rendu" ? `${angle}deg` : "0deg";
-    img.src = vue === "rendu" ? `assets/rendus/${j.id}.png` : vue === "dessin" ? `assets/dessins/${j.id}.png` : `assets/photos/${j.id}-${photo}.jpg`;
+    img.style.rotate = vue === "dessin" ? `${angle}deg` : "0deg";
+    img.src = vue === "dessin" ? `assets/dessins/${j.id}.png` : `assets/photos/${j.id}-${photo}.jpg`;
     img.alt = `${j.nom} ${j.finition} — ${vue}`;
     document.querySelectorAll(".vues button").forEach(b => b.setAttribute("aria-pressed", b.dataset.vue === vue));
     $("f-mini").classList.toggle("visibles", vue === "photos");
     $("f-mini").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k + 1 === photo));
-    $("f-astuce").style.visibility = vue === "rendu" ? "visible" : "hidden";
+    $("f-astuce").style.visibility = vue === "dessin" ? "visible" : "hidden";
   }
   function remplir(i) {
     const j = W[i]; actuel = i; angle = 0; photo = 1;
@@ -339,14 +327,13 @@
     $("f-fab").textContent = T[j.techno].detail;
     $("f-concave").textContent = j.concave;
     $("f-entraxes").textContent = j.entraxes;
-    $("f-fin2").textContent = j.finition;
     $("f-compat").innerHTML = j.compat.map(c => `<li>${c}</li>`).join("");
     $("f-mini").innerHTML = [1, 2, 3, 4].map(k => `<button aria-label="Photo ${k}"><img src="assets/photos/${j.id}-${k}.jpg" alt=""></button>`).join("");
     $("f-mini").querySelectorAll("button").forEach((b, k) => b.onclick = () => { photo = k + 1; afficher(); });
     afficher();
   }
   function ouvrir(i) {
-    dernierFocus = document.activeElement; vue = "rendu";
+    dernierFocus = document.activeElement; vue = "dessin";
     remplir(i);
     fiche.classList.add("ouverte"); voile.classList.add("ouvert"); fiche.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
@@ -371,7 +358,7 @@
   // Tourner la jante au glisser
   let glisse = null;
   img.addEventListener("pointerdown", e => {
-    if (vue !== "rendu") return;
+    if (vue !== "dessin") return;
     const r = img.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     glisse = { cx, cy, a0: angle, d0: Math.atan2(e.clientY - cy, e.clientX - cx) };
     img.setPointerCapture(e.pointerId);
