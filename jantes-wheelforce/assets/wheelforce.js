@@ -1,0 +1,34 @@
+// Gamme WheelForce présentée chez EVOX — infos reprises des fiches produit evox-performance.com (sans prix).
+// id : nom des fichiers dans rendus/, dessins/ et photos/ (id-1.jpg … id-4.jpg)
+window.TECHNOS = {
+  forged: { nom: "Full Forged", detail: "Aluminium T6061 Aerospace Grade, structure complexe usinée sur 5 axes." },
+  flow: { nom: "Flowforming", detail: "Monobloc chauffé, étiré et compacté sur un axe rotatif : surface homogène, résistance et poids proches d’une jante forgée." },
+  hypercast: { nom: "WF Hypercast", detail: "Technologie de création WheelForce, avec centres de roue WF Hypercast." }
+};
+
+window.WHEELFORCE = [
+  { id: "raceone", nom: "RACE.ONE", finition: "Frozen Silver", techno: "forged", diametres: ["19\"", "22\""], entraxes: "5x112 · 5x120",
+    concave: "Deep Concave, Flat Concave, Xtreme Deep Concave (22\" RS Edition)",
+    accroche: "Jantes forgées en aluminium T6061 Aerospace Grade, au design concave agressif.",
+    compat: ["Audi RS3 8V et 8Y", "BMW M2 F87 et M2 CS", "Ø22\" RS Edition"] },
+  { id: "race2", nom: "RACE.2", finition: "Deep Black", techno: "forged", diametres: ["19\"", "20\"", "21\""], entraxes: "5x112 · 5x120",
+    concave: "Centre concave",
+    accroche: "Un aspect concave prononcé, qui accentue la sportivité de votre auto.",
+    compat: ["Audi RS3 8Y", "BMW M2 G87, M3 G80, M4 G82", "BMW M5 F90, M8"] },
+  { id: "race3", nom: "RACE.3", finition: "Frozen Silver", techno: "forged", diametres: ["19\"", "21\""], entraxes: "5x112",
+    concave: "Centre concave",
+    accroche: "Un aspect concave prononcé, qui accentue la sportivité de votre auto.",
+    compat: ["Audi RS3 8Y", "BMW M2 G87, M3 G80, M4 G82", "BMW M5 F90, M8"] },
+  { id: "cf3", nom: "CF.3-FF R", finition: "Satin Bronze", techno: "flow", diametres: ["20\"", "21\"", "22\""], entraxes: "5x112 · 5x120",
+    concave: "Ultra Concave (UC) et Extra Deep Concave (XDC), jusqu’à 82 mm de recul",
+    accroche: "Des traits fins et tendus jusqu’au bord de la jante, qui mettent en valeur le freinage.",
+    compat: ["BMW M2 G87, M3 G80, M4 G82, M3 F80, M4 F82", "BMW Série 3, 4, 5, 8 et Z4", "Audi A4 à A7, RS4, RS5, RS6, RS7", "Mercedes C 63, Classe E, CLS", "Toyota Supra MK5"] },
+  { id: "cf4", nom: "CF.4-FF R", finition: "Deep Black", techno: "hypercast", diametres: ["20\"", "21\"", "22\""], entraxes: "5x112 · 5x120",
+    concave: "Centre concave, Ultra Concave (UC)",
+    accroche: "Environ 11,15 kg par jante, pour une charge maximale de 690 kg par roue.",
+    compat: ["BMW M2 G87, M3 G80, M4 G82, M3 F80, M4 F82", "Audi A4, S4, RS4, A5, S5, RS5, A7, Q3", "Audi RS6, RS7"] },
+  { id: "he1", nom: "HE.1-FF", finition: "Gloss Steel", techno: "flow", diametres: ["20\"", "21\""], entraxes: "5x112 · 5x120 · 5x114.3",
+    concave: "Curved Deep Concave, Medium Deep Concave, Straight Extreme Concave, jusqu’à 82 mm de recul",
+    accroche: "Monobloc allégé fabriqué en Allemagne par flowforming, au design concave agressif.",
+    compat: ["BMW M2 G87, M3 G80, M4 G82, M5 F90, M8", "BMW Série 3, 4, 5, 8, X3, X4 M et Z4", "Audi A4 à A7, RS4 à RS7", "Mercedes Classe E, CLS, E 63 AMG", "Porsche Macan, 911 991.2", "Toyota Supra MK5, Tesla Model Y"] }
+];

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jantes WheelForce — EVOX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --texte: #1D1D1F;
+    --gris: #6E6E73;
+    --clair: #F5F5F7;
+    --filet: #D2D2D7;
+    --vert: #CCFF00;
+    --ease: cubic-bezier(.22, .8, .24, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "Montserrat", sans-serif; color: var(--texte); background: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3, .titre { font-family: "Poppins", sans-serif; letter-spacing: -.025em; }
+  .cadre { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 40px); }
+  .lien { font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+  .lien::after { content: "›"; font-size: 1.25em; line-height: 1; transition: transform .3s var(--ease); }
+  .lien:hover::after { transform: translateX(3px); }
+  .lien:hover { text-decoration: underline; text-decoration-color: var(--vert); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  /* Barre */
+  .barre { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.78); backdrop-filter: saturate(180%) blur(18px); -webkit-backdrop-filter: saturate(180%) blur(18px); border-bottom: 1px solid rgba(0,0,0,.06); }
+  .barre .cadre { height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .barre strong { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+  .barre nav { display: flex; gap: 24px; font-size: 13px; color: var(--gris); }
+  .barre nav a:hover { color: var(--texte); }
+  .barre img { height: 16px; }
+
+  /* Ouverture */
+  .hero { text-align: center; padding: clamp(56px, 9vw, 104px) 0 0; overflow: hidden; }
+  .surtitre { font-size: 15px; font-weight: 600; color: var(--gris); }
+  .surtitre::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 2px; }
+  .hero h1 { font-size: clamp(44px, 8vw, 88px); font-weight: 700; line-height: 1.02; margin-top: 10px; }
+  .hero p.intro { font-size: clamp(19px, 2.4vw, 26px); font-family: "Poppins"; font-weight: 500; letter-spacing: -.015em; color: var(--texte); margin: 14px auto 0; max-width: 720px; line-height: 1.25; }
+  .hero .liens { display: flex; justify-content: center; gap: 28px; margin-top: 22px; font-size: 17px; }
+  .hero-roue { width: min(620px, 86vw); aspect-ratio: 1; margin: clamp(32px, 6vw, 56px) auto 0; position: relative; }
+  .hero-roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 40px 60px rgba(0,0,0,.18)); will-change: transform; }
+  .hero-sol { height: 1px; background: linear-gradient(90deg, transparent, var(--filet), transparent); margin-top: -2px; }
+
+  /* Chiffres */
+  .chiffres { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: clamp(48px, 7vw, 80px) 0; text-align: center; }
+  .chiffres b { display: block; font-family: "Poppins"; font-weight: 600; font-size: clamp(28px, 4vw, 44px); letter-spacing: -.03em; }
+  .chiffres span { display: block; margin-top: 6px; font-size: 14px; color: var(--gris); line-height: 1.4; }
+
+  /* Gamme */
+  .section { padding: clamp(64px, 9vw, 112px) 0; }
+  .section.gris { background: var(--clair); }
+  .entete { text-align: center; max-width: 720px; margin: 0 auto clamp(36px, 5vw, 56px); }
+  .entete h2 { font-size: clamp(34px, 5.4vw, 56px); font-weight: 700; line-height: 1.05; }
+  .entete p { margin-top: 12px; font-size: clamp(17px, 2vw, 21px); color: var(--gris); line-height: 1.4; }
+  .gamme { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .tuile {
+    background: #fff; border-radius: 28px; padding: 32px 28px 30px; text-align: center; cursor: pointer; outline: none;
+    display: flex; flex-direction: column; align-items: center; transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+    opacity: 0; transform: translateY(24px);
+  }
+  .vu .tuile { opacity: 1; transform: none; transition: opacity .9s var(--ease), transform .9s var(--ease), box-shadow .5s var(--ease); }
+  .tuile:hover, .tuile:focus-visible { transform: translateY(-4px) !important; box-shadow: 0 24px 50px rgba(0,0,0,.08); }
+  .tuile:focus-visible { box-shadow: 0 0 0 3px var(--vert); }
+  .tuile .techno { font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: .08em; }
+  .tuile h3 { font-size: 28px; font-weight: 600; margin-top: 6px; }
+  .tuile .finition { font-size: 15px; color: var(--gris); margin-top: 2px; }
+  .tuile .roue { width: 82%; aspect-ratio: 1; margin: 22px 0 20px; position: relative; }
+  .tuile .roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: rotate 1.4s var(--ease), scale 1s var(--ease); filter: drop-shadow(0 18px 24px rgba(0,0,0,.14)); }
+  .tuile:hover .roue img { rotate: 40deg; scale: 1.03; }
+  .pastilles { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .pastilles span { font-size: 13px; font-weight: 600; padding: 5px 11px; border-radius: 999px; background: var(--clair); }
+  .tuile .lien { margin-top: 18px; font-size: 15px; }
+
+  /* Technologies */
+  .noir { background: #000; color: #F5F5F7; }
+  .noir .entete p { color: #A1A1A6; }
+  .technos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .techno-carte { background: #1C1C1E; border-radius: 28px; padding: 34px 30px; position: relative; overflow: hidden; min-height: 300px; display: flex; flex-direction: column; }
+  .techno-carte img { position: absolute; right: -28%; bottom: -30%; width: 86%; filter: invert(1); opacity: .16; }
+  .techno-carte .modeles { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--vert); }
+  .techno-carte h3 { font-size: 30px; font-weight: 600; margin-top: 10px; color: #fff; }
+  .techno-carte p { margin-top: 12px; font-size: 16px; line-height: 1.5; color: #A1A1A6; max-width: 300px; position: relative; }
+  .atouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; }
+  .atouts div { background: #1C1C1E; border-radius: 22px; padding: 22px 22px; font-size: 15px; color: #A1A1A6; line-height: 1.45; }
+  .atouts b { display: block; color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 19px; letter-spacing: -.015em; margin-bottom: 4px; }
+
+  /* Comparer */
+  .table-defile { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
+  table { width: 100%; min-width: 860px; border-collapse: collapse; table-layout: fixed; }
+  th, td { padding: 18px 12px; text-align: center; vertical-align: top; font-size: 14px; line-height: 1.45; border-bottom: 1px solid var(--filet); }
+  thead th { border-bottom: 0; }
+  thead img { width: 104px; height: 104px; object-fit: contain; margin: 0 auto 10px; }
+  thead strong { display: block; font-family: "Poppins"; font-weight: 600; font-size: 18px; letter-spacing: -.015em; }
+  thead span { display: block; font-weight: 400; color: var(--gris); font-size: 13px; }
+  tbody th { text-align: left; font-weight: 600; color: var(--gris); font-size: 13px; width: 120px; }
+
+  /* Pied */
+  .pied { border-top: 1px solid var(--filet); padding: 28px 0 40px; font-size: 12px; color: var(--gris); line-height: 1.6; }
+  .pied .cadre { display: flex; justify-content: space-between; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .pied p.cta { color: var(--texte); font-weight: 600; font-size: 14px; }
+  .pied img { height: 22px; }
+
+  /* Fiche produit */
+  .voile { position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .45s var(--ease); z-index: 20; }
+  .voile.ouvert { opacity: 1; pointer-events: auto; }
+  .fiche {
+    position: fixed; z-index: 21; left: 50%; top: 50%; width: min(1060px, calc(100% - 32px)); max-height: calc(100svh - 48px);
+    background: #fff; border-radius: 28px; overflow: hidden; display: grid; grid-template-columns: 1.1fr 1fr;
+    transform: translate(-50%, -46%) scale(.97); opacity: 0; pointer-events: none; transition: transform .55s var(--ease), opacity .4s var(--ease);
+  }
+  .fiche.ouverte { transform: translate(-50%, -50%); opacity: 1; pointer-events: auto; }
+  .media { background: var(--clair); position: relative; display: flex; flex-direction: column; min-height: 0; }
+  .vues { display: flex; gap: 4px; padding: 18px; justify-content: center; }
+  .vues button { padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gris); transition: background .3s, color .3s; }
+  .vues button[aria-pressed="true"] { background: var(--texte); color: #fff; }
+  .scene { flex: 1; min-height: 0; position: relative; display: grid; place-items: center; padding: 8px 28px 20px; }
+  .scene .principale { width: 100%; max-width: 460px; aspect-ratio: 1; object-fit: contain; transition: opacity .35s; }
+  .scene .principale.photo { object-fit: cover; border-radius: 18px; }
+  .scene .principale.rendu { filter: drop-shadow(0 24px 34px rgba(0,0,0,.16)); cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; }
+  .miniatures { display: none; gap: 8px; justify-content: center; padding: 0 18px 18px; }
+  .miniatures.visibles { display: flex; }
+  .miniatures button { width: 56px; height: 56px; border-radius: 12px; overflow: hidden; border: 2px solid transparent; background: #fff; }
+  .miniatures button[aria-pressed="true"] { border-color: var(--texte); }
+  .miniatures img { width: 100%; height: 100%; object-fit: cover; }
+  .astuce { text-align: center; font-size: 12px; color: var(--gris); padding-bottom: 16px; }
+  .infos { padding: clamp(26px, 4vw, 48px); overflow-y: auto; }
+  .infos-haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .infos .techno { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gris); }
+  .fermer { width: 36px; height: 36px; border-radius: 50%; background: var(--clair); display: grid; place-items: center; flex: none; transition: background .3s; }
+  .fermer:hover { background: var(--filet); }
+  .infos h3 { font-size: clamp(32px, 4vw, 44px); font-weight: 700; margin-top: 4px; line-height: 1.05; }
+  .infos .finition { font-size: 19px; color: var(--gris); margin-top: 4px; font-family: "Poppins"; font-weight: 500; letter-spacing: -.01em; }
+  .infos .accroche { font-size: 17px; line-height: 1.5; margin-top: 18px; }
+  .infos .pastilles { justify-content: flex-start; margin-top: 18px; }
+  .specs { margin-top: 26px; border-top: 1px solid var(--filet); }
+  .specs div { display: grid; grid-template-columns: 116px 1fr; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--filet); font-size: 14px; line-height: 1.45; }
+  .specs dt { color: var(--gris); font-weight: 500; }
+  .compat { margin-top: 24px; }
+  .compat h4 { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+  .compat ul { list-style: none; margin-top: 8px; font-size: 14px; line-height: 1.5; }
+  .compat li { padding: 3px 0 3px 16px; position: relative; }
+  .compat li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+  .note { margin-top: 18px; font-size: 13px; color: var(--gris); line-height: 1.5; }
+  .nav-fiche { display: flex; justify-content: space-between; margin-top: 26px; font-size: 15px; }
+
+  @media (max-width: 900px) {
+    .gamme, .technos { grid-template-columns: 1fr 1fr; }
+    .atouts, .chiffres { grid-template-columns: 1fr 1fr; }
+    .barre nav { display: none; }
+    .fiche { grid-template-columns: 1fr; top: auto; bottom: 0; left: 0; width: 100%; max-height: 92svh; border-radius: 24px 24px 0 0; overflow-y: auto; transform: translateY(100%); }
+    .fiche.ouverte { transform: none; }
+    .scene .principale { max-width: 300px; }
+    .infos { overflow: visible; }
+  }
+  @media (max-width: 600px) {
+    .gamme { grid-template-columns: 1fr; }
+    .technos { grid-template-columns: 1fr; }
+    .techno-carte { min-height: 240px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    .tuile { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="barre">
+  <div class="cadre">
+    <strong>WheelForce</strong>
+    <nav><a href="#gamme">Gamme</a><a href="#technologies">Technologies</a><a href="#comparer">Comparer</a></nav>
+    <img src="assets/evox-logo-noir.svg" alt="EVOX Performance">
+  </div>
+</header>
+
+<section class="hero">
+  <div class="cadre">
+    <p class="surtitre">Disponibles chez EVOX</p>
+    <h1>WheelForce.</h1>
+    <p class="intro">Six designs fabriqués en Allemagne. Certifiés TÜV.</p>
+    <div class="liens"><a class="lien" href="#gamme">Découvrir la gamme</a><a class="lien" href="#comparer">Comparer</a></div>
+  </div>
+  <div class="hero-roue"><img id="hero-img" src="assets/rendus/cf3.png" alt="Jante WheelForce CF.3-FF R Satin Bronze"></div>
+  <div class="hero-sol"></div>
+</section>
+
+<div class="cadre chiffres">
+  <div><b>6</b><span>designs</span></div>
+  <div><b>19" à 22"</b><span>diamètres disponibles</span></div>
+  <div><b>TÜV</b><span>collection certifiée</span></div>
+  <div><b>Inclus</b><span>centres de roue et boulonnerie</span></div>
+</div>
+
+<section class="section gris" id="gamme">
+  <div class="cadre">
+    <div class="entete">
+      <h2>La gamme.</h2>
+      <p>Choisissez une jante pour voir ses dimensions, sa fabrication et ses compatibilités.</p>
+    </div>
+    <div class="gamme" id="gamme-grille"></div>
+  </div>
+</section>
+
+<section class="section noir" id="technologies">
+  <div class="cadre">
+    <div class="entete">
+      <h2>Trois façons de fabriquer une jante.</h2>
+      <p>Toutes conçues en Allemagne, avec un design breveté et un centre concave.</p>
+    </div>
+    <div class="technos" id="technos"></div>
+    <div class="atouts">
+      <div><b>Allemagne</b>Fabrication et ingénierie WheelForce.</div>
+      <div><b>TÜV</b>Certificats d’homologation fournis.</div>
+      <div><b>Inclus</b>Centres de roue et boulonnerie.</div>
+      <div><b>2 à 3 semaines</b>Disponibles sur commande.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comparer">
+  <div class="cadre">
+    <div class="entete">
+      <h2>Comparer les modèles.</h2>
+    </div>
+    <div class="table-defile"><table id="tableau"></table></div>
+  </div>
+</section>
+
+<footer class="pied">
+  <div class="cadre">
+    <div>
+      <p class="cta">Une jante vous plaît ? Renseignez-vous auprès de notre équipe.</p>
+      <p>Montage à confirmer selon le véhicule, la largeur et le déport de chaque jante. Compatibilités indicatives.</p>
+    </div>
+    <img src="assets/evox-logo-noir.svg" alt="EVOX Performance">
+  </div>
+</footer>
+
+<!-- Fiche produit -->
+<div class="voile" id="voile"></div>
+<article class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
+  <div class="media">
+    <div class="vues" role="group" aria-label="Vue">
+      <button data-vue="rendu" aria-pressed="true">Rendu</button>
+      <button data-vue="dessin" aria-pressed="false">Dessin</button>
+      <button data-vue="photos" aria-pressed="false">Photos</button>
+    </div>
+    <div class="scene"><img class="principale rendu" id="f-img" alt="" draggable="false"></div>
+    <div class="miniatures" id="f-mini"></div>
+    <p class="astuce" id="f-astuce">Faites glisser pour tourner la jante</p>
+  </div>
+  <div class="infos">
+    <div class="infos-haut">
+      <div><p class="techno" id="f-techno"></p><h3 id="f-nom"></h3><p class="finition" id="f-finition"></p></div>
+      <button class="fermer" id="fermer" aria-label="Fermer"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </div>
+    <p class="accroche" id="f-accroche"></p>
+    <div class="pastilles" id="f-diam"></div>
+    <dl class="specs">
+      <div><dt>Fabrication</dt><dd id="f-fab"></dd></div>
+      <div><dt>Concavité</dt><dd id="f-concave"></dd></div>
+      <div><dt>Entraxes</dt><dd id="f-entraxes"></dd></div>
+      <div><dt>Finition</dt><dd id="f-fin2"></dd></div>
+      <div><dt>Certification</dt><dd>Collection certifiée TÜV, centres de roue et boulonnerie inclus</dd></div>
+    </dl>
+    <div class="compat"><h4>Compatibilités principales</h4><ul id="f-compat"></ul></div>
+    <p class="note">Montage à confirmer selon le véhicule, la largeur et le déport. Renseignez-vous auprès de notre équipe.</p>
+    <div class="nav-fiche"><button class="lien" id="prec">Précédente</button><button class="lien" id="suiv">Suivante</button></div>
+  </div>
+</article>
+
+<script src="assets/wheelforce.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const T = window.TECHNOS, W = window.WHEELFORCE;
+  const pastilles = j => j.diametres.map(d => `<span>${d}</span>`).join("");
+
+  // Gamme
+  W.forEach((j, i) => {
+    const el = document.createElement("article");
+    el.className = "tuile"; el.tabIndex = 0; el.setAttribute("role", "button");
+    el.setAttribute("aria-label", `${j.nom} ${j.finition}`);
+    el.style.transitionDelay = `${i * 70}ms`;
+    el.innerHTML = `<p class="techno">${T[j.techno].nom}</p><h3>${j.nom}</h3><p class="finition">${j.finition}</p>
+      <div class="roue"><img src="assets/rendus/${j.id}.png" alt="" loading="lazy"></div>
+      <div class="pastilles">${pastilles(j)}</div><span class="lien">En savoir plus</span>`;
+    el.addEventListener("click", () => ouvrir(i));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrir(i); } });
+    $("gamme-grille").appendChild(el);
+  });
+  new IntersectionObserver((es, io) => es.forEach(e => { if (e.isIntersecting) { $("gamme-grille").classList.add("vu"); io.disconnect(); } }), { threshold: .1 }).observe($("gamme-grille"));
+
+  // Technologies
+  Object.entries(T).forEach(([k, t]) => {
+    const modeles = W.filter(j => j.techno === k);
+    $("technos").insertAdjacentHTML("beforeend", `<div class="techno-carte">
+      <p class="modeles">${modeles.map(j => j.nom).join(" · ")}</p><h3>${t.nom}</h3><p>${t.detail}</p>
+      <img src="assets/dessins/${modeles[0].id}.png" alt=""></div>`);
+  });
+
+  // Tableau comparatif
+  const lignes = [["Fabrication", j => T[j.techno].nom], ["Finition", j => j.finition], ["Diamètres", j => j.diametres.join(" · ")],
+                  ["Entraxes", j => j.entraxes], ["Concavité", j => j.concave], ["TÜV", () => "Oui"]];
+  $("tableau").innerHTML = `<thead><tr><th></th>${W.map(j => `<th><img src="assets/rendus/${j.id}.png" alt=""><strong>${j.nom}</strong><span>${j.finition}</span></th>`).join("")}</tr></thead>
+    <tbody>${lignes.map(([nom, f]) => `<tr><th>${nom}</th>${W.map(j => `<td>${f(j)}</td>`).join("")}</tr>`).join("")}</tbody>`;
+
+  // Rotation douce de la jante d'ouverture au défilement
+  const heroImg = $("hero-img");
+  addEventListener("scroll", () => { heroImg.style.transform = `rotate(${scrollY * .12}deg)`; }, { passive: true });
+
+  // Fiche produit
+  const fiche = $("fiche"), voile = $("voile"), img = $("f-img");
+  let actuel = 0, vue = "rendu", photo = 1, angle = 0, dernierFocus = null;
+  function afficher() {
+    const j = W[actuel];
+    img.classList.toggle("rendu", vue === "rendu");
+    img.classList.toggle("photo", vue === "photos");
+    img.style.rotate = vue === "rendu" ? `${angle}deg` : "0deg";
+    img.src = vue === "rendu" ? `assets/rendus/${j.id}.png` : vue === "dessin" ? `assets/dessins/${j.id}.png` : `assets/photos/${j.id}-${photo}.jpg`;
+    img.alt = `${j.nom} ${j.finition} — ${vue}`;
+    document.querySelectorAll(".vues button").forEach(b => b.setAttribute("aria-pressed", b.dataset.vue === vue));
+    $("f-mini").classList.toggle("visibles", vue === "photos");
+    $("f-mini").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k + 1 === photo));
+    $("f-astuce").style.visibility = vue === "rendu" ? "visible" : "hidden";
+  }
+  function remplir(i) {
+    const j = W[i]; actuel = i; angle = 0; photo = 1;
+    $("f-techno").textContent = T[j.techno].nom;
+    $("f-nom").textContent = j.nom;
+    $("f-finition").textContent = j.finition;
+    $("f-accroche").textContent = j.accroche;
+    $("f-diam").innerHTML = pastilles(j);
+    $("f-fab").textContent = T[j.techno].detail;
+    $("f-concave").textContent = j.concave;
+    $("f-entraxes").textContent = j.entraxes;
+    $("f-fin2").textContent = j.finition;
+    $("f-compat").innerHTML = j.compat.map(c => `<li>${c}</li>`).join("");
+    $("f-mini").innerHTML = [1, 2, 3, 4].map(k => `<button aria-label="Photo ${k}"><img src="assets/photos/${j.id}-${k}.jpg" alt=""></button>`).join("");
+    $("f-mini").querySelectorAll("button").forEach((b, k) => b.onclick = () => { photo = k + 1; afficher(); });
+    afficher();
+  }
+  function ouvrir(i) {
+    dernierFocus = document.activeElement; vue = "rendu";
+    remplir(i);
+    fiche.classList.add("ouverte"); voile.classList.add("ouvert"); fiche.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => $("fermer").focus(), 60);
+  }
+  function fermer() {
+    fiche.classList.remove("ouverte"); voile.classList.remove("ouvert"); fiche.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    dernierFocus && dernierFocus.focus();
+  }
+  document.querySelectorAll(".vues button").forEach(b => b.onclick = () => { vue = b.dataset.vue; afficher(); });
+  $("fermer").onclick = fermer; voile.onclick = fermer;
+  $("prec").onclick = () => remplir((actuel + W.length - 1) % W.length);
+  $("suiv").onclick = () => remplir((actuel + 1) % W.length);
+  addEventListener("keydown", e => {
+    if (!fiche.classList.contains("ouverte")) return;
+    if (e.key === "Escape") fermer();
+    if (e.key === "ArrowRight") $("suiv").click();
+    if (e.key === "ArrowLeft") $("prec").click();
+  });
+
+  // Tourner la jante au glisser
+  let glisse = null;
+  img.addEventListener("pointerdown", e => {
+    if (vue !== "rendu") return;
+    const r = img.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    glisse = { cx, cy, a0: angle, d0: Math.atan2(e.clientY - cy, e.clientX - cx) };
+    img.setPointerCapture(e.pointerId);
+  });
+  img.addEventListener("pointermove", e => {
+    if (!glisse) return;
+    angle = glisse.a0 + (Math.atan2(e.clientY - glisse.cy, e.clientX - glisse.cx) - glisse.d0) * 180 / Math.PI;
+    img.style.rotate = `${angle}deg`;
+  });
+  img.addEventListener("pointerup", () => glisse = null);
+</script>
+</body>
+</html>
