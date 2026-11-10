@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Murs de jantes — EVOX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --texte: #F5F5F7; --gris: #A1A1A6; --vert: #CCFF00; --ease: cubic-bezier(.22, .8, .24, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: #0B0B0C; color: var(--texte); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column; overflow: hidden; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+  a { color: inherit; text-decoration: none; }
+
+  header { display: flex; justify-content: space-between; align-items: center; padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 48px) 0; }
+  header img { height: clamp(20px, 2.2vw, 28px); filter: invert(1); }
+  header p { font-size: 13px; color: var(--gris); letter-spacing: .02em; }
+  header p::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 1px; }
+
+  h1 { font-family: "Poppins"; font-weight: 700; letter-spacing: -.03em; font-size: clamp(34px, 5.4vw, 64px); line-height: 1.02;
+    padding: clamp(18px, 3vh, 36px) clamp(20px, 4vw, 48px) clamp(18px, 3vh, 32px); }
+  h1 span { color: var(--gris); font-weight: 600; }
+
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 1.6vw, 20px); padding: 0 clamp(20px, 4vw, 48px) clamp(20px, 4vw, 48px); }
+  .mur { position: relative; border-radius: 28px; overflow: hidden; background: #1C1C1E; display: flex; flex-direction: column; justify-content: flex-end;
+    opacity: 0; transform: translateY(18px); animation: entre .9s var(--ease) forwards; }
+  .mur:nth-child(2) { animation-delay: .12s; }
+  .mur img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); animation: respire 14s ease-in-out infinite alternate; }
+  .mur:nth-child(2) img { animation-delay: -7s; }
+  .mur::after { content: ""; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.82)); }
+  .texte { position: relative; z-index: 1; padding: clamp(20px, 3vw, 36px); }
+  .texte small { display: block; font-size: 13px; font-weight: 500; color: var(--gris); letter-spacing: .08em; text-transform: uppercase; }
+  .texte h2 { font-family: "Poppins"; font-weight: 700; letter-spacing: -.025em; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.05; margin-top: 6px; }
+  .texte p { font-size: clamp(14px, 1.4vw, 17px); color: #D2D2D7; margin-top: 8px; line-height: 1.45; }
+  .bouton { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; padding: 13px 22px; border-radius: 999px; background: #fff; color: #1D1D1F;
+    font-family: "Poppins"; font-weight: 600; font-size: 15px; transition: transform .3s var(--ease), background .3s; }
+  .mur:active .bouton { transform: scale(.96); background: var(--vert); }
+
+  @keyframes entre { to { opacity: 1; transform: none; } }
+  @keyframes respire { to { transform: scale(1.09); } }
+
+  @media (orientation: portrait) {
+    main { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mur, .mur img { animation: none; opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <img src="../jantes-wheelforce/assets/evox-logo-noir.svg" alt="EVOX Performance">
+    <p>Showroom EVOX</p>
+  </header>
+  <h1>Nos murs de jantes. <span>Choisissez.</span></h1>
+  <main>
+    <a class="mur" href="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/">
+      <img src="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/assets/photos/mur.jpg" alt="Le mur des jantes Porsche">
+      <div class="texte">
+        <small>Collection Porsche</small>
+        <h2>Jantes Porsche</h2>
+        <p>12 jantes, de la Fuchs de 1967 à la 991.</p>
+        <span class="bouton">Découvrir ›</span>
+      </div>
+    </a>
+    <a class="mur" href="../jantes-wheelforce/">
+      <img src="../jantes-wheelforce/assets/photos/mur.jpg" alt="Le mur des jantes WheelForce">
+      <div class="texte">
+        <small>Collection WheelForce</small>
+        <h2>Jantes WheelForce</h2>
+        <p>6 designs fabriqués en Allemagne, certifiés TÜV.</p>
+        <span class="bouton">Découvrir ›</span>
+      </div>
+    </a>
+  </main>
+</body>
+</html>

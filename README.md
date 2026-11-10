@@ -10,3 +10,7 @@ Pages du site evox-performance.com (PrestaShop).
 ## jantes-wheelforce/ — Gamme WheelForce
 
 - `index.html` : landing style Apple (https://evoxmarketing999-debug.github.io/evox-pages-cms/jantes-wheelforce/), cible du QR code de la fiche A4
+
+## borne/ — Accueil de la tablette du magasin
+
+- `index.html` : page d’accueil de l’appli Borne EVOX (choix Porsche / WheelForce)
