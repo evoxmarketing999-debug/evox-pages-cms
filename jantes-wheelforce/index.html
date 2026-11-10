@@ -401,7 +401,7 @@
   </div>
 </article>
 
-<script src="assets/wheelforce.js?v=2026-11-10c"></script>
+<script src="assets/wheelforce.js?v=2026-11-10d"></script>
 <script>
   const $ = id => document.getElementById(id);
   const T = window.TECHNOS, W = window.WHEELFORCE, TEINTES = window.TEINTES;
@@ -570,7 +570,7 @@
     $("f-concave").textContent = j.concave;
     $("f-entraxes").textContent = j.entraxes;
     $("f-coloris").innerHTML = j.coloris
-      ? `<div class="nuancier">${j.coloris.map(c => `<span><b style="background:${TEINTES[c]}"></b>${c}</span>`).join("")}</div><small class="note-coloris">Finition présentée : ${j.finition}. Selon disponibilité.</small>`
+      ? `<div class="nuancier">${j.coloris.map(c => `<span><b style="background:${TEINTES[c]}"></b>${c}</span>`).join("")}</div><small class="note-coloris">Finition présentée : ${j.finition}. Certains coloris selon la dimension, sous réserve de disponibilité.</small>`
       : `Finition présentée : ${j.finition}. Plusieurs autres coloris disponibles.`;
     $("f-compat").innerHTML = j.compat.map(c => `<li>${c}</li>`).join("");
     galerieFiche.charger(photosDe(j));
