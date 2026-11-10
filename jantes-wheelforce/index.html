@@ -147,6 +147,32 @@
   .note { margin-top: 18px; font-size: 13px; color: var(--gris); line-height: 1.5; }
   .nav-fiche { display: flex; justify-content: space-between; margin-top: 26px; font-size: 15px; }
 
+  /* Sur le mur : vue d'ensemble, cercle sur la jante, zoom, puis la fiche */
+  .visite {
+    position: fixed; inset: 0; z-index: 25; background: #0B0B0C; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    opacity: 0; pointer-events: none; transition: opacity .6s var(--ease);
+  }
+  .visite.ouverte { opacity: 1; pointer-events: auto; }
+  .visite-titre, .visite-legende { font-family: "Poppins"; font-weight: 600; letter-spacing: -.01em; position: relative; z-index: 2; transition: opacity .5s; }
+  .visite-titre { color: #A1A1A6; font-size: 15px; }
+  .visite-titre::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 2px; }
+  .visite-legende { color: #fff; font-size: 20px; opacity: 0; }
+  .visite-legende span { color: #A1A1A6; font-weight: 500; }
+  .visite.cible .visite-legende { opacity: 1; }
+  .visite.zoom .visite-titre { opacity: 0; }
+  .visite-cadre { position: relative; aspect-ratio: 3 / 4; height: min(74svh, calc(90vw * 4 / 3)); flex: none; border-radius: 18px; transform: scale(.94); transition: transform 1.4s cubic-bezier(.65, 0, .25, 1); }
+  .visite.ouverte .visite-cadre { transform: none; }
+  .visite-cadre img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 18px; }
+  .halo {
+    position: absolute; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%) scale(1.35);
+    border: 2px solid var(--vert); box-shadow: 0 0 0 200vmax rgba(5,5,6,0), 0 0 30px rgba(204,255,0,0);
+    opacity: 0; transition: opacity .6s var(--ease), transform .8s var(--ease), box-shadow .8s var(--ease);
+  }
+  .visite.cible .halo { opacity: 1; transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 0 200vmax rgba(5,5,6,.72), 0 0 30px rgba(204,255,0,.35); }
+  .visite-passer { position: absolute; top: 18px; right: 18px; z-index: 3; color: #A1A1A6; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.08); transition: color .3s, background .3s; }
+  .visite-passer:hover { color: #fff; background: rgba(255,255,255,.16); }
+
   @media (max-width: 900px) {
     .gamme, .technos { grid-template-columns: 1fr 1fr; }
     .atouts { grid-template-columns: 1fr 1fr; }
@@ -234,6 +260,15 @@
 </footer>
 
 <!-- Fiche produit -->
+<div class="visite" id="visite" aria-hidden="true">
+  <button class="visite-passer" id="visite-passer">Passer</button>
+  <p class="visite-titre">Sur le mur</p>
+  <div class="visite-cadre" id="visite-cadre">
+    <img src="assets/photos/mur.jpg" alt="">
+    <i class="halo" id="halo"></i>
+  </div>
+  <p class="visite-legende" id="visite-legende"></p>
+</div>
 <div class="voile" id="voile"></div>
 <article class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
   <div class="media">
@@ -278,8 +313,8 @@
     el.innerHTML = `<p class="techno">${T[j.techno].nom}</p><h3>${j.nom}</h3><p class="finition">${j.finition}</p>
       <div class="roue"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"><img class="survol" src="assets/photos/${j.id}-1.jpg" alt="" loading="lazy"></div>
       <div class="pastilles">${pastilles(j)}</div><span class="lien">En savoir plus</span>`;
-    el.addEventListener("click", () => ouvrir(i));
-    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ouvrir(i); } });
+    el.addEventListener("click", () => montrerSurLeMur(i));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); montrerSurLeMur(i); } });
     $("gamme-grille").appendChild(el);
   });
   new IntersectionObserver((es, io) => es.forEach(e => { if (e.isIntersecting) { $("gamme-grille").classList.add("vu"); io.disconnect(); } }), { threshold: .1 }).observe($("gamme-grille"));
@@ -332,6 +367,43 @@
     $("f-mini").querySelectorAll("button").forEach((b, k) => b.onclick = () => { photo = k + 1; afficher(); });
     afficher();
   }
+  // Sur le mur : vue d'ensemble, cercle sur la jante, zoom de la caméra, puis la fiche
+  const visite = $("visite"), cadre = $("visite-cadre"), halo = $("halo");
+  const sansAnim = matchMedia("(prefers-reduced-motion: reduce)");
+  let minuteurs = [], enVisite = null;
+  function montrerSurLeMur(i) {
+    const j = W[i];
+    if (sansAnim.matches || !j.mur) return ouvrir(i);
+    if (enVisite !== null) return;
+    enVisite = i;
+    const [fx, fy, fr] = j.mur;
+    halo.style.left = `${fx * 100}%`; halo.style.top = `${fy * 100}%`; halo.style.width = `${fr * 200}%`;
+    $("visite-legende").innerHTML = `${j.nom} <span>${j.finition}</span>`;
+    cadre.style.transform = "";
+    visite.classList.remove("cible", "zoom");
+    visite.setAttribute("aria-hidden", "false");
+    visite.classList.add("ouverte");
+    const plus = (ms, f) => minuteurs.push(setTimeout(f, ms));
+    plus(800, () => visite.classList.add("cible"));
+    plus(1700, () => {
+      const L = cadre.offsetWidth, H = cadre.offsetHeight;
+      const e = Math.min(2.6, Math.min(innerWidth, innerHeight) * .62 / (fr * 2 * L));
+      cadre.style.transform = `translate(${-e * (fx - .5) * L}px, ${-e * (fy - .5) * H}px) scale(${e})`;
+      visite.classList.add("zoom");
+    });
+    plus(3500, finirVisite);
+  }
+  function finirVisite() {
+    if (enVisite === null) return;
+    const i = enVisite;
+    minuteurs.forEach(clearTimeout); minuteurs = [];
+    ouvrir(i);
+    visite.classList.remove("ouverte");
+    visite.setAttribute("aria-hidden", "true");
+    setTimeout(() => { visite.classList.remove("cible", "zoom"); cadre.style.transform = ""; enVisite = null; }, 650);
+  }
+  visite.addEventListener("click", finirVisite);
+
   function ouvrir(i) {
     dernierFocus = document.activeElement; vue = "dessin";
     remplir(i);
@@ -349,6 +421,7 @@
   $("prec").onclick = () => remplir((actuel + W.length - 1) % W.length);
   $("suiv").onclick = () => remplir((actuel + 1) % W.length);
   addEventListener("keydown", e => {
+    if (enVisite !== null && (e.key === "Escape" || e.key === "Enter")) return finirVisite();
     if (!fiche.classList.contains("ouverte")) return;
     if (e.key === "Escape") fermer();
     if (e.key === "ArrowRight") $("suiv").click();
