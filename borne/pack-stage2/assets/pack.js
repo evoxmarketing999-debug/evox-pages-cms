@@ -20,8 +20,19 @@ window.PACK = {
     { id: "origine", nom: "A110 · canule d’origine", court: "A110", img: "silencieux-origine.jpg" },
     { id: "chrome", nom: "A110 R / R Look · sorties Chrome", court: "Chrome", img: "silencieux-chrome.jpg" },
     { id: "carbone", nom: "A110 R / R Look · sorties Carbone", court: "Carbone", img: "silencieux-carbone.jpg" },
-    { id: "pvd", nom: "A110 R / R Look · sorties Black PVD", court: "Black PVD", img: "silencieux-pvd.jpg" }
+    { id: "pvd", nom: "A110 R / R Look · sorties Black PVD", court: "Black PVD", img: "silencieux-pvd.jpg" },
+    // Silencieux RACE TITANIUM (produit à part, id 7207) proposé en option du pack
+    { id: "ti-bleu", famille: "titane", nom: "RACE TITANIUM · sorties titane bleu (de série)", court: "Titane", img: "titane-sortie-bleu.jpg" },
+    { id: "ti-chrome", famille: "titane", nom: "RACE TITANIUM · sorties inox Chrome", court: "Chrome", img: "titane-sortie-chrome.jpg" },
+    { id: "ti-carbone", famille: "titane", nom: "RACE TITANIUM · sorties Carbone", court: "Carbone", img: "titane-sortie-carbone.jpg" },
+    { id: "ti-pvd", famille: "titane", nom: "RACE TITANIUM · sorties Black PVD", court: "Black PVD", img: "titane-sortie-pvd.jpg" }
   ],
+  // Prix TTC du silencieux RACE TITANIUM selon les sorties (fiche evox-performance.com id 7207, relevés le 12 nov. 2026).
+  // Il n'existe pas de prix « pack + titane » sur le site : la borne affiche pack sans silencieux + silencieux titane.
+  titane: {
+    produit: "Silencieux EVOX RACE TITANIUM",
+    prix: { "ti-bleu": [3999, "939406RT"], "ti-chrome": [3999, "939406RT-1"], "ti-carbone": [4299, "939406RT-3"], "ti-pvd": [4199, "939406RT-2"] }
+  },
   // prix[catalyseur][silencieux] = [prix TTC, référence]
   prix: {
     cata:  { origine: [8249, "928959-1"], sans: [6349, "928959-2"], chrome: [8849, "928959-3"], carbone: [9149, "928959-4"], pvd: [9049, "928959-5"] },
@@ -67,6 +78,17 @@ window.PACK = {
         ["Open", "Votre Alpine fait le son d’une vraie voiture de sport : rauque, agressif, envoûtant."],
         ["Closed", "Sobre et sage : le grain métallique de l’inox, discret, pour le quotidien."],
         ["Finitions", "A110 avec canule d’origine, ou A110 R / R Look en sorties Chrome, Carbone ou Black PVD."]
+      ] },
+    { id: "titane", n: "+", nom: "Silencieux EVOX RACE TITANIUM", sous: "En option · titane, valves et mégaphone", pt: null,
+      photos: ["situ-titane-1.jpg", "situ-titane-2.jpg", "situ-titane-3.jpg", "situ-titane-4.jpg", "titane-1.jpg", "titane-2.jpg", "titane-3.jpg", "titane-sol-1.jpg", "titane-sol-2.jpg", "titane-logo.jpg", "titane-sorties.jpg"],
+      situ: ["situ-titane-1.jpg", "situ-titane-2.jpg", "situ-titane-3.jpg", "situ-titane-4.jpg"],
+      accroche: "Plus léger, plus exclusif, plus expressif : entièrement conçu en titane.",
+      points: [
+        ["Poids", "7,7 kg : environ 33 % plus léger que l’échappement d’origine de référence, et environ 29 % plus léger que la version inox EVOX."],
+        ["Valves", "Deux personnalités : sonorité maîtrisée valves fermées, rendu beaucoup plus présent et sportif valves ouvertes."],
+        ["Mégaphone", "Mégaphone de 100 mm sur la branche ouverte : timbre plus métallique et typé compétition, meilleure évacuation des gaz."],
+        ["Sorties", "Sorties titane de 90 mm de série, jusqu’à 50 % plus légères. En option : inox Chrome, Carbone ou Black PVD."],
+        ["Compatibilité", "Annoncé compatible Alpine A110 R."]
       ] }
   ],
 
