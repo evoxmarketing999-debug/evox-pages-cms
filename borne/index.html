@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Murs de jantes — EVOX</title>
-<script>/* tablette réglée sur un autre écran (voir ecran-borne.js) */ try { if (localStorage.getItem("evox-borne-ecran") === "pack-stage2") location.replace("pack-stage2/"); } catch (e) {}</script>
+<script>/* tablette réglée sur un autre écran (voir ecran-borne.js) */ try { const e = localStorage.getItem("evox-borne-ecran"), u = { "pack-stage2": "pack-stage2/", "wheelforce": "../jantes-wheelforce/?borne", "porsche": "https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne" }[e]; if (u) location.replace(u); } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
 <style>

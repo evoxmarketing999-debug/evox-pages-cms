@@ -780,5 +780,93 @@
   });
   dessin.addEventListener("pointerup", () => glisse = null);
 </script>
+
+<!-- Écran de veille, seulement sur la tablette du magasin (adresse avec ?borne) -->
+<style>
+  .veille { position: fixed; inset: 0; z-index: 60; background: radial-gradient(120% 90% at 70% 50%, #EFEDE8 0%, var(--papier) 45%, #D9D7D0 100%); color: var(--encre); overflow: hidden;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 4vw; padding: 6vh 6vw; cursor: pointer;
+    -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; transition: opacity .8s cubic-bezier(.22,.8,.24,1), visibility 0s .8s; }
+  .veille.cachee { opacity: 0; visibility: hidden; pointer-events: none; }
+  .veille .v-texte { position: relative; z-index: 2; }
+  .veille .v-sur { font-size: 11px; letter-spacing: .28em; color: var(--doux); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .veille .v-sur::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--vert); margin-right: 10px; vertical-align: 1px; }
+  .veille h2 { margin-top: 4vh; line-height: .92; }
+  .veille h2 span { display: block; }
+  .veille h2 .a { font-size: clamp(18px, min(3.4vw, 5.4vh), 50px); font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
+  .veille h2 .b { font-size: clamp(34px, min(7.4vw, 12vh), 120px); color: var(--titre); margin-top: .12em; white-space: nowrap; animation: v-respire 5.5s ease-in-out infinite alternate; }
+  .veille .v-chiffres { display: flex; gap: 22px; align-items: stretch; margin-top: 5vh; }
+  .veille .v-chiffres .barre { width: 3px; background: var(--encre); }
+  .veille .v-chiffres b { display: block; font-size: clamp(26px, min(4vw, 6vh), 52px); font-weight: normal; line-height: 1; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; font-variant-numeric: tabular-nums; }
+  .veille .v-chiffres small { display: block; font-size: 11px; letter-spacing: .18em; color: var(--doux); margin-top: 6px; font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; transition: opacity .4s; }
+  .veille .v-toucher { display: inline-flex; align-items: center; gap: 14px; margin-top: 6vh; padding: 16px 26px; border: 1px solid var(--encre); border-radius: 999px; font-size: 12px; letter-spacing: .24em; }
+  .veille .v-toucher i { width: 10px; height: 10px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px var(--encre); animation: v-clignote 1.4s ease-in-out infinite; }
+  .veille .v-roue { position: relative; aspect-ratio: 1; width: min(100%, 78vh); justify-self: center; }
+  .veille .v-roue::before { content: ""; position: absolute; inset: 4%; border-radius: 50%; border: 1px solid var(--filet); }
+  .veille .v-roue::after { content: ""; position: absolute; left: 50%; top: -3%; bottom: -3%; width: 1px; background: var(--filet); opacity: .7; }
+  .veille .v-roue img { position: absolute; inset: 8%; width: 84%; height: 84%; object-fit: contain; opacity: 0; transform: scale(.9) rotate(-30deg); transition: opacity 1s ease, transform 1.4s cubic-bezier(.22,.8,.24,1); }
+  .veille .v-roue img.on { opacity: 1; transform: none; }
+  .veille .v-roue .tourne { position: absolute; inset: 0; animation: v-tourne 40s linear infinite; }
+  @keyframes v-respire { 0% { font-variation-settings: "wght" 560, "wdth" 70, "slnt" 0; } 100% { font-variation-settings: "wght" 640, "wdth" 150, "slnt" -10; } }
+  @keyframes v-tourne { to { rotate: 360deg; } }
+  @keyframes v-clignote { 50% { opacity: .25; transform: scale(.7); } }
+  @media (orientation: portrait) {
+    .veille { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; align-content: center; text-align: center; }
+    .veille .v-roue { order: -1; width: min(78vw, 46vh); }
+    .veille h2 { margin-top: 2vh; } .veille .v-chiffres { justify-content: center; } .veille .v-toucher { margin-top: 3.5vh; }
+  }
+  @media (max-width: 560px) { .veille .v-sur { font-size: 9px; letter-spacing: .14em; } .veille h2 .b { font-size: clamp(26px, 8.6vw, 60px); } }
+  .veille .v-chiffres b, .veille .v-toucher { white-space: nowrap; }
+  @media (max-width: 560px), (max-height: 500px) {
+    .veille .v-toucher { letter-spacing: .12em; padding: 12px 18px; font-size: 11px; }
+    .veille .v-chiffres { gap: 14px; } .veille .v-chiffres small { letter-spacing: .08em; white-space: nowrap; }
+    .veille .v-chiffres b { font-size: clamp(22px, min(6vw, 8vh), 40px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .veille *, .veille { animation: none !important; } }
+</style>
+<div class="veille cachee" id="veille" role="button" aria-label="Touchez pour découvrir">
+  <div class="v-texte">
+    <p class="v-sur large">Studio EVOX · Collection WheelForce</p>
+    <h2 class="large"><span class="a">Six dessins concaves,</span><span class="b">WheelForce</span></h2>
+    <div class="v-chiffres large"><div><b id="v-n">6</b><small>Jantes au mur</small></div><div class="barre"></div><div><b id="v-val"></b><small id="v-lib"></small></div></div>
+    <p class="v-toucher large"><i></i>Touchez pour découvrir</p>
+  </div>
+  <div class="v-roue"><div class="tourne" id="v-roue"></div></div>
+</div>
+<script>
+(() => {
+  // Mode borne : adresse avec ?borne (tablette réglée sur ce mur). Sur le site web, la page s'ouvre normalement.
+  const q = new URLSearchParams(location.search);
+  const borne = q.has("borne");
+  const v = document.getElementById("veille");
+  if (!borne) { v.remove(); return; }
+  const ITEMS = W.map(j => ({ img: `assets/dessins/${j.id}.png`, val: j.nom, lib: j.diametres.map(d => d.replace('"', "")).join(" · ") + " pouces" }));
+  const roue = document.getElementById("v-roue");
+  roue.innerHTML = ITEMS.map(it => `<img src="${it.img}" alt="">`).join("");
+  const imgs = [...roue.children];
+  let i = 0, boucle = null, minuteur = null;
+  function montrer(k) {
+    i = (k + ITEMS.length) % ITEMS.length;
+    imgs.forEach((im, n) => im.classList.toggle("on", n === i));
+    document.getElementById("v-val").textContent = ITEMS[i].val;
+    document.getElementById("v-lib").textContent = ITEMS[i].lib;
+  }
+  function veille() {
+    try { if (typeof finirVisite === "function") finirVisite(); if (typeof fermerVisionneuse === "function" && visionneuseOuverte) fermerVisionneuse(); if (typeof fermer === "function" && document.getElementById("panneau").classList.contains("ouvert")) fermer(); } catch (e) {}
+    scrollTo(0, 0);
+    v.classList.remove("cachee");
+    montrer(0); clearInterval(boucle); boucle = setInterval(() => montrer(i + 1), 3200);
+  }
+  function reveil() { clearInterval(boucle); v.classList.add("cachee"); relancer(); }
+  const relancer = () => { clearTimeout(minuteur); minuteur = setTimeout(veille, 90000); };
+  v.addEventListener("click", reveil);
+  ["pointerdown", "touchstart", "keydown", "scroll"].forEach(ev => addEventListener(ev, () => { if (v.classList.contains("cachee")) relancer(); }, { passive: true }));
+  veille();
+  // Réglage équipe (appui long ou 5 appuis sur le surtitre de la veille) : choisir ce qu'affiche la tablette
+  v.querySelector(".v-sur").setAttribute("data-reglage", "");
+  const s = document.createElement("script");
+  s.src = "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/ecran-borne.js";
+  document.body.appendChild(s);
+})();
+</script>
 </body>
 </html>
