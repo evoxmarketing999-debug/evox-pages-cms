@@ -841,7 +841,7 @@
   if (!borne) { v.remove(); return; }
   // Sur la tablette : réglage équipe + mémoire du dernier contact (pour le menu Showroom)
   const s = document.createElement("script");
-  s.src = "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/ecran-borne.js";
+  s.src = "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/ecran-borne.js?v=2026-11-13a";
   // ?borne=visite : ouverte depuis le menu Showroom, pas d'écran de veille (le client vient de choisir)
   if (q.get("borne") === "visite") { v.remove(); document.body.appendChild(s); return; }
   const ITEMS = W.map(j => ({ img: `assets/dessins/${j.id}.png`, val: j.nom, lib: j.diametres.map(d => d.replace('"', "")).join(" · ") + " pouces" }));
