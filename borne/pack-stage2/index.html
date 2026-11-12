@@ -170,9 +170,33 @@
   .bloc { background: var(--noir-2); border-radius: 22px; padding: clamp(16px, 2.2vw, 24px); }
   .bloc h3 { font-size: clamp(16px, 1.8vw, 20px); margin: 8px 0 4px; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; }
   .bloc > p { font-size: 13px; color: var(--gris); line-height: 1.5; }
-  .courbe { margin-top: 12px; background: #fff; border-radius: 14px; overflow: hidden; position: relative; }
-  .courbe img { width: 100%; clip-path: inset(0 100% 0 0); transition: clip-path 2.2s var(--ease) .4s; }
-  .ecran.actif.joue .courbe img { clip-path: inset(0 0 0 0); }
+  .lecture { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 12px; min-height: 30px; }
+  .lecture .regime { font-size: 12px; color: var(--gris); letter-spacing: .06em; }
+  .lecture b { font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(20px, 2.4vw, 26px); font-variation-settings: "wght" 850, "wdth" 115, "slnt" 0; }
+  .lecture b.ch { color: var(--vert); }
+  .lecture b small { font-size: .5em; color: var(--gris); margin-left: 3px; }
+  .graphe-banc { position: relative; margin-top: 6px; touch-action: none; cursor: crosshair; }
+  .graphe-banc svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .graphe-banc .grille line { stroke: rgba(255,255,255,.07); }
+  .graphe-banc .lib { font: 600 var(--fs, 10px) Montserrat, sans-serif; fill: #6A6A64; }
+  .graphe-banc .lib.ch { fill: #9DB33A; } 
+  .graphe-banc .trait-ch { fill: none; stroke: var(--vert); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+  .graphe-banc .trait-nm { fill: none; stroke: #FFFFFF; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; opacity: .9; }
+  .graphe-banc .aire { fill: url(#degrade-ch); opacity: 0; transition: opacity 1.2s var(--ease) 1.4s; }
+  .graphe-banc.trace .aire { opacity: 1; }
+  .graphe-banc .pic { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.4); transition: opacity .5s var(--ease), transform .6s var(--ressort); }
+  .graphe-banc.trace .pic { opacity: 1; transform: none; }
+  .graphe-banc.trace .pic.p1 { transition-delay: 1.9s; } .graphe-banc.trace .pic.p2 { transition-delay: 1.2s; }
+  .graphe-banc .pic text { font: 800 var(--fs2, 12px) Montserrat, sans-serif; }
+  .graphe-banc .curseur { opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .graphe-banc.lit .curseur { opacity: 1; }
+  .legende-banc { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 8px; font-size: 11.5px; color: var(--gris); }
+  .legende-banc i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+  .legende-banc .original { margin-left: auto; padding: 8px 12px; border-radius: 10px; background: var(--noir-3); color: var(--blanc); font-size: 11.5px; font-weight: 700; }
+  .releve { position: fixed; inset: 0; z-index: 40; background: rgba(5,5,4,.92); display: grid; place-items: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+  .releve.ouvert { opacity: 1; pointer-events: auto; }
+  .releve img { max-width: min(760px, 100%); max-height: 82svh; border-radius: 14px; background: #fff; }
+  .releve p { margin-top: 12px; text-align: center; color: var(--gris); font-size: 12px; }
   .perfs .col { display: grid; gap: 12px; align-content: start; }
   .segments { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
   .segments button { flex: 1; padding: 11px 8px; border-radius: 12px; background: var(--noir-3); font-size: 13px; font-weight: 700; color: var(--gris); transition: background .3s, color .3s; min-width: 0; }
@@ -275,7 +299,6 @@
     .fiche { grid-template-columns: minmax(0, 1fr); grid-template-rows: 38svh minmax(0, 1fr); }
     .galerie { min-height: 0; }
     .son .visu-son { order: -1; }
-    .courbe img { max-height: 34svh; object-fit: contain; }
   }
   @media (max-width: 760px) {
     .barre .titre { display: none; }
@@ -377,8 +400,11 @@
           <div class="bloc" data-a>
             <p class="etiquette">Pack Stage 2 / 340 · Alpine A110 II</p>
             <h3 class="cf">La courbe</h3>
-            <p>Puissance et couple relevés au banc Dynojet.</p>
-            <div class="courbe"><img src="assets/dyno.jpg" alt="Courbe de puissance et de couple au banc Dynojet : 340 ch et 409 Nm"></div>
+            <p>Glissez le doigt sur la courbe pour lire la puissance et le couple à chaque régime.</p>
+            <div class="lecture" id="lecture"></div>
+            <div class="graphe-banc" id="graphe-banc"></div>
+            <div class="legende-banc"><span><i style="background:var(--vert)"></i>Puissance (ch)</span><span><i style="background:#fff"></i>Couple (Nm)</span><span>Régime en tr/min</span>
+              <button class="original" id="voir-releve">Relevé original</button></div>
           </div>
         </div>
         <div class="col">
@@ -427,6 +453,9 @@
     <button class="onglet" role="tab" data-ecran="e-son"><i>04</i><span>Le son</span></button>
   </nav>
 </div>
+
+<!-- Relevé original du banc -->
+<div class="releve" id="releve" role="dialog" aria-label="Relevé original du banc"><div><img src="assets/dyno.jpg" alt="Relevé au banc Dynojet : 339 ch et 409 Nm"><p>Relevé original au banc Dynojet · touchez pour fermer</p></div></div>
 
 <!-- Fiche d'un élément du pack -->
 <div class="voile" id="voile"></div>
@@ -493,7 +522,7 @@
     el.querySelectorAll("[data-a]").forEach((x, k) => x.style.transitionDelay = `${120 + k * 90}ms`);
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("joue")));
     ecranActuel = id;
-    if (id === "e-perfs") lancerJauges();
+    if (id === "e-perfs") { lancerJauges(); lancerCourbe(); }
     if (id === "e-son") lancerVague(); else arreterVague();
 
   }
@@ -641,7 +670,7 @@
       <div class="val cf">0</div><div class="unite cf">${unite}</div><div class="sous">${sous}</div>`;
     el.dataset.val = val; el.dataset.max = max;
   }
-  jauge($("j-ch"), P.banc.ch, 400, "ch", `Puissance max. à ${P.banc.chRegime} tr/min`);
+  jauge($("j-ch"), P.banc.ch, 400, "ch", "Puissance max. au banc Dynojet");
   jauge($("j-nm"), P.banc.nm, 500, "Nm", `Couple max. à ${P.banc.nmRegime} tr/min`);
   function lancerJauges() {
     ["j-ch", "j-nm"].forEach((id, k) => {
@@ -650,6 +679,71 @@
       setTimeout(() => { arc.style.transition = ""; arc.style.strokeDashoffset = 251.3 * (1 - v / m); compter(el.querySelector(".val"), 0, v, 1800); }, 450 + k * 200);
     });
   }
+
+
+  // ---------- Courbe du banc, redessinée en code ----------
+  const C = P.courbe, G = { l: 40, r: 44, h: 22, b: 28, W: 600, H: 320 }, RMIN = 1500, RMAX = 6500, CHMAX = 350, NMMAX = 600;
+  const bx = r => G.l + (r - RMIN) / (RMAX - RMIN) * (G.W - G.l - G.r);
+  const gyc = v => G.H - G.b - v / CHMAX * (G.H - G.b - G.h);
+  const gyn = v => G.H - G.b - v / NMMAX * (G.H - G.b - G.h);
+  const chemin = (vals, fy) => C.regimes.map((r, i) => (i ? "L" : "M") + bx(r).toFixed(1) + " " + fy(vals[i]).toFixed(1)).join(" ");
+  const iCh = C.ch.indexOf(Math.max(...C.ch)), iNm = C.nm.indexOf(Math.max(...C.nm));
+  const sep = n => n.toLocaleString("fr-FR").replace(/\u202f|\s/g, "\u202f");
+  (() => {
+    let s = `<svg viewBox="0 0 ${G.W} ${G.H}" role="img" aria-label="Courbe de puissance et de couple : ${P.banc.ch} ch et ${P.banc.nm} Nm">
+      <defs><linearGradient id="degrade-ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CCFF00" stop-opacity=".28"/><stop offset="1" stop-color="#CCFF00" stop-opacity="0"/></linearGradient></defs><g class="grille">`;
+    for (let v = 0; v <= CHMAX; v += 50) s += `<line x1="${G.l}" x2="${G.W - G.r}" y1="${gyc(v)}" y2="${gyc(v)}"/><text class="lib ch" x="${G.l - 8}" y="${gyc(v) + 3}" text-anchor="end">${v}</text>`;
+    for (let v = 0; v <= NMMAX; v += 100) s += `<text class="lib" x="${G.W - G.r + 8}" y="${gyn(v) + 3}">${v}</text>`;
+    for (let r = 2000; r <= 6000; r += 1000) s += `<line x1="${bx(r)}" x2="${bx(r)}" y1="${G.h}" y2="${G.H - G.b}"/><text class="lib" x="${bx(r)}" y="${G.H - 8}" text-anchor="middle">${sep(r)}</text>`;
+    s += `</g>
+      <path class="aire" d="${chemin(C.ch, gyc)} L${bx(C.regimes.at(-1))} ${gyc(0)} L${bx(C.regimes[0])} ${gyc(0)} Z"/>
+      <path class="trait-nm" id="t-nm" d="${chemin(C.nm, gyn)}"/>
+      <path class="trait-ch" id="t-ch" d="${chemin(C.ch, gyc)}"/>
+      <g class="pic p1"><circle cx="${bx(C.regimes[iCh])}" cy="${gyc(C.ch[iCh])}" r="6" fill="#11110E" stroke="#CCFF00" stroke-width="3"/>
+        <text x="${bx(C.regimes[iCh]) - 12}" y="${gyc(C.ch[iCh]) - 12}" text-anchor="end" fill="#CCFF00">${P.banc.ch} ch</text></g>
+      <g class="pic p2"><circle cx="${bx(C.regimes[iNm])}" cy="${gyn(C.nm[iNm])}" r="5" fill="#11110E" stroke="#fff" stroke-width="2.5"/>
+        <text x="${bx(C.regimes[iNm])}" y="${gyn(C.nm[iNm]) - 12}" text-anchor="middle" fill="#fff">${P.banc.nm} Nm</text></g>
+      <g class="curseur" id="curseur"><line id="cur-l" y1="${G.h}" y2="${G.H - G.b}" stroke="rgba(255,255,255,.5)" stroke-dasharray="3 3"/>
+        <circle id="cur-c" r="6" fill="#CCFF00" stroke="#11110E" stroke-width="2"/><circle id="cur-n" r="5" fill="#fff" stroke="#11110E" stroke-width="2"/></g></svg>`;
+    $("graphe-banc").innerHTML = s;
+  })();
+  function lire(i) {
+    $("lecture").innerHTML = `<span class="regime">${sep(C.regimes[i])} tr/min</span><b class="ch">${Math.round(C.ch[i])}<small>ch</small></b><b>${Math.round(C.nm[i])}<small>Nm</small></b>`;
+  }
+  function lirePics() {
+    $("lecture").innerHTML = `<span class="regime">Pics mesurés</span><b class="ch">${P.banc.ch}<small>ch</small></b><b>${P.banc.nm}<small>Nm à ${P.banc.nmRegime} tr/min</small></b>`;
+  }
+  function viser(ev) {
+    const svg = $("graphe-banc").querySelector("svg"), b = svg.getBoundingClientRect();
+    const x = (ev.clientX - b.left) / b.width * G.W, r = RMIN + (x - G.l) / (G.W - G.l - G.r) * (RMAX - RMIN);
+    let i = Math.round((r - C.regimes[0]) / 25); i = Math.max(0, Math.min(C.regimes.length - 1, i));
+    const X = bx(C.regimes[i]);
+    $("cur-l").setAttribute("x1", X); $("cur-l").setAttribute("x2", X);
+    $("cur-c").setAttribute("cx", X); $("cur-c").setAttribute("cy", gyc(C.ch[i]));
+    $("cur-n").setAttribute("cx", X); $("cur-n").setAttribute("cy", gyn(C.nm[i]));
+    $("graphe-banc").classList.add("lit"); lire(i);
+  }
+  let visee = false;
+  $("graphe-banc").addEventListener("pointerdown", e => { visee = true; $("graphe-banc").setPointerCapture(e.pointerId); viser(e); });
+  $("graphe-banc").addEventListener("pointermove", e => { if (visee || e.pointerType === "mouse") viser(e); });
+  const relacher = () => { visee = false; };
+  $("graphe-banc").addEventListener("pointerup", relacher); $("graphe-banc").addEventListener("pointercancel", relacher);
+  $("graphe-banc").addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { $("graphe-banc").classList.remove("lit"); lirePics(); } });
+  function lancerCourbe() {
+    const g = $("graphe-banc"); g.classList.remove("trace", "lit"); lirePics();
+    ["t-ch", "t-nm"].forEach((id, k) => {
+      const p = $(id), L = p.getTotalLength();
+      p.style.transition = "none"; p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      p.getBoundingClientRect();
+      p.style.transition = `stroke-dashoffset ${k ? 1.6 : 2.2}s cubic-bezier(.45,0,.2,1) ${k ? .5 : .3}s`;
+      p.style.strokeDashoffset = 0;
+    });
+    requestAnimationFrame(() => g.classList.add("trace"));
+  }
+  // garder des libellés lisibles quand le graphique est petit (le SVG est mis à l'échelle)
+  new ResizeObserver(([e]) => { const k = G.W / Math.max(1, e.contentRect.width); $("graphe-banc").style.setProperty("--fs", Math.max(10, 10 * k * .8) + "px"); $("graphe-banc").style.setProperty("--fs2", Math.max(12, 12 * k * .8) + "px"); }).observe($("graphe-banc"));
+  $("voir-releve").onclick = () => $("releve").classList.add("ouvert");
+  $("releve").onclick = () => $("releve").classList.remove("ouvert");
 
   const L = P.litrage, MIN = 2, MAX = 4.6;
   let puissance = 340, temp = 1;
