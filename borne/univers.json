@@ -1,0 +1,26 @@
+{
+  "info": "Catalogue des univers de la borne EVOX (appli Android v2). Ajouter un univers = ajouter une entrée ici. url = écran de la tablette (avec sa veille), visite = ouverture par l'équipe depuis « Tous les univers » (sans veille).",
+  "univers": [
+    {
+      "id": "pack-stage2",
+      "nom": "Pack Stage 2 / 340",
+      "sous": "Alpine A110 II",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/pack-stage2/",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/pack-stage2/#direct"
+    },
+    {
+      "id": "porsche",
+      "nom": "Jantes Porsche",
+      "sous": "Mur de 12 jantes, 1967 – 2019",
+      "url": "https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne=visite"
+    },
+    {
+      "id": "wheelforce",
+      "nom": "Jantes WheelForce",
+      "sous": "Mur de 6 jantes, 19 – 22 pouces",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/jantes-wheelforce/?borne",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/jantes-wheelforce/?borne=visite"
+    }
+  ]
+}

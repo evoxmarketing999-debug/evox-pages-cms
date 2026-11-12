@@ -359,8 +359,7 @@
 <body>
 <div id="app">
   <header class="barre">
-    <a class="showroom" href="../?menu" aria-label="Retour au menu Showroom"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M8 2 4 6l4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Showroom</span></a>
-    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance" data-reglage>
+    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
     <p class="titre etiquette">Pack Performance · Stage 2 / 340 · Alpine A110 II</p>
     <div class="puce-prix" id="puce-prix"><small class="etiquette">Votre pack</small><b id="puce-montant"></b></div>
   </header>
@@ -496,7 +495,7 @@
 <div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir le pack">
   <div class="fond"></div>
   <div class="contenu">
-    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance" data-reglage>
+    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
     <p class="grand cf"><span>Stage 2</span><span>/ 340</span></p>
     <p class="modele cf">Pack Performance · Alpine A110 II</p>
     <div class="compteurs cf">
@@ -508,7 +507,6 @@
 </div>
 
 <script src="assets/pack.js?v=2026-11-13b"></script>
-<script src="../ecran-borne.js?v=2026-11-13b"></script>
 <script>
   const P = window.PACK, $ = id => document.getElementById(id);
   const euros = n => n.toLocaleString("fr-FR").replace(/ |\s/g, " ") + " €";
@@ -870,7 +868,7 @@
   function arreterVague() { clearInterval(minuteurVague); }
 
   // ---------- Veille et inactivité ----------
-  const INACTIVITE = 90_000;
+  const INACTIVITE = 80_000; // 1 min 20
   let minuteurVeille = null;
   function veille() {
     fermerFiche(); $("veille").classList.remove("cachee");

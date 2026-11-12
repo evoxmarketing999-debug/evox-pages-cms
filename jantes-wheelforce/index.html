@@ -838,12 +838,8 @@
   const q = new URLSearchParams(location.search);
   const borne = q.has("borne");
   const v = document.getElementById("veille");
-  if (!borne) { v.remove(); return; }
-  // Sur la tablette : réglage équipe + mémoire du dernier contact (pour le menu Showroom)
-  const s = document.createElement("script");
-  s.src = "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/ecran-borne.js?v=2026-11-13b";
-  // ?borne=visite : ouverte depuis le menu Showroom, pas d'écran de veille (le client vient de choisir)
-  if (q.get("borne") === "visite") { v.remove(); document.body.appendChild(s); return; }
+  // ?borne=visite : ouverte par l'équipe depuis « Tous les univers » (appli borne), pas d'écran de veille
+  if (!borne || q.get("borne") === "visite") { v.remove(); return; }
   const ITEMS = W.map(j => ({ img: `assets/dessins/${j.id}.png`, val: j.nom, lib: j.diametres.map(d => d.replace('"', "")).join(" · ") + " pouces" }));
   const roue = document.getElementById("v-roue");
   roue.innerHTML = ITEMS.map(it => `<img src="${it.img}" alt="">`).join("");
@@ -862,13 +858,10 @@
     montrer(0); clearInterval(boucle); boucle = setInterval(() => montrer(i + 1), 3200);
   }
   function reveil() { clearInterval(boucle); v.classList.add("cachee"); relancer(); }
-  const relancer = () => { clearTimeout(minuteur); minuteur = setTimeout(veille, 90000); };
+  const relancer = () => { clearTimeout(minuteur); minuteur = setTimeout(veille, 80000); }; // 1 min 20
   v.addEventListener("click", reveil);
   ["pointerdown", "touchstart", "keydown", "scroll"].forEach(ev => addEventListener(ev, () => { if (v.classList.contains("cachee")) relancer(); }, { passive: true }));
   veille();
-  // Réglage équipe (appui long ou 5 appuis sur le surtitre de la veille) : choisir ce qu'affiche la tablette
-  v.querySelector(".v-sur").setAttribute("data-reglage", "");
-  document.body.appendChild(s);
 })();
 </script>
 </body>
