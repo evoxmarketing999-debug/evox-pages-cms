@@ -71,7 +71,7 @@
   .colonnes { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(24px, 6vw, 96px); max-width: 940px; margin: 0 auto 10px; }
   .colonnes p { font-size: 10px; letter-spacing: .2em; color: var(--doux); padding-bottom: 12px; border-bottom: 1px solid var(--filet); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
   .colonnes p b { color: var(--encre); font-weight: normal; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
-  .mur { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, 220px); column-gap: clamp(24px, 6vw, 96px); max-width: 940px; margin: 0 auto; }
+  .mur { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(7, 220px); column-gap: clamp(24px, 6vw, 96px); max-width: 940px; margin: 0 auto; }
   .jante {
     grid-row: span 2; display: flex; flex-direction: column; align-items: center; padding: 18px 0; cursor: pointer; outline: none; position: relative;
     opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease), filter .5s;
@@ -176,7 +176,7 @@
   .recit { margin-top: 24px; font-size: 16px; line-height: 1.65; color: #34342F; max-width: 440px; }
   .fiche { display: flex; gap: 22px; margin: 26px 0 26px; }
   .fiche .barre { width: 3px; background: var(--encre); flex: none; }
-  .fiche dl { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 12px 16px; font-size: 14px; line-height: 1.45; }
+  .fiche dl { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 12px 16px; font-size: 14px; line-height: 1.45; }
   .fiche dt { font-size: 10px; letter-spacing: .1em; padding-top: 3px; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
   .nuancier { display: flex; flex-wrap: wrap; gap: 6px 14px; }
   .nuancier span { display: inline-flex; align-items: center; gap: 7px; }
@@ -301,9 +301,26 @@
     .hero-jante { min-height: 220px; }
     .entete .fleches { display: none; }
   }
+  /* ---------- Écran bas en paysage (téléphone couché) : fiche en deux colonnes ---------- */
+  @media (max-width: 900px) and (orientation: landscape) and (max-height: 600px) {
+    .panneau { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; }
+    .scene .dessin { width: min(74%, 64svh); }
+    .scene .cercle { width: min(84%, 74svh); }
+    .bascule { top: 12px; left: 12px; }
+    .progression { top: 58px; }
+    .astuce { bottom: 10px; }
+    .infos { padding: 18px 20px; }
+    .hero h1 { margin-top: 28px; }
+  }
   /* ---------- Téléphone ---------- */
   @media (max-width: 560px) {
-    .surtitre { font-size: 9px; letter-spacing: .16em; }
+    .surtitre { font-size: 8px; letter-spacing: .12em; gap: 6px 12px; flex-wrap: wrap; }
+    .surtitre span { white-space: nowrap; }
+    .entete h2 { font-size: clamp(19px, 6.6vw, 30px); }
+    .entete > div { min-width: 0; }
+    .teintes { flex-wrap: wrap; }
+    .tete { gap: 6px; }
+    .tete span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .chapo { font-size: 10px; text-align: left; }
     .bloc { flex-wrap: wrap; gap: 18px; } .bloc .barre { display: none; } .bloc a { margin-left: 0; }
     .colonnes { display: none; }
