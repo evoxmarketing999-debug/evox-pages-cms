@@ -4,339 +4,378 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jantes WheelForce — EVOX</title>
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* Même direction artistique que le mur de jantes Porsche : affiche d'époque, papier, CoFo Peshka large */
   :root {
-    --texte: #1D1D1F;
-    --gris: #6E6E73;
-    --clair: #F5F5F7;
-    --filet: #D2D2D7;
+    --papier: #E7E5E0;
+    --papier-2: #DEDCD6;
+    --encre: #1C1C1A;
+    --titre: #5C5C58;
+    --doux: #85847E;
+    --filet: #BDBBB4;
     --vert: #CCFF00;
     --ease: cubic-bezier(.22, .8, .24, 1);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; overflow-x: hidden; }
-  body { font-family: "Montserrat", sans-serif; color: var(--texte); background: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  button:focus:not(:focus-visible) { outline: none; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--encre); outline-offset: 3px; }
+  body { font-synthesis: none; font-style: normal; font-family: "Montserrat", sans-serif; color: var(--encre); background: var(--papier); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   img { display: block; max-width: 100%; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   a { color: inherit; text-decoration: none; }
-  h1, h2, h3, .titre { font-family: "Poppins", sans-serif; letter-spacing: -.025em; }
-  .cadre { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 40px); }
-  .lien { font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
-  .lien::after { content: "›"; font-size: 1.25em; line-height: 1; transition: transform .3s var(--ease); }
-  .lien:hover::after { transform: translateX(3px); }
-  .retour::after { content: none; }
-  .retour::before { content: "‹"; font-size: 1.25em; line-height: 1; }
-  .lien:hover { text-decoration: underline; text-decoration-color: var(--vert); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .large { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
+  .cadre { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 64px); }
+  .carre::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--vert); margin-right: 10px; vertical-align: 1px; }
 
-  /* Barre */
-  .barre { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.78); backdrop-filter: saturate(180%) blur(18px); -webkit-backdrop-filter: saturate(180%) blur(18px); border-bottom: 1px solid rgba(0,0,0,.06); }
-  .barre .cadre { height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  .barre strong { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
-  .barre nav { display: flex; gap: 24px; font-size: 13px; color: var(--gris); }
-  .barre nav a:hover { color: var(--texte); }
-  .barre img { height: 16px; }
+  /* ---------- Ouverture ---------- */
+  .hero { min-height: 100svh; display: flex; flex-direction: column; padding-top: 32px; padding-bottom: 36px; }
+  .surtitre { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .28em; color: var(--doux); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .hero h1 { margin-top: clamp(40px, 8vh, 90px); line-height: .95; }
+  .hero h1 .l1 { display: block; font-size: clamp(17px, 3.6vw, 46px); font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; letter-spacing: .02em; }
+  .hero h1 .l2 { display: block; font-size: clamp(26px, 7.4vw, 94px); color: var(--titre); font-variation-settings: "wght" 560, "wdth" 150, "slnt" 0; margin-top: .12em; white-space: nowrap; }
+  .chapo { text-align: right; margin-top: 18px; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; }
+  .hero-jante { flex: 1; min-height: 260px; position: relative; margin: 24px 0; }
+  .hero-jante img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; animation: tourne 120s linear infinite; }
+  .bloc { display: flex; align-items: stretch; gap: 28px; }
+  .bloc .annees span { display: block; font-size: 15px; letter-spacing: .14em; }
+  .bloc .annees strong { display: block; font-size: clamp(22px, 3vw, 32px); color: var(--titre); font-weight: normal; font-variation-settings: "wght" 500, "wdth" 150, "slnt" 0; margin-top: 4px; white-space: nowrap; }
+  .bloc .barre { width: 3px; background: var(--encre); flex: none; }
+  .bloc p { align-self: center; font-size: 14px; line-height: 1.6; color: #4A4A46; max-width: 380px; }
+  .hero .bloc p { flex: 1 1 220px; }
+  .bloc a { margin-left: auto; align-self: center; font-size: 12px; letter-spacing: .2em; color: var(--encre); display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+  .rond { width: 44px; height: 44px; border: 1px solid var(--encre); border-radius: 50%; display: grid; place-items: center; transition: background .4s var(--ease), color .4s; flex: none; }
+  .bloc a:hover .rond { background: var(--encre); color: var(--papier); }
+  @keyframes tourne { to { rotate: 360deg; } }
 
-  /* Ouverture */
-  .hero { text-align: center; padding: clamp(56px, 9vw, 104px) 0 0; overflow: hidden; }
-  .surtitre { font-size: 15px; font-weight: 600; color: var(--gris); }
-  .surtitre::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 2px; }
-  .hero h1 { font-size: clamp(44px, 8vw, 88px); font-weight: 700; line-height: 1.02; margin-top: 10px; }
-  .hero p.intro { font-size: clamp(19px, 2.4vw, 26px); font-family: "Poppins"; font-weight: 500; letter-spacing: -.015em; color: var(--texte); margin: 14px auto 0; max-width: 720px; line-height: 1.25; }
-  .hero .liens { display: flex; justify-content: center; gap: 28px; margin-top: 22px; font-size: 17px; }
-  .hero-roue { width: min(620px, 86vw); aspect-ratio: 1; margin: clamp(32px, 6vw, 56px) auto 0; position: relative; }
-  .hero-roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; will-change: transform; }
-  .hero-sol { height: 1px; background: linear-gradient(90deg, transparent, var(--filet), transparent); margin-top: -2px; }
+  /* ---------- Sections ---------- */
+  .section { padding: clamp(64px, 9vw, 120px) 0; border-top: 1px solid var(--filet); }
+  .section.fonce { background: var(--papier-2); }
+  .entete { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px; }
+  .entete h2 { font-size: clamp(26px, 4vw, 44px); font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; line-height: 1; }
+  .entete p { margin-top: 12px; color: #4A4A46; font-size: 14px; }
+  .filtres { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .filtres > span { font-size: 10px; letter-spacing: .2em; color: var(--doux); margin-right: 12px; }
+  .filtre { padding: 8px 10px; font-size: 13px; letter-spacing: .1em; color: var(--doux); position: relative; transition: color .3s; font-family: "cofo-peshka-variable"; text-transform: uppercase; font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .filtre::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 2px; height: 2px; background: var(--encre); transform: scaleX(0); transition: transform .4s var(--ease); }
+  .filtre:hover, .filtre[aria-pressed="true"] { color: var(--encre); }
+  .filtre[aria-pressed="true"]::after { transform: none; }
+  .fleches { display: flex; gap: 10px; }
+  .fleches button { width: 44px; height: 44px; border: 1px solid var(--encre); border-radius: 50%; display: grid; place-items: center; transition: background .3s, color .3s; }
+  .fleches button:hover { background: var(--encre); color: var(--papier); }
 
-  /* Gamme */
-  .section { padding: clamp(64px, 9vw, 112px) 0; }
-  .section.gris { background: var(--clair); }
-  .entete { text-align: center; max-width: 720px; margin: 0 auto clamp(36px, 5vw, 56px); }
-  .entete h2 { font-size: clamp(34px, 5.4vw, 56px); font-weight: 700; line-height: 1.05; }
-  .entete p { margin-top: 12px; font-size: clamp(17px, 2vw, 21px); color: var(--gris); line-height: 1.4; }
-  .gamme { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: clamp(170px, 20vw, 240px); gap: 20px 24px; max-width: 940px; margin: 0 auto; }
-  .gamme .g { grid-column: 1; } .gamme .d { grid-column: 2; }
-  .tuile {
-    grid-row: span 2;
-    background: #fff; border-radius: 28px; padding: 32px 28px 30px; text-align: center; cursor: pointer; outline: none;
-    display: flex; flex-direction: column; align-items: center; transition: transform .5s var(--ease), box-shadow .5s var(--ease);
-    opacity: 0; transform: translateY(24px);
+  /* ---------- Le mur ---------- */
+  .colonnes { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(24px, 6vw, 96px); max-width: 940px; margin: 0 auto 10px; }
+  .colonnes p { font-size: 10px; letter-spacing: .2em; color: var(--doux); padding-bottom: 12px; border-bottom: 1px solid var(--filet); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .colonnes p b { color: var(--encre); font-weight: normal; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
+  .mur { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, 220px); column-gap: clamp(24px, 6vw, 96px); max-width: 940px; margin: 0 auto; }
+  .jante {
+    grid-row: span 2; display: flex; flex-direction: column; align-items: center; padding: 18px 0; cursor: pointer; outline: none; position: relative;
+    opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease), filter .5s;
   }
-  .vu .tuile { opacity: 1; transform: none; transition: opacity .9s var(--ease), transform .9s var(--ease), box-shadow .5s var(--ease); }
-  .tuile:hover, .tuile:focus-visible { transform: translateY(-4px) !important; box-shadow: 0 24px 50px rgba(0,0,0,.08); }
-  .tuile:focus-visible { box-shadow: 0 0 0 3px var(--vert); }
-  .tuile .techno { font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: .08em; }
-  .tuile h3 { font-size: 28px; font-weight: 600; margin-top: 6px; }
-  .tuile .finition { font-size: 15px; color: var(--gris); margin-top: 2px; }
-  .tuile .roue { flex: 1; min-height: 0; width: 100%; margin: 16px 0; position: relative; }
-  .tuile .roue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .5s var(--ease), scale .8s var(--ease); }
-  .tuile .roue .survol { object-fit: cover; border-radius: 18px; opacity: 0; scale: .96; }
-  .tuile:hover .roue .survol, .tuile:focus-visible .roue .survol { opacity: 1; scale: 1; }
-  .pastilles { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-  .pastilles span { font-size: 13px; font-weight: 600; padding: 5px 11px; border-radius: 999px; background: var(--clair); }
-  .tuile .lien { margin-top: 14px; font-size: 15px; }
-  .coloris { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--gris); margin-top: 8px; }
-  .teintes { display: inline-flex; flex: none; }
-  .teintes b { width: 12px; height: 12px; border-radius: 50%; margin-left: -4px; box-shadow: 0 0 0 1.5px #fff; }
-  .teintes b:first-child { margin-left: 0; }
-  .nuancier { display: flex; flex-wrap: wrap; gap: 8px 14px; }
-  .nuancier span { display: inline-flex; align-items: center; gap: 7px; }
-  .nuancier b { width: 15px; height: 15px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); flex: none; }
-  .note-coloris { display: block; margin-top: 8px; font-size: 13px; color: var(--gris); }
-  .coloris i { flex: none; width: 12px; height: 12px; border-radius: 50%; background: conic-gradient(#C9CACC 0 33%, #1D1D1F 0 66%, #A88A63 0); box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  .vu .jante { opacity: 1; transform: none; }
+  .g { grid-column: 1; } .d { grid-column: 2; }
+  .tete { width: 100%; display: flex; justify-content: space-between; font-size: 13px; color: var(--doux); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .tete .n { color: var(--encre); }
+  .visuel { flex: none; height: 250px; width: 100%; position: relative; margin: -4px 0 14px; }
+  .visuel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: rotate 1.4s var(--ease), scale 1s var(--ease); }
+  .jante:hover .visuel img, .jante:focus-visible .visuel img { rotate: 36deg; scale: 1.04; }
+  .nom { font-size: 19px; letter-spacing: .03em; font-variation-settings: "wght" 760, "wdth" 140, "slnt" 0; text-align: center; position: relative; padding-bottom: 6px; }
+  .nom::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--vert); transform: scaleX(0); transition: transform .5s var(--ease); }
+  .jante:hover .nom::after, .jante:focus-visible .nom::after { transform: none; }
+  .meta { margin-top: 8px; font-size: 12.5px; line-height: 1.35; text-align: center; color: #3E3E3B; }
+  .meta b { font-family: "cofo-peshka-variable"; font-weight: normal; text-transform: uppercase; font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; font-size: 11.5px; letter-spacing: .06em; color: var(--encre); }
+  .histoire { margin-top: 8px; font-size: 12px; line-height: 1.5; color: #5A5A54; text-align: center; max-width: 320px; }
+  .teintes { display: flex; justify-content: center; align-items: center; gap: 5px; margin-top: 10px; font-size: 10px; letter-spacing: .14em; color: var(--doux); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .teintes i { width: 11px; height: 11px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(28,28,26,.25); flex: none; }
+  .teintes span { margin-left: 6px; }
+  .jante.eteinte { filter: opacity(.2); }
+  .jante.eteinte .visuel img { rotate: 0deg !important; }
 
-  /* Technologies */
-  .noir { background: #000; color: #F5F5F7; }
-  .noir .entete p { color: #A1A1A6; }
-  .technos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .techno-carte { background: #1C1C1E; border-radius: 28px; padding: 34px 30px; position: relative; overflow: hidden; min-height: 300px; display: flex; flex-direction: column; }
-  .techno-carte img { position: absolute; right: -28%; bottom: -30%; width: 86%; filter: invert(1); opacity: .16; }
-  .techno-carte .modeles { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--vert); }
-  .techno-carte h3 { font-size: 30px; font-weight: 600; margin-top: 10px; color: #fff; }
-  .techno-carte p { margin-top: 12px; font-size: 16px; line-height: 1.5; color: #A1A1A6; max-width: 300px; position: relative; }
-  .atouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; }
-  .atouts div { background: #1C1C1E; border-radius: 22px; padding: 22px 22px; font-size: 15px; color: #A1A1A6; line-height: 1.45; }
-  .atouts b { display: block; color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 19px; letter-spacing: -.015em; margin-bottom: 4px; }
+  /* ---------- En situation ---------- */
+  .piste { display: flex; gap: clamp(14px, 2vw, 24px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none;
+    padding: 0 max(16px, calc((100vw - 1240px) / 2 + 64px)); scroll-padding: 0 max(16px, calc((100vw - 1240px) / 2 + 64px)); }
+  .piste::-webkit-scrollbar { display: none; }
+  .carte-photo { flex: none; width: clamp(240px, 28vw, 380px); scroll-snap-align: start; cursor: zoom-in; outline: none; }
+  .carte-photo .cliche { aspect-ratio: 4 / 5; overflow: hidden; background: var(--encre); }
+  .carte-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease), filter .6s; }
+  .carte-photo:hover img, .carte-photo:focus-visible img { transform: scale(1.05); }
+  .carte-photo figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; font-size: 13px; letter-spacing: .04em; }
+  .carte-photo figcaption span { color: var(--doux); font-family: "Montserrat"; text-transform: none; font-size: 12px; letter-spacing: 0; }
 
-  /* Comparer */
+  /* ---------- Comparer ---------- */
   .table-defile { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
   table { width: 100%; min-width: 860px; border-collapse: collapse; table-layout: fixed; }
-  th, td { padding: 18px 12px; text-align: center; vertical-align: top; font-size: 14px; line-height: 1.45; border-bottom: 1px solid var(--filet); }
-  thead th { border-bottom: 0; }
-  thead img { width: 104px; height: 104px; object-fit: contain; margin: 0 auto 10px; }
-  thead strong { display: block; font-family: "Poppins"; font-weight: 600; font-size: 18px; letter-spacing: -.015em; }
-  thead span { display: block; font-weight: 400; color: var(--gris); font-size: 13px; }
-  tbody th { text-align: left; font-weight: 600; color: var(--gris); font-size: 13px; width: 120px; }
+  th, td { padding: 16px 10px; text-align: center; vertical-align: top; font-size: 13px; line-height: 1.45; border-bottom: 1px solid var(--filet); }
+  thead th { border-bottom: 3px solid var(--encre); padding-bottom: 18px; }
+  thead img { width: 96px; height: 96px; object-fit: contain; margin: 0 auto 12px; }
+  thead strong { display: block; font-family: "cofo-peshka-variable"; font-weight: normal; text-transform: uppercase; font-variation-settings: "wght" 760, "wdth" 140, "slnt" 0; font-size: 14px; letter-spacing: .03em; }
+  thead span { display: block; font-weight: 400; color: var(--doux); font-size: 12px; margin-top: 2px; }
+  tbody th { text-align: left; width: 120px; font-family: "cofo-peshka-variable"; font-weight: normal; text-transform: uppercase; font-size: 10px; letter-spacing: .14em; padding-top: 18px; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
 
-  /* Pied */
-  .pied { border-top: 1px solid var(--filet); padding: 28px 0 40px; font-size: 12px; color: var(--gris); line-height: 1.6; }
-  .pied .cadre { display: flex; justify-content: space-between; gap: 24px; align-items: center; flex-wrap: wrap; }
-  .pied p.cta { color: var(--texte); font-weight: 600; font-size: 14px; }
-  .pied img { height: 22px; }
+  /* ---------- Technologies ---------- */
+  .technos { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
+  .techno { display: flex; gap: 22px; position: relative; overflow: hidden; padding-bottom: 8px; }
+  .techno .barre { width: 3px; background: var(--encre); flex: none; }
+  .techno .modeles { font-size: 10px; letter-spacing: .16em; color: var(--doux); font-variation-settings: "wght" 650, "wdth" 150, "slnt" 0; }
+  .techno h3 { font-size: clamp(20px, 2.2vw, 26px); line-height: 1.05; margin-top: 10px; font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
+  .techno p { margin-top: 12px; font-size: 14px; line-height: 1.6; color: #4A4A46; }
+  .atouts { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(40px, 6vw, 72px); border-top: 1px solid var(--filet); }
+  .atouts div { padding: 22px 20px 4px 0; font-size: 13px; color: #4A4A46; line-height: 1.5; }
+  .atouts div + div { padding-left: 20px; border-left: 1px solid var(--filet); }
+  .atouts b { display: block; color: var(--encre); font-family: "cofo-peshka-variable"; font-weight: normal; text-transform: uppercase; font-size: clamp(16px, 1.8vw, 20px); margin-bottom: 6px; font-variation-settings: "wght" 760, "wdth" 150, "slnt" 0; }
 
-  /* Fiche produit */
-  .voile { position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .45s var(--ease); z-index: 20; }
+  /* ---------- Pied ---------- */
+  .pied { border-top: 1px solid var(--filet); padding: 40px 0 48px; }
+  .pied .cadre { display: flex; align-items: stretch; gap: 28px; flex-wrap: wrap; }
+  .pied .notes { flex: 1; min-width: 240px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .pied h2 { font-size: 12px; letter-spacing: .1em; }
+  .pied p { font-size: 13px; color: #4A4A46; }
+  .pied p.cta { color: var(--encre); font-weight: 600; }
+  .pied img { height: 30px; align-self: center; opacity: .82; }
+
+  /* ---------- Fiche d'une jante ---------- */
+  .voile { position: fixed; inset: 0; background: rgba(28,28,26,.4); opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); z-index: 20; }
   .voile.ouvert { opacity: 1; pointer-events: auto; }
-  .fiche {
-    position: fixed; z-index: 21; left: 50%; top: 50%; width: min(1060px, calc(100% - 32px)); max-height: calc(100svh - 48px);
-    background: #fff; border-radius: 28px; overflow: hidden; display: grid; grid-template-columns: 1.1fr 1fr;
-    transform: translate(-50%, -46%) scale(.97); opacity: 0; pointer-events: none; transition: transform .55s var(--ease), opacity .4s var(--ease);
+  .panneau {
+    position: fixed; inset: 0 0 0 auto; width: min(1040px, 100%); background: var(--papier); z-index: 21;
+    transform: translateX(102%); transition: transform .7s var(--ease); display: grid; grid-template-columns: 1.1fr 1fr;
   }
-  .fiche.ouverte { transform: translate(-50%, -50%); opacity: 1; pointer-events: auto; }
-  .media { background: var(--clair); position: relative; min-height: 0; overflow: hidden; transition: background .6s var(--ease); }
-  .media.sombre { background: #0B0B0C; }
-  .vues { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 5; display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: background .5s; }
-  .vues button { padding: 7px 15px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gris); transition: background .3s, color .3s; }
-  .vues button[aria-pressed="true"] { background: var(--texte); color: #fff; }
-  .media.sombre .vues { background: rgba(40,40,42,.55); }
-  .media.sombre .vues button { color: #A1A1A6; }
-  .media.sombre .vues button[aria-pressed="true"] { background: #fff; color: var(--texte); }
-  .scene-dessin { position: absolute; inset: 0; display: grid; place-items: center; padding: 70px 28px 48px; transition: opacity .5s var(--ease); }
-  .scene-dessin img { width: 100%; max-width: 460px; aspect-ratio: 1; object-fit: contain; cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; }
-  .astuce { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; font-size: 12px; color: var(--gris); }
-  .media.sombre .scene-dessin { opacity: 0; pointer-events: none; }
-  .media .galerie { opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
-  .media.sombre .galerie { opacity: 1; pointer-events: auto; }
+  .panneau.ouvert { transform: none; }
+  .scene { position: relative; background: var(--papier-2); display: grid; place-items: center; overflow: hidden; min-width: 0; }
+  .scene .cercle { position: absolute; width: 84%; aspect-ratio: 1; border: 1px solid var(--filet); border-radius: 50%; }
+  .scene .axe { position: absolute; background: var(--filet); opacity: .7; }
+  .scene .axe.h { left: 0; right: 0; height: 1px; top: 50%; }
+  .scene .axe.v { top: 0; bottom: 0; width: 1px; left: 50%; }
+  .scene .dessin { width: 74%; aspect-ratio: 1; object-fit: contain; cursor: grab; touch-action: none; user-select: none; -webkit-user-drag: none; position: relative; transition: opacity .5s; }
+  .scene .dessin:active { cursor: grabbing; }
+  .scene .galerie { opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
+  .scene.mode-photo .galerie { opacity: 1; pointer-events: auto; }
+  .scene.mode-photo .dessin, .scene.mode-photo .astuce { opacity: 0; }
+  .astuce { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font-size: 10px; letter-spacing: .2em; color: var(--doux); transition: opacity .4s; }
+  .bascule { position: absolute; top: 22px; left: 22px; display: flex; gap: 2px; z-index: 4; background: var(--papier); padding: 4px; }
+  .bascule button { padding: 7px 12px; font-size: 11px; letter-spacing: .14em; color: var(--doux); font-family: "cofo-peshka-variable"; text-transform: uppercase; font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; transition: background .3s, color .3s; }
+  .bascule button[aria-pressed="true"] { background: var(--encre); color: var(--papier); }
+  .scene::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; transform: translateX(-110%); z-index: 3;
+    background: linear-gradient(105deg, transparent 36%, rgba(255,255,255,.6) 50%, transparent 64%);
+  }
+  .scene.balaye::after { animation: balayage 1.2s var(--ease) .35s; }
 
-  /* Galerie photo : fondu enchaîné, zoom lent, progression façon story */
-  .galerie { position: absolute; inset: 0; user-select: none; touch-action: pan-y; cursor: zoom-in; }
+  .infos { min-width: 0; padding: clamp(24px, 4vw, 56px); display: flex; flex-direction: column; overflow-y: auto; }
+  .infos-haut { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--doux); }
+  .infos-haut .n { color: var(--encre); }
+  .fermer { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--encre); display: grid; place-items: center; transition: background .3s, color .3s; flex: none; }
+  .fermer:hover { background: var(--encre); color: var(--papier); }
+  .infos .techno-nom { margin-top: 30px; font-size: 11px; letter-spacing: .2em; color: var(--doux); font-variation-settings: "wght" 650, "wdth" 150, "slnt" 0; }
+  .infos h3 { font-size: clamp(26px, 3vw, 40px); line-height: 1.02; margin-top: 8px; font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
+  .infos .taille { font-size: clamp(28px, 4vw, 52px); color: var(--titre); font-variation-settings: "wght" 500, "wdth" 150, "slnt" 0; line-height: 1; margin-top: 6px; white-space: nowrap; }
+  .recit { margin-top: 24px; font-size: 16px; line-height: 1.65; color: #34342F; max-width: 440px; }
+  .fiche { display: flex; gap: 22px; margin: 26px 0 26px; }
+  .fiche .barre { width: 3px; background: var(--encre); flex: none; }
+  .fiche dl { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 12px 16px; font-size: 14px; line-height: 1.45; }
+  .fiche dt { font-size: 10px; letter-spacing: .1em; padding-top: 3px; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
+  .nuancier { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .nuancier span { display: inline-flex; align-items: center; gap: 7px; }
+  .nuancier i { width: 13px; height: 13px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(28,28,26,.25); flex: none; }
+  .nuancier small { flex-basis: 100%; font-size: 12px; color: var(--doux); }
+  .compat { padding-top: 22px; border-top: 1px solid var(--filet); }
+  .compat h4 { font-size: 10px; letter-spacing: .14em; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
+  .compat ul { list-style: none; margin-top: 10px; font-size: 14px; line-height: 1.5; }
+  .compat li { padding: 2px 0 2px 18px; position: relative; }
+  .compat li::before { content: ""; position: absolute; left: 0; top: 9px; width: 7px; height: 7px; background: var(--vert); box-shadow: 0 0 0 1px var(--encre); }
+  .position { display: flex; gap: 18px; align-items: center; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--filet); }
+  .mini-mur { display: grid; grid-template-columns: repeat(2, 14px); grid-template-rows: repeat(7, 6px); gap: 3px 4px; flex: none; }
+  .mini-mur i { grid-row: span 2; background: var(--filet); }
+  .mini-mur i.ici { background: var(--encre); box-shadow: inset 0 -3px 0 var(--vert); animation: pouls 1.2s ease-in-out 3; }
+  .position p { font-size: 13px; color: #4A4A46; line-height: 1.55; }
+  .position b { color: var(--encre); font-weight: 600; }
+  .nav { margin-top: auto; padding-top: 28px; display: flex; gap: 10px; }
+  .nav button {
+    flex: 1; min-width: 0; padding: 16px 10px; border: 1px solid var(--encre); font-size: 10px; letter-spacing: .1em; white-space: nowrap;
+    display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .3s, color .3s;
+    font-family: "cofo-peshka-variable"; text-transform: uppercase; font-variation-settings: "wght" 650, "wdth" 150, "slnt" 0;
+  }
+  .nav button:hover { background: var(--encre); color: var(--papier); }
+
+  /* ---------- Galerie photo : fondu enchaîné, zoom lent, progression ---------- */
+  .galerie { position: absolute; inset: 0; user-select: none; touch-action: pan-y; cursor: zoom-in; background: var(--encre); }
   .diapo { position: absolute; inset: 0; overflow: hidden; opacity: 0; transition: opacity 1s var(--ease); }
   .diapo.active { opacity: 1; }
   .diapo img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.001); transition: transform 7s linear; -webkit-user-drag: none; }
   .diapo.active img { transform: scale(1.07); }
-  .diapo.studio { background: #F5F5F7; }
-  .diapo.studio img { object-fit: contain; padding: 14%; transform: none !important; }
-  .galerie::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; background: linear-gradient(transparent, rgba(0,0,0,.55)); pointer-events: none; }
-  .galerie::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 24%; background: linear-gradient(rgba(0,0,0,.35), transparent); pointer-events: none; z-index: 1; }
-  .progression { position: absolute; top: 64px; left: 20px; right: 20px; display: flex; gap: 4px; z-index: 3; }
-  .progression i { flex: 1; height: 2px; border-radius: 2px; background: rgba(255,255,255,.3); position: relative; overflow: hidden; cursor: pointer; }
+  .diapo.studio { background: var(--papier-2); }
+  .diapo.studio img { object-fit: contain; padding: 14%; transform: none !important; mix-blend-mode: multiply; }
+  .galerie::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background: linear-gradient(transparent, rgba(14,14,12,.6)); pointer-events: none; }
+  .progression { position: absolute; top: 76px; left: 22px; right: 22px; display: flex; gap: 4px; z-index: 3; }
+  .progression i { flex: 1; height: 2px; background: rgba(255,255,255,.3); position: relative; overflow: hidden; cursor: pointer; }
   .progression i::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; bottom: -8px; }
-  .progression i::after { content: ""; position: absolute; inset: 0; background: #fff; transform-origin: left; transform: scaleX(0); }
-  .progression i.vue::after { transform: scaleX(1); }
+  .progression i::after { content: ""; position: absolute; inset: 0; background: var(--vert); transform-origin: left; transform: scaleX(0); }
+  .progression i.vue::after { transform: scaleX(1); background: #fff; }
   .progression i.encours::after { animation: remplir 5s linear forwards; }
   .galerie.pause .progression i.encours::after { animation-play-state: paused; }
   .galerie.fixe .progression i.encours::after { animation: none; transform: scaleX(1); }
   @keyframes remplir { to { transform: scaleX(1); } }
-  .bas { position: absolute; left: 22px; right: 18px; bottom: 18px; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fff; }
-  .compteur { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: .02em; }
+  .bas { position: absolute; left: 22px; right: 22px; bottom: 20px; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fff; }
+  .compteur { font-family: "cofo-peshka-variable"; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; font-size: 13px; letter-spacing: .1em; }
   .compteur span { color: rgba(255,255,255,.55); }
   .boutons { display: flex; gap: 8px; }
-  .boutons button { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; display: grid; place-items: center; transition: background .3s, transform .3s var(--ease); }
-  .boutons button:hover { background: rgba(255,255,255,.3); transform: scale(1.06); }
+  .boutons button { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.6); color: #fff; display: grid; place-items: center; transition: background .3s, color .3s; }
+  .boutons button:hover { background: #fff; color: var(--encre); }
 
-  /* Visionneuse plein écran */
-  .visionneuse { position: fixed; inset: 0; z-index: 40; background: #000; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
+  /* ---------- Visionneuse plein écran ---------- */
+  .visionneuse { position: fixed; inset: 0; z-index: 40; background: #0E0E0C; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
   .visionneuse.ouverte { opacity: 1; pointer-events: auto; }
-  .vis-haut { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 20px; color: #fff; font-family: "Poppins"; }
-  .vis-haut strong { font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
-  .vis-haut strong span { color: #A1A1A6; font-weight: 500; margin-left: 6px; }
-  .vis-haut button { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; display: grid; place-items: center; }
+  .vis-haut { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 20px; color: #fff; }
+  .vis-haut strong { font-weight: normal; font-size: 13px; letter-spacing: .14em; }
+  .vis-haut strong span { color: #9C9C95; margin-left: 10px; }
+  .vis-haut button { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); color: #fff; display: grid; place-items: center; }
   .vis-scene { flex: 1; min-height: 0; position: relative; }
-  .vis-scene .galerie { cursor: default; }
-  .vis-scene .galerie::before, .vis-scene .galerie::after { display: none; }
+  .vis-scene .galerie { cursor: default; background: transparent; }
+  .vis-scene .galerie::after { display: none; }
   .vis-scene .diapo img { object-fit: contain; }
   .vis-scene .diapo.active img { transform: scale(1.02); }
-  .vis-scene .diapo.studio { background: #000; }
-  .vis-scene .diapo.studio img { background: #F5F5F7; padding: 0; height: auto; max-height: 100%; width: auto; max-width: 100%; position: absolute; inset: 0; margin: auto; border-radius: 6px; }
-  .vis-scene .progression { top: 0; left: 20px; right: 20px; }
+  .vis-scene .diapo.studio { background: transparent; }
+  .vis-scene .diapo.studio img { background: var(--papier-2); mix-blend-mode: normal; padding: 0; height: auto; max-height: 100%; width: auto; max-width: 100%; position: absolute; inset: 0; margin: auto; }
+  .vis-scene .progression { top: 0; }
   .vis-scene .bas { bottom: 50%; transform: translateY(50%); left: 16px; right: 16px; pointer-events: none; }
   .vis-scene .compteur { display: none; }
   .vis-scene .boutons { width: 100%; justify-content: space-between; }
-  .vis-scene .boutons button { pointer-events: auto; width: 46px; height: 46px; }
+  .vis-scene .boutons button { pointer-events: auto; width: 48px; height: 48px; background: rgba(14,14,12,.4); }
   .vis-miniatures { display: flex; gap: 8px; padding: 14px 20px 22px; overflow-x: auto; justify-content: safe center; scrollbar-width: none; }
   .vis-miniatures::-webkit-scrollbar { display: none; }
-  .vis-miniatures button { flex: none; width: 60px; height: 60px; border-radius: 10px; overflow: hidden; opacity: .4; transition: opacity .3s, outline-color .3s; outline: 2px solid transparent; outline-offset: 2px; }
-  .vis-miniatures button[aria-current="true"] { opacity: 1; outline-color: #fff; }
+  .vis-miniatures button { flex: none; width: 60px; height: 60px; overflow: hidden; opacity: .4; transition: opacity .3s, outline-color .3s; outline: 2px solid transparent; outline-offset: 2px; }
+  .vis-miniatures button[aria-current="true"] { opacity: 1; outline-color: var(--vert); }
   .vis-miniatures img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* En situation : carrousel horizontal */
-  .entete-ligne { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: clamp(28px, 4vw, 44px); }
-  .entete-ligne h2 { font-size: clamp(34px, 5.4vw, 56px); font-weight: 700; line-height: 1.05; }
-  .entete-ligne p { margin-top: 10px; font-size: clamp(17px, 2vw, 21px); color: var(--gris); }
-  .entete-ligne .boutons button { background: var(--clair); color: var(--texte); }
-  .entete-ligne .boutons button:hover { background: var(--filet); }
-  .piste { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none;
-    padding: 0 max(16px, calc((100vw - 1120px) / 2 + 40px)); scroll-padding: 0 max(16px, calc((100vw - 1120px) / 2 + 40px)); }
-  .piste::-webkit-scrollbar { display: none; }
-  .carte-photo { flex: none; width: clamp(260px, 30vw, 400px); aspect-ratio: 4 / 5; border-radius: 26px; overflow: hidden; position: relative; scroll-snap-align: start; cursor: zoom-in; background: #111; }
-  .carte-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--ease); }
-  .carte-photo:hover img { transform: scale(1.05); }
-  .carte-photo::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.6)); }
-  .carte-photo p { position: absolute; left: 22px; bottom: 20px; z-index: 1; color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 19px; letter-spacing: -.01em; }
-  .carte-photo p span { display: block; font-weight: 500; font-size: 14px; color: rgba(255,255,255,.75); margin-top: 2px; }
-
-  .infos { padding: clamp(26px, 4vw, 48px); overflow-y: auto; }
-  .infos-haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-  .infos .techno { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gris); }
-  .fermer { width: 36px; height: 36px; border-radius: 50%; background: var(--clair); display: grid; place-items: center; flex: none; transition: background .3s; }
-  .fermer:hover { background: var(--filet); }
-  button:focus:not(:focus-visible) { outline: none; }
-  button:focus-visible { outline: 2px solid var(--vert); outline-offset: 2px; }
-  .infos h3 { font-size: clamp(32px, 4vw, 44px); font-weight: 700; margin-top: 4px; line-height: 1.05; }
-  .infos .finition { font-size: 19px; color: var(--gris); margin-top: 4px; font-family: "Poppins"; font-weight: 500; letter-spacing: -.01em; }
-  .infos .accroche { font-size: 17px; line-height: 1.5; margin-top: 18px; }
-  .infos .pastilles { justify-content: flex-start; margin-top: 18px; }
-  .specs { margin-top: 26px; border-top: 1px solid var(--filet); }
-  .specs > div { display: grid; grid-template-columns: 116px 1fr; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--filet); font-size: 14px; line-height: 1.45; }
-  .specs dt { color: var(--gris); font-weight: 500; }
-  .compat { margin-top: 24px; }
-  .compat h4 { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
-  .compat ul { list-style: none; margin-top: 8px; font-size: 14px; line-height: 1.5; }
-  .compat li { padding: 3px 0 3px 16px; position: relative; }
-  .compat li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
-  .note { margin-top: 18px; font-size: 13px; color: var(--gris); line-height: 1.5; }
-  .nav-fiche { display: flex; justify-content: space-between; margin-top: 26px; font-size: 15px; }
-
-  /* Sur le mur : vue d'ensemble, cercle sur la jante, zoom, puis la fiche */
+  /* ---------- Visite : vue d'ensemble du mur puis zoom sur la vraie jante ---------- */
   .visite {
-    position: fixed; inset: 0; z-index: 25; background: #0B0B0C; overflow: hidden;
+    position: fixed; inset: 0; z-index: 25; background: #0E0E0C; overflow: hidden;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
     opacity: 0; pointer-events: none; transition: opacity .6s var(--ease);
   }
   .visite.ouverte { opacity: 1; pointer-events: auto; }
-  .visite-titre, .visite-legende { font-family: "Poppins"; font-weight: 600; letter-spacing: -.01em; position: relative; z-index: 2; transition: opacity .5s; }
-  .visite-titre { color: #A1A1A6; font-size: 15px; }
-  .visite-titre::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 2px; }
-  .visite-legende { color: #fff; font-size: 20px; opacity: 0; }
-  .visite-legende span { color: #A1A1A6; font-weight: 500; }
+  .visite-titre, .visite-legende { color: #fff; font-size: 12px; letter-spacing: .26em; position: relative; z-index: 2; transition: opacity .5s; }
+  .visite-titre { color: #9C9C95; }
+  .visite-legende { font-size: 15px; opacity: 0; }
+  .visite-legende b { color: var(--vert); font-weight: normal; }
   .visite.cible .visite-legende { opacity: 1; }
   .visite.zoom .visite-titre { opacity: 0; }
-  .visite-cadre { position: relative; aspect-ratio: 3 / 4; height: min(74svh, calc(90vw * 4 / 3)); flex: none; border-radius: 18px; transform: scale(.94); transition: transform 1.4s cubic-bezier(.65, 0, .25, 1); }
+  .visite-cadre {
+    position: relative; aspect-ratio: 3 / 4; height: min(76svh, calc(90vw * 4 / 3)); flex: none;
+    transform: scale(.94); transition: transform 1.4s cubic-bezier(.65, 0, .25, 1);
+  }
   .visite.ouverte .visite-cadre { transform: none; }
-  .visite-cadre img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 18px; }
+  .visite-cadre img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .halo {
     position: absolute; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%) scale(1.35);
-    border: 2px solid var(--vert); box-shadow: 0 0 0 200vmax rgba(5,5,6,0), 0 0 30px rgba(204,255,0,0);
+    border: 2px solid var(--vert); box-shadow: 0 0 0 200vmax rgba(8,8,6,0), 0 0 30px rgba(204,255,0,0);
     opacity: 0; transition: opacity .6s var(--ease), transform .8s var(--ease), box-shadow .8s var(--ease);
   }
-  .visite.cible .halo { opacity: 1; transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 0 200vmax rgba(5,5,6,.72), 0 0 30px rgba(204,255,0,.35); }
-  .visite-passer { position: absolute; top: 18px; right: 18px; z-index: 3; color: #A1A1A6; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.08); transition: color .3s, background .3s; }
-  .visite-passer:hover { color: #fff; background: rgba(255,255,255,.16); }
+  .visite.cible .halo { opacity: 1; transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 0 200vmax rgba(8,8,6,.74), 0 0 30px rgba(204,255,0,.35); }
+  .visite-passer { position: absolute; top: 18px; right: 18px; z-index: 3; color: #9C9C95; font-size: 11px; letter-spacing: .2em; padding: 10px 14px; border: 1px solid rgba(255,255,255,.2); transition: color .3s, border-color .3s; }
+  .visite-passer:hover { color: #fff; border-color: #fff; }
 
+  @keyframes balayage { to { transform: translateX(110%); } }
+  @keyframes pouls { 50% { box-shadow: inset 0 -3px 0 var(--vert), 0 0 0 3px rgba(204,255,0,.55); } }
+
+  /* ---------- Tablette ---------- */
   @media (max-width: 900px) {
-    .gamme, .technos { grid-template-columns: 1fr 1fr; }
-    .atouts { grid-template-columns: 1fr 1fr; }
-    .barre nav { display: none; }
-    .fiche { grid-template-columns: 1fr; top: auto; bottom: 0; left: 0; width: 100%; max-height: 92svh; border-radius: 24px 24px 0 0; overflow-y: auto; transform: translateY(100%); }
-    .fiche.ouverte { transform: none; }
-    .media { height: 56svh; }
-    .scene-dessin img { max-width: 300px; }
-    .entete-ligne .boutons { display: none; }
-    .infos { overflow: visible; }
-  }
-  @media (max-width: 600px) {
-    .gamme { grid-auto-rows: 150px; gap: 12px; }
-    .tuile { padding: 18px 10px 16px; border-radius: 22px; }
-    .tuile h3 { font-size: 19px; }
-    .tuile .finition { font-size: 13px; }
-    .tuile .techno, .tuile .lien { display: none; }
-    .tuile .roue { margin: 10px 0; }
-    .coloris { font-size: 12px; }
-    .coloris .long { display: none; }
+    .mur { grid-template-rows: repeat(7, 226px); column-gap: 20px; }
+    .colonnes { column-gap: 20px; }
+    .nom { font-size: 16px; }
+    .meta { font-size: 11px; } .meta b { font-size: 10px; }
+    .histoire { font-size: 11px; }
+    .panneau { grid-template-columns: minmax(0, 1fr); grid-template-rows: 44svh minmax(0, 1fr); }
+    .scene .dessin { width: min(74%, 36svh); }
+    .scene .cercle { width: min(84%, 41svh); }
+    .hero .bloc { flex-wrap: wrap; row-gap: 20px; }
+    .hero .bloc p { order: 3; flex-basis: 100%; max-width: 520px; }
+    .colonnes p { font-size: 9px; letter-spacing: .12em; }
     .technos { grid-template-columns: 1fr; }
-    .techno-carte { min-height: 240px; }
+    .atouts { grid-template-columns: 1fr 1fr; }
+    .atouts div:nth-child(3) { padding-left: 0; border-left: 0; }
+    .hero-jante { min-height: 220px; }
+    .entete .fleches { display: none; }
+  }
+  /* ---------- Téléphone ---------- */
+  @media (max-width: 560px) {
+    .surtitre { font-size: 9px; letter-spacing: .16em; }
+    .chapo { font-size: 10px; text-align: left; }
+    .bloc { flex-wrap: wrap; gap: 18px; } .bloc .barre { display: none; } .bloc a { margin-left: 0; }
+    .colonnes { display: none; }
+    .mur { grid-template-rows: none; gap: 40px 14px; }
+    .jante { grid-row: auto !important; padding: 0; }
+    .visuel { height: clamp(130px, 38vw, 260px); }
+    .nom { font-size: 14px; }
+    .histoire { display: none; }
+    .tete { font-size: 11px; }
+    .entete { margin-bottom: 32px; }
+    .astuce { font-size: 8px; letter-spacing: .12em; }
+    .atouts { grid-template-columns: 1fr; }
+    .atouts div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--filet); }
+    .fiche dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .fiche dd { margin-bottom: 10px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
-    .tuile { opacity: 1; transform: none; }
+    .jante { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
 
-<header class="barre">
-  <div class="cadre">
-    <strong>WheelForce</strong>
-    <nav><a href="#gamme">Gamme</a><a href="#situation">En situation</a><a href="#comparer">Comparer</a><a href="#technologies">Technologies</a></nav>
-    <img src="assets/evox-logo-noir.svg" alt="EVOX Performance">
+<header class="hero cadre">
+  <div class="surtitre large"><span class="carre">Studio EVOX</span><span>Collection WheelForce</span></div>
+  <h1 class="large"><span class="l1">Six dessins concaves,</span><span class="l2">WheelForce</span></h1>
+  <p class="chapo">Retrouvez les modèles dans la même disposition que sur le mur</p>
+  <div class="hero-jante"><img src="assets/dessins/cf3.png" alt="Dessin de la jante WheelForce CF.3-FF R"></div>
+  <div class="bloc">
+    <div class="annees large"><span>6 jantes</span><strong>19 — 22 pouces</strong></div>
+    <div class="barre"></div>
+    <p>Forgées, flowformées ou WF Hypercast : trois façons de fabriquer une jante, toutes conçues en Allemagne et certifiées TÜV.</p>
+    <a class="large" href="#mur">Explorer le mur <i class="rond"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12m0 0L2 8m5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
   </div>
 </header>
 
-<section class="hero">
-  <div class="cadre">
-    <p class="surtitre">Disponibles chez EVOX</p>
-    <h1>WheelForce.</h1>
-    <p class="intro">Six designs fabriqués en Allemagne. Certifiés TÜV.</p>
-    <div class="liens"><a class="lien" href="#gamme">Découvrir la gamme</a><a class="lien" href="#comparer">Comparer</a></div>
-  </div>
-  <div class="hero-roue"><img id="hero-img" src="assets/dessins/cf3.png" alt="Dessin de la jante WheelForce CF.3-FF R"></div>
-  <div class="hero-sol"></div>
-</section>
-
-<section class="section gris" id="gamme">
+<main class="section" id="mur">
   <div class="cadre">
     <div class="entete">
-      <h2>La gamme.</h2>
-      <p>Dans la même disposition que sur le mur. Touchez une jante pour la découvrir.</p>
+      <div>
+        <h2 class="large">Le mur</h2>
+        <p>Sélectionnez une jante pour découvrir ses photos, ses coloris et ses compatibilités.</p>
+      </div>
+      <div class="filtres" id="filtres"><span class="large">Fabrication</span></div>
     </div>
-    <div class="gamme" id="gamme-grille"></div>
+    <div class="colonnes large"><p>Gauche · <b>Full Forged</b></p><p>Droite · <b>Flowforming · Hypercast</b></p></div>
+    <div class="mur" id="grille"></div>
   </div>
-</section>
+</main>
 
-<section class="section" id="situation">
-  <div class="cadre entete-ligne">
-    <div><h2>En situation.</h2><p>Montées sur Audi, BMW, Mercedes et Toyota.</p></div>
-    <div class="boutons"><button id="piste-prec" aria-label="Photos précédentes"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2 4 7l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="piste-suiv" aria-label="Photos suivantes"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="m5 2 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+<section class="section fonce" id="situation">
+  <div class="cadre entete">
+    <div>
+      <h2 class="large">En situation</h2>
+      <p>Montées sur Audi, BMW, Mercedes et Toyota. Touchez une photo pour l’agrandir.</p>
+    </div>
+    <div class="fleches"><button id="piste-prec" aria-label="Photos précédentes"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2 4 7l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="piste-suiv" aria-label="Photos suivantes"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="m5 2 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
   </div>
   <div class="piste" id="piste"></div>
 </section>
 
-<section class="section gris" id="comparer">
+<section class="section" id="comparer">
   <div class="cadre">
-    <div class="entete">
-      <h2>Comparer les modèles.</h2>
-    </div>
+    <div class="entete"><div><h2 class="large">Comparer</h2><p>Les six modèles côte à côte.</p></div></div>
     <div class="table-defile"><table id="tableau"></table></div>
   </div>
 </section>
 
-<section class="section noir" id="technologies">
+<section class="section fonce" id="technologies">
   <div class="cadre">
-    <div class="entete">
-      <h2>Trois façons de fabriquer une jante.</h2>
-      <p>Toutes conçues en Allemagne, avec un design breveté et un centre concave.</p>
-    </div>
+    <div class="entete"><div><h2 class="large">Trois fabrications</h2><p>Toutes conçues en Allemagne, avec un design breveté et un centre concave.</p></div></div>
     <div class="technos" id="technos"></div>
     <div class="atouts">
       <div><b>Allemagne</b>Fabrication et ingénierie WheelForce.</div>
@@ -348,109 +387,153 @@
 </section>
 
 <footer class="pied">
-  <div class="cadre">
-    <div>
-      <p class="cta">Une jante vous plaît ? Renseignez-vous auprès de notre équipe.</p>
-      <p>Montage à confirmer selon le véhicule, la largeur et le déport de chaque jante. Compatibilités indicatives.</p>
+  <div class="cadre bloc">
+    <div class="annees large"><span>6 jantes</span><strong>19 — 22 pouces</strong></div>
+    <div class="barre"></div>
+    <div class="notes">
+      <h2 class="large">Compatibilités indicatives</h2>
+      <p>Montage à confirmer selon le véhicule, la largeur et le déport de chaque jante.</p>
+      <p class="cta">Une jante vous plaît ? Renseignez-vous auprès de notre équipe</p>
     </div>
     <img src="assets/evox-logo-noir.svg" alt="EVOX Performance">
   </div>
 </footer>
 
-<!-- Fiche produit -->
+<!-- Sur le mur -->
 <div class="visite" id="visite" aria-hidden="true">
-  <button class="visite-passer" id="visite-passer">Passer</button>
-  <p class="visite-titre">Sur le mur</p>
+  <button class="visite-passer large" id="visite-passer">Passer</button>
+  <p class="visite-titre large carre">Sur le mur</p>
   <div class="visite-cadre" id="visite-cadre">
     <img src="assets/photos/mur.jpg" alt="">
     <i class="halo" id="halo"></i>
   </div>
-  <p class="visite-legende" id="visite-legende"></p>
+  <p class="visite-legende large" id="visite-legende"></p>
 </div>
+
+<!-- Photos en grand -->
 <div class="visionneuse" id="visionneuse" role="dialog" aria-modal="true" aria-label="Photos" aria-hidden="true">
-  <div class="vis-haut"><strong id="vis-titre"></strong><button id="vis-fermer" aria-label="Fermer"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>
+  <div class="vis-haut"><strong class="large" id="vis-titre"></strong><button id="vis-fermer" aria-label="Fermer"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1l12 12M13 1 1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
   <div class="vis-scene"><div class="galerie" id="galerie-pleine"></div></div>
   <div class="vis-miniatures" id="vis-mini"></div>
 </div>
+
+<!-- Fiche d'une jante -->
 <div class="voile" id="voile"></div>
-<article class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
-  <div class="media" id="media">
-    <div class="vues" role="group" aria-label="Vue">
-      <button data-vue="photos" aria-pressed="true">Photos</button>
-      <button data-vue="dessin" aria-pressed="false">Dessin</button>
-    </div>
-    <div class="scene-dessin"><img id="f-img" alt="" draggable="false"><p class="astuce">Faites glisser pour tourner la jante</p></div>
+<aside class="panneau" id="panneau" role="dialog" aria-modal="true" aria-labelledby="d-nom" aria-hidden="true">
+  <div class="scene" id="scene">
+    <div class="cercle"></div><i class="axe h"></i><i class="axe v"></i>
+    <img class="dessin" id="d-dessin" alt="" draggable="false">
     <div class="galerie" id="galerie-fiche"></div>
+    <div class="bascule">
+      <button id="b-dessin" aria-pressed="true">Dessin</button>
+      <button id="b-photo" aria-pressed="false">Photos</button>
+    </div>
+    <div class="astuce large">Faites glisser pour tourner la jante</div>
   </div>
   <div class="infos">
-    <div class="infos-haut">
-      <div><p class="techno" id="f-techno"></p><h3 id="f-nom"></h3><p class="finition" id="f-finition"></p></div>
-      <button class="fermer" id="fermer" aria-label="Fermer"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    <div class="infos-haut large"><span><span class="n" id="d-num"></span> / 06</span>
+      <button class="fermer" id="fermer" aria-label="Fermer">
+        <svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1l12 12M13 1 1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
     </div>
-    <p class="accroche" id="f-accroche"></p>
-    <div class="pastilles" id="f-diam"></div>
-    <dl class="specs">
-      <div><dt>Fabrication</dt><dd id="f-fab"></dd></div>
-      <div><dt>Concavité</dt><dd id="f-concave"></dd></div>
-      <div><dt>Entraxes</dt><dd id="f-entraxes"></dd></div>
-      <div><dt>Coloris</dt><dd id="f-coloris"></dd></div>
-    </dl>
-    <div class="compat"><h4>Compatibilités principales</h4><ul id="f-compat"></ul></div>
-    <p class="note">Montage à confirmer selon le véhicule, la largeur et le déport. Renseignez-vous auprès de notre équipe.</p>
-    <div class="nav-fiche"><button class="lien retour" id="prec">Précédente</button><button class="lien" id="suiv">Suivante</button></div>
+    <p class="techno-nom large carre" id="d-techno"></p>
+    <h3 class="large" id="d-nom"></h3>
+    <div class="taille large" id="d-taille"></div>
+    <p class="recit" id="d-accroche"></p>
+    <div class="fiche">
+      <div class="barre"></div>
+      <dl>
+        <dt class="large">Finition</dt><dd id="d-finition"></dd>
+        <dt class="large">Fabrication</dt><dd id="d-fab"></dd>
+        <dt class="large">Concavité</dt><dd id="d-concave"></dd>
+        <dt class="large">Entraxes</dt><dd id="d-entraxes"></dd>
+        <dt class="large">Coloris</dt><dd id="d-coloris"></dd>
+      </dl>
+    </div>
+    <div class="compat"><h4 class="large">Compatibilités principales</h4><ul id="d-compat"></ul></div>
+    <div class="position">
+      <div class="mini-mur" id="d-mini"></div>
+      <p id="d-pos"></p>
+    </div>
+    <div class="nav">
+      <button id="prec"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M9 2 4 7l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Précédente</button>
+      <button id="suiv">Suivante<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="m5 2 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
   </div>
-</article>
+</aside>
 
 <script src="assets/wheelforce.js?v=2026-11-10d"></script>
 <script>
   const $ = id => document.getElementById(id);
-  const T = window.TECHNOS, W = window.WHEELFORCE, TEINTES = window.TEINTES;
-  const pastilles = j => j.diametres.map(d => `<span>${d}</span>`).join("");
-  // Coloris : liste officielle quand on la connaît (CF.3, CF.4), sinon mention générale
-  const colorisCarte = j => j.coloris
-    ? `<p class="coloris"><span class="teintes">${j.coloris.map(c => `<b style="background:${TEINTES[c]}" title="${c}"></b>`).join("")}</span><span>${j.coloris.length} coloris<span class="long"> disponibles</span></span></p>`
-    : `<p class="coloris"><i></i><span>Plusieurs coloris<span class="long"> disponibles</span></span></p>`;
+  const T = window.TECHNOS, TEINTES = window.TEINTES;
+  const deux = n => String(n).padStart(2, "0");
+  // Numérotation dans l'ordre de lecture du mur : du haut vers le bas
+  const W = [...window.WHEELFORCE].sort((a, b) => a.ligne - b.ligne);
+  W.forEach((j, k) => j.n = deux(k + 1));
+  const COLS = { g: "de gauche", d: "de droite" };
+  const RANGS = ["1re", "2e", "3e"];
+  const diam = j => j.diametres.map(d => d.replace('"', "")).join(" · ") + '"';
+  const pastilles = noms => noms.map(c => `<i style="background:${TEINTES[c]}" title="${c}"></i>`).join("");
 
-  // Gamme
-  // ordre de lecture : du haut du mur vers le bas
-  [...W].sort((a, b) => a.ligne - b.ligne).forEach((j, n) => {
-    const i = W.indexOf(j);
+  // --- Le mur
+  const grille = $("grille");
+  W.forEach((j, i) => {
     const el = document.createElement("article");
-    el.className = `tuile ${j.col}`; el.tabIndex = 0; el.setAttribute("role", "button");
+    el.className = `jante ${j.col}`;
+    el.tabIndex = 0;
     el.style.gridRow = `${j.ligne} / span 2`;
-    el.setAttribute("aria-label", `${j.nom} ${j.finition}`);
-    el.style.transitionDelay = `${n * 70}ms`;
-    el.innerHTML = `<p class="techno">${T[j.techno].nom}</p><h3>${j.nom}</h3><p class="finition">${j.finition}</p>
-      <div class="roue"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"><img class="survol" src="assets/galeries/${j.id}/01.jpg" alt="" loading="lazy"></div>
-      <div class="pastilles">${pastilles(j)}</div>${colorisCarte(j)}<span class="lien">En savoir plus</span>`;
+    el.style.transitionDelay = `${i * 110}ms`;
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", `${j.n} — ${j.nom}, ${j.finition}`);
+    el.innerHTML = `
+      <div class="tete large"><span class="n">${j.n}</span><span>${diam(j)}</span></div>
+      <div class="visuel"><img src="assets/dessins/${j.id}.png" alt="" loading="lazy"></div>
+      <h3 class="nom large">${j.nom}</h3>
+      <p class="meta"><b>${T[j.techno].nom}</b> — ${j.finition}</p>
+      <p class="histoire">${j.accroche}</p>
+      ${j.coloris ? `<p class="teintes large">${pastilles(j.coloris)}<span>${j.coloris.length} coloris</span></p>` : ""}`;
     el.addEventListener("click", () => montrerSurLeMur(i));
     el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); montrerSurLeMur(i); } });
-    $("gamme-grille").appendChild(el);
+    j.el = el;
+    grille.appendChild(el);
   });
-  new IntersectionObserver((es, io) => es.forEach(e => { if (e.isIntersecting) { $("gamme-grille").classList.add("vu"); io.disconnect(); } }), { threshold: .1 }).observe($("gamme-grille"));
+  new IntersectionObserver((es, io) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    grille.classList.add("vu"); io.disconnect();
+    setTimeout(() => W.forEach(j => j.el.style.transitionDelay = ""), 1600);
+  }), { threshold: .1 }).observe(grille);
 
-  // Technologies
+  // --- Filtre fabrication
+  [["", "Tous"], ...Object.entries(T).map(([k, t]) => [k, t.nom.replace("WF ", "")])].forEach(([v, label]) => {
+    const b = document.createElement("button");
+    b.className = "filtre"; b.textContent = label; b.setAttribute("aria-pressed", v === "" ? "true" : "false");
+    b.addEventListener("click", () => {
+      $("filtres").querySelectorAll(".filtre").forEach(f => f.setAttribute("aria-pressed", f === b ? "true" : "false"));
+      W.forEach(j => {
+        const ok = !v || j.techno === v;
+        j.el.classList.toggle("eteinte", !ok);
+        j.el.tabIndex = ok ? 0 : -1;
+      });
+    });
+    $("filtres").appendChild(b);
+  });
+
+  // --- Technologies
   Object.entries(T).forEach(([k, t]) => {
     const modeles = W.filter(j => j.techno === k);
-    $("technos").insertAdjacentHTML("beforeend", `<div class="techno-carte">
-      <p class="modeles">${modeles.map(j => j.nom).join(" · ")}</p><h3>${t.nom}</h3><p>${t.detail}</p>
-      <img src="assets/dessins/${modeles[0].id}.png" alt=""></div>`);
+    $("technos").insertAdjacentHTML("beforeend", `<div class="techno"><div class="barre"></div><div>
+      <p class="modeles large">${modeles.map(j => j.nom).join(" · ")}</p><h3 class="large">${t.nom}</h3><p>${t.detail}</p></div></div>`);
   });
 
-  // Tableau comparatif
-  const lignes = [["Fabrication", j => T[j.techno].nom], ["Diamètres", j => j.diametres.join(" · ")],
+  // --- Tableau comparatif
+  const lignes = [["Fabrication", j => T[j.techno].nom], ["Diamètres", j => diam(j)],
                   ["Entraxes", j => j.entraxes], ["Concavité", j => j.concave]];
   $("tableau").innerHTML = `<thead><tr><th></th>${W.map(j => `<th><img src="assets/dessins/${j.id}.png" alt=""><strong>${j.nom}</strong><span>${j.finition}</span></th>`).join("")}</tr></thead>
     <tbody>${lignes.map(([nom, f]) => `<tr><th>${nom}</th>${W.map(j => `<td>${f(j)}</td>`).join("")}</tr>`).join("")}</tbody>`;
 
-  // Rotation douce de la jante d'ouverture au défilement
-  const heroImg = $("hero-img");
-  addEventListener("scroll", () => { heroImg.style.transform = `rotate(${scrollY * .12}deg)`; }, { passive: true });
-
-  // Photos d'une jante (c = sur voiture, s = studio)
-  const deux = n => String(n).padStart(2, "0");
+  // --- Photos d'une jante (c = sur voiture, s = studio)
   const photosDe = j => [...j.galerie].map((t, k) => ({ src: `assets/galeries/${j.id}/${deux(k + 1)}.jpg`, studio: t === "s", alt: `${j.nom} ${j.finition}, photo ${k + 1}` }));
-  const fleche = d => `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="${d < 0 ? "M9 2 4 7l5 5" : "m5 2 5 5-5 5"}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const fleche = d => `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="${d < 0 ? "M9 2 4 7l5 5" : "m5 2 5 5-5 5"}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   // Galerie : fondu enchaîné, zoom lent, défilement auto (5 s), glisser pour changer
   function creerGalerie(racine, { auto = false, auClic = null, auChangement = null } = {}) {
@@ -502,7 +585,7 @@
     };
   }
 
-  // Visionneuse plein écran
+  // --- Visionneuse plein écran
   const visionneuse = $("visionneuse");
   const galeriePleine = creerGalerie($("galerie-pleine"), { auChangement: k => {
     $("vis-mini").querySelectorAll("button").forEach((b, n) => { b.setAttribute("aria-current", n === k); if (n === k) b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }); });
@@ -522,11 +605,11 @@
   function fermerVisionneuse() {
     visionneuse.classList.remove("ouverte"); visionneuse.setAttribute("aria-hidden", "true");
     visionneuseOuverte = false;
-    if (fiche.classList.contains("ouverte")) { if (vue === "photos") galerieFiche.demarrer(); } else document.body.style.overflow = "";
+    if (panneau.classList.contains("ouvert")) { if (vue === "photo") galerieFiche.demarrer(); } else document.body.style.overflow = "";
   }
   $("vis-fermer").onclick = fermerVisionneuse;
 
-  // En situation : les plus belles photos sur voiture, en carrousel
+  // --- En situation : les plus belles photos sur voiture, en carrousel
   (() => {
     const ordre = ["cf3", "raceone", "cf4", "race2", "he1", "race3"].map(id => W.find(j => j.id === id));
     const cartes = [];
@@ -535,7 +618,8 @@
       if (k !== undefined && (tour < 2 || j.galerie.length > 8)) cartes.push([j, k]);
     });
     $("piste").innerHTML = cartes.map(([j, k]) => `<figure class="carte-photo" tabindex="0" role="button" aria-label="Voir les photos ${j.nom}">
-      <img src="assets/galeries/${j.id}/${deux(k + 1)}.jpg" alt="${j.nom} ${j.finition} montée" loading="lazy"><p>${j.nom}<span>${j.finition}</span></p></figure>`).join("");
+      <div class="cliche"><img src="assets/galeries/${j.id}/${deux(k + 1)}.jpg" alt="${j.nom} ${j.finition} montée" loading="lazy"></div>
+      <figcaption class="large">${j.nom}<span>${j.finition}</span></figcaption></figure>`).join("");
     $("piste").querySelectorAll(".carte-photo").forEach((c, n) => {
       const [j, k] = cartes[n];
       c.onclick = () => ouvrirVisionneuse(j, k);
@@ -546,37 +630,54 @@
     $("piste-suiv").onclick = () => $("piste").scrollBy({ left: pas() });
   })();
 
-  // Fiche produit
-  const fiche = $("fiche"), voile = $("voile"), img = $("f-img"), media = $("media");
+  // --- Fiche d'une jante
+  const panneau = $("panneau"), voile = $("voile"), scene = $("scene"), dessin = $("d-dessin");
   const galerieFiche = creerGalerie($("galerie-fiche"), { auto: true, auClic: k => ouvrirVisionneuse(W[actuel], k) });
-  let actuel = 0, vue = "photos", angle = 0, dernierFocus = null;
-  function afficher() {
-    const j = W[actuel];
-    media.classList.toggle("sombre", vue === "photos");
-    img.style.rotate = `${angle}deg`;
-    img.src = `assets/dessins/${j.id}.png`;
-    img.alt = `Dessin de la jante ${j.nom}`;
-    document.querySelectorAll(".vues button").forEach(b => b.setAttribute("aria-pressed", b.dataset.vue === vue));
-    if (vue === "photos" && fiche.classList.contains("ouverte")) galerieFiche.demarrer(); else galerieFiche.arreter();
-  }
+  let actuel = 0, angle = 0, vue = "dessin", dernierFocus = null;
+
+  // mini-mur : 2 colonnes, 7 demi-hauteurs
+  W.forEach(j => {
+    const i = document.createElement("i");
+    i.style.gridColumn = j.col === "g" ? 1 : 2;
+    i.style.gridRow = `${j.ligne} / span 2`;
+    j.mini = i; $("d-mini").appendChild(i);
+  });
+
   function remplir(i) {
     const j = W[i]; actuel = i; angle = 0;
-    $("f-techno").textContent = T[j.techno].nom;
-    $("f-nom").textContent = j.nom;
-    $("f-finition").textContent = j.finition;
-    $("f-accroche").textContent = j.accroche;
-    $("f-diam").innerHTML = pastilles(j);
-    $("f-fab").textContent = T[j.techno].detail;
-    $("f-concave").textContent = j.concave;
-    $("f-entraxes").textContent = j.entraxes;
-    $("f-coloris").innerHTML = j.coloris
-      ? `<div class="nuancier">${j.coloris.map(c => `<span><b style="background:${TEINTES[c]}"></b>${c}</span>`).join("")}</div><small class="note-coloris">Finition présentée : ${j.finition}. Certains coloris selon la dimension, sous réserve de disponibilité.</small>`
-      : `Finition présentée : ${j.finition}. Plusieurs autres coloris disponibles.`;
-    $("f-compat").innerHTML = j.compat.map(c => `<li>${c}</li>`).join("");
+    dessin.style.rotate = "0deg";
+    dessin.src = `assets/dessins/${j.id}.png`;
+    dessin.alt = `Dessin de la jante ${j.nom}`;
+    $("d-num").textContent = j.n;
+    $("d-techno").textContent = T[j.techno].nom;
+    $("d-nom").textContent = j.nom;
+    $("d-taille").textContent = diam(j);
+    $("d-accroche").textContent = j.accroche;
+    $("d-finition").textContent = j.finition + " (présentée sur le mur)";
+    $("d-fab").textContent = T[j.techno].detail;
+    $("d-concave").textContent = j.concave;
+    $("d-entraxes").textContent = j.entraxes;
+    $("d-coloris").innerHTML = j.coloris
+      ? `<div class="nuancier">${j.coloris.map(c => `<span><i style="background:${TEINTES[c]}"></i>${c}</span>`).join("")}<small>Certains coloris selon la dimension, sous réserve de disponibilité.</small></div>`
+      : "Plusieurs coloris disponibles.";
+    $("d-compat").innerHTML = j.compat.map(c => `<li>${c}</li>`).join("");
+    const memeCol = W.filter(k => k.col === j.col);
+    $("d-pos").innerHTML = `Sur le mur : <b>colonne ${COLS[j.col]}</b>,<br>${RANGS[memeCol.indexOf(j)]} jante en partant du haut.`;
+    W.forEach(k => k.mini.classList.toggle("ici", k === j));
+    $("prec").disabled = i === 0; $("prec").style.opacity = i === 0 ? .3 : 1;
+    $("suiv").disabled = i === W.length - 1; $("suiv").style.opacity = i === W.length - 1 ? .3 : 1;
     galerieFiche.charger(photosDe(j));
-    afficher();
+    mode(vue);
   }
-  // Sur le mur : vue d'ensemble, cercle sur la jante, zoom de la caméra, puis la fiche
+  function mode(m) {
+    vue = m;
+    scene.classList.toggle("mode-photo", m === "photo");
+    $("b-dessin").setAttribute("aria-pressed", m === "dessin");
+    $("b-photo").setAttribute("aria-pressed", m === "photo");
+    if (m === "photo" && panneau.classList.contains("ouvert")) galerieFiche.demarrer(); else galerieFiche.arreter();
+  }
+
+  // Vue d'ensemble du mur, cercle sur la jante, zoom de la caméra, puis ouverture de la fiche
   const visite = $("visite"), cadre = $("visite-cadre"), halo = $("halo");
   const sansAnim = matchMedia("(prefers-reduced-motion: reduce)");
   let minuteurs = [], enVisite = null;
@@ -587,7 +688,7 @@
     enVisite = i;
     const [fx, fy, fr] = j.mur;
     halo.style.left = `${fx * 100}%`; halo.style.top = `${fy * 100}%`; halo.style.width = `${fr * 200}%`;
-    $("visite-legende").innerHTML = `${j.nom} <span>${j.finition}</span>`;
+    $("visite-legende").innerHTML = `<b>${j.n}</b> · ${j.nom} · ${j.finition}`;
     cadre.style.transform = "";
     visite.classList.remove("cible", "zoom");
     visite.setAttribute("aria-hidden", "false");
@@ -614,23 +715,27 @@
   visite.addEventListener("click", finirVisite);
 
   function ouvrir(i) {
-    dernierFocus = document.activeElement; vue = "photos";
-    fiche.classList.add("ouverte");
-    remplir(i); voile.classList.add("ouvert"); fiche.setAttribute("aria-hidden", "false");
+    dernierFocus = document.activeElement; vue = "dessin";
+    panneau.classList.add("ouvert"); voile.classList.add("ouvert");
+    remplir(i);
+    scene.classList.remove("balaye"); void scene.offsetWidth; scene.classList.add("balaye");
+    panneau.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
-    setTimeout(() => $("fermer").focus(), 60);
+    setTimeout(() => $("fermer").focus(), 50);
   }
   function fermer() {
-    fiche.classList.remove("ouverte"); voile.classList.remove("ouvert"); fiche.setAttribute("aria-hidden", "true");
+    panneau.classList.remove("ouvert"); voile.classList.remove("ouvert");
+    panneau.setAttribute("aria-hidden", "true");
     galerieFiche.arreter();
     document.body.style.overflow = "";
     dernierFocus && dernierFocus.focus();
   }
-  document.querySelectorAll(".vues button").forEach(b => b.onclick = () => { vue = b.dataset.vue; afficher(); });
+  const pas = d => { const k = actuel + d; if (k >= 0 && k < W.length) remplir(k); };
+
   $("fermer").onclick = fermer; voile.onclick = fermer;
-  $("prec").onclick = () => remplir((actuel + W.length - 1) % W.length);
-  $("suiv").onclick = () => remplir((actuel + 1) % W.length);
-  addEventListener("keydown", e => {
+  $("prec").onclick = () => pas(-1); $("suiv").onclick = () => pas(1);
+  $("b-dessin").onclick = () => mode("dessin"); $("b-photo").onclick = () => mode("photo");
+  document.addEventListener("keydown", e => {
     if (enVisite !== null && (e.key === "Escape" || e.key === "Enter")) return finirVisite();
     if (visionneuseOuverte) {
       if (e.key === "Escape") fermerVisionneuse();
@@ -638,26 +743,25 @@
       if (e.key === "ArrowLeft") galeriePleine.aller(galeriePleine.index - 1);
       return;
     }
-    if (!fiche.classList.contains("ouverte")) return;
+    if (!panneau.classList.contains("ouvert")) return;
     if (e.key === "Escape") fermer();
-    if (e.key === "ArrowRight") $("suiv").click();
-    if (e.key === "ArrowLeft") $("prec").click();
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); pas(1); }
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); pas(-1); }
   });
 
-  // Tourner la jante au glisser
+  // rotation de la jante au glisser
   let glisse = null;
-  img.addEventListener("pointerdown", e => {
-    if (vue !== "dessin") return;
-    const r = img.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  dessin.addEventListener("pointerdown", e => {
+    const r = dessin.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     glisse = { cx, cy, a0: angle, d0: Math.atan2(e.clientY - cy, e.clientX - cx) };
-    img.setPointerCapture(e.pointerId);
+    dessin.setPointerCapture(e.pointerId);
   });
-  img.addEventListener("pointermove", e => {
+  dessin.addEventListener("pointermove", e => {
     if (!glisse) return;
     angle = glisse.a0 + (Math.atan2(e.clientY - glisse.cy, e.clientX - glisse.cx) - glisse.d0) * 180 / Math.PI;
-    img.style.rotate = `${angle}deg`;
+    dessin.style.rotate = angle + "deg";
   });
-  img.addEventListener("pointerup", () => glisse = null);
+  dessin.addEventListener("pointerup", () => glisse = null);
 </script>
 </body>
 </html>
