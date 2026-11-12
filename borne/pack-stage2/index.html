@@ -86,47 +86,76 @@
   @keyframes onde { 0% { transform: scale(.55); opacity: 1; } 100% { transform: scale(1.35); opacity: 0; } }
   @keyframes balaye { to { transform: translateX(120%); } }
 
-  /* ---------- 02 · Composer ---------- */
-  .composer { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: clamp(18px, 3vw, 40px); align-items: start; }
-  .etape + .etape { margin-top: 26px; }
-  .etape h2 { display: flex; align-items: baseline; gap: 12px; font-size: clamp(20px, 2.4vw, 28px); margin: 8px 0 14px; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; }
-  .etape h2 em { font-style: normal; color: var(--vert); font-size: .6em; }
-  .choix-cata { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .choix-cata .vignette { aspect-ratio: 16 / 8; }
-  .choix-sil { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
-  .carte { position: relative; text-align: left; border-radius: 16px; background: var(--noir-2); border: 2px solid transparent; overflow: hidden;
-    transition: border-color .3s, transform .35s var(--ressort), background .3s; display: flex; flex-direction: column; }
-  .carte:active { transform: scale(.97); }
-  .carte[aria-checked="true"] { border-color: var(--vert); background: var(--noir-3); }
-  .carte .vignette { background: var(--studio); aspect-ratio: 4 / 3; position: relative; overflow: hidden; }
-  .carte .vignette img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
-  .carte[aria-checked="true"] .vignette img { transform: scale(1.08); }
-  .carte .vignette .vide { position: absolute; inset: 0; display: grid; place-items: center; color: var(--gris-2); font-size: 11px; letter-spacing: .16em; }
-  .carte .corps { padding: 12px 14px 14px; }
-  .carte b { display: block; font-size: 15px; font-weight: 700; }
-  .carte small { display: block; font-size: 12px; color: var(--gris); margin-top: 3px; line-height: 1.35; }
-  .carte .delta { position: absolute; top: 10px; right: 10px; padding: 4px 9px; border-radius: 999px; background: var(--noir); color: var(--blanc); font-size: 11px; font-weight: 700; z-index: 1; }
-  .carte .coche { position: absolute; top: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: var(--vert); color: var(--noir); display: grid; place-items: center; z-index: 1;
-    transform: scale(0); transition: transform .4s var(--ressort); }
-  .carte[aria-checked="true"] .coche { transform: scale(1); }
-  .choix-sil .corps { padding: 10px 10px 12px; }
-  .choix-sil b { font-size: 13px; }
-  .choix-sil small { font-size: 11px; }
+  /* ---------- 02 · Composer : une carte par pièce ---------- */
+  .compo { display: flex; flex-direction: column; gap: clamp(14px, 2vh, 22px); min-height: 100%; }
+  .compo-tete { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+  .compo-tete h2 { font-size: clamp(22px, min(3vw, 5vh), 40px); line-height: 1; margin-top: 8px; font-variation-settings: "wght" 850, "wdth" 125, "slnt" 0; }
+  .compo-tete h2 span { color: var(--gris); }
+  .total { position: relative; text-align: right; }
+  .total small { display: block; font-size: 10px; letter-spacing: .2em; color: var(--gris); }
+  .total b { display: block; font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(30px, min(4vw, 7vh), 52px); line-height: 1.05; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; white-space: nowrap; }
+  .total span { display: block; font-size: 11px; color: var(--gris); }
+  .bulle { position: absolute; right: 0; top: -6px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; pointer-events: none; opacity: 0; }
+  .bulle.plus { background: var(--vert); color: var(--noir); } .bulle.moins { background: var(--blanc); color: var(--noir); }
+  .bulle.monte { animation: bulle 1.4s var(--ease) forwards; }
+  @keyframes bulle { 0% { opacity: 0; transform: translateY(14px) scale(.8); } 18% { opacity: 1; transform: translateY(-6px) scale(1.05); } 70% { opacity: 1; transform: translateY(-14px); } 100% { opacity: 0; transform: translateY(-30px); } }
 
-  .recap { position: sticky; top: 0; background: var(--noir-2); border-radius: 22px; padding: clamp(18px, 2.4vw, 28px); overflow: hidden; }
-  .recap::before { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(var(--vert), transparent 70%); opacity: .12; }
-  .recap .prix { margin-top: 10px; font-size: clamp(40px, 5.2vw, 64px); line-height: 1; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; white-space: nowrap; }
-  .recap .prix sup { font-size: .32em; vertical-align: .9em; margin-left: 4px; color: var(--gris); font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; }
-  .recap .ref { font-size: 12px; color: var(--gris); margin-top: 8px; }
-  .recap ul { list-style: none; margin-top: 20px; border-top: 1px solid var(--filet); }
-  .recap li { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--filet); font-size: 13px; line-height: 1.4; }
-  .recap li i { flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--vert); color: var(--noir); display: grid; place-items: center; margin-top: 1px; }
-  .recap li.non i { background: var(--noir-3); color: var(--gris); }
-  .recap li.non { color: var(--gris); }
-  .recap li.pop { animation: pop .6s var(--ressort); }
-  .recap .note { margin-top: 14px; font-size: 11.5px; color: var(--gris); line-height: 1.5; }
-  .recap .cta { margin-top: 16px; padding: 14px; border-radius: 14px; background: var(--vert); color: var(--noir); font-weight: 700; font-size: 14px; text-align: center; }
-  @keyframes pop { 0% { transform: translateX(-10px); opacity: .3; } 100% { transform: none; opacity: 1; } }
+  .cartes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 16px); }
+  .piece { position: relative; display: flex; flex-direction: column; background: var(--noir-2); border-radius: 26px; overflow: hidden; text-align: left;
+    transition: transform .5s var(--ressort), box-shadow .5s var(--ease); }
+  .piece.secoue { animation: secoue .55s var(--ressort); }
+  @keyframes secoue { 0% { transform: scale(1); } 35% { transform: scale(.965); } 100% { transform: scale(1); } }
+  .piece .ph { position: relative; background: var(--studio); aspect-ratio: 4 / 3; overflow: hidden; }
+  .piece .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6%;
+    transition: opacity .55s var(--ease), transform .7s var(--ressort), filter .55s var(--ease); }
+  .piece .ph img.sort { opacity: 0; transform: scale(.82) translateY(10px); }
+  .piece .ph img.flip { animation: flip .7s var(--ease); }
+  @keyframes flip { 0% { transform: none; } 45% { transform: perspective(600px) rotateY(80deg) scale(.92); opacity: .4; } 100% { transform: none; } }
+  .piece .num { position: absolute; top: 12px; left: 14px; font-size: 12px; color: var(--noir); }
+  .piece .badge { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: var(--noir); color: var(--blanc); font-size: 11px; font-weight: 700; z-index: 2; }
+  .piece .badge.opt { background: var(--vert); color: var(--noir); }
+  .piece .txt { padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1; }
+  .piece h3 { font-size: 16px; font-weight: 700; line-height: 1.25; }
+  .piece .detail { font-size: 12.5px; color: var(--gris); margin-top: 4px; line-height: 1.4; min-height: 2.8em; transition: opacity .3s; }
+  .piece .bas { margin-top: auto; padding-top: 12px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--noir-3); border-radius: 12px; padding: 4px; position: relative; }
+  .seg::before { content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 9px; background: var(--blanc); transition: transform .45s var(--ressort); }
+  .seg.droite::before { transform: translateX(100%); }
+  .seg button { position: relative; padding: 9px 4px; font-size: 12.5px; font-weight: 700; color: var(--gris); transition: color .3s; min-width: 0; }
+  .seg button[aria-pressed="true"] { color: var(--noir); }
+  .seg button small { display: block; font-size: 10.5px; font-weight: 600; opacity: .7; }
+  .inclus { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--gris); padding: 10px 12px; border-radius: 12px; background: var(--noir-3); }
+  .inclus i { width: 18px; height: 18px; border-radius: 50%; background: var(--vert); color: var(--noir); display: grid; place-items: center; flex: none; }
+  .finitions { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 5px; transition: opacity .4s; }
+  .finitions button { padding: 8px 2px 7px; border-radius: 10px; background: var(--noir-3); font-size: 10.5px; white-space: nowrap; font-weight: 700; color: var(--gris); border: 2px solid transparent; transition: border-color .3s, color .3s; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .finitions button i { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+  .finitions button[aria-pressed="true"] { border-color: var(--vert); color: var(--blanc); }
+  .interrupteur-mini { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 12.5px; font-weight: 700; }
+  .bascule-on { width: 52px; height: 30px; border-radius: 999px; background: var(--vert); position: relative; flex: none; transition: background .35s; }
+  .bascule-on::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--noir); transform: translateX(22px); transition: transform .45s var(--ressort), background .35s; }
+  .piece.retire .bascule-on { background: var(--noir-3); } .piece.retire .bascule-on::after { transform: none; background: var(--gris); }
+  .piece.retire .ph img { opacity: .18; filter: grayscale(1); transform: scale(.86); }
+  .piece.retire .finitions { opacity: .3; pointer-events: none; }
+  .piece .ajouter { position: absolute; inset: 0; display: grid; place-items: center; z-index: 3; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+  .piece .ajouter span { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 999px; background: var(--noir); color: var(--blanc); font-weight: 700; font-size: 13px;
+    box-shadow: 0 0 0 2px var(--vert); transform: scale(.8); transition: transform .5s var(--ressort); }
+  .piece.retire .ajouter { opacity: 1; pointer-events: auto; }
+  .piece.retire .ajouter span { transform: none; }
+  .piece.retire { box-shadow: inset 0 0 0 2px rgba(255,255,255,.12); }
+  .piece.retire .ph { background: repeating-linear-gradient(135deg, #E6E5E1 0 10px, #EFEFEC 10px 20px); }
+
+  .compo-pied { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 16px; border-radius: 20px; background: var(--noir-2); }
+  .pile { display: flex; align-items: center; }
+  .pile span { width: 44px; height: 44px; border-radius: 50%; background: var(--studio) center / 80% no-repeat; box-shadow: 0 0 0 3px var(--noir-2); margin-left: -10px; flex: none;
+    transition: width .5s var(--ressort), margin .5s var(--ressort), opacity .4s, transform .5s var(--ressort); }
+  .pile span:first-child { margin-left: 0; }
+  .pile span.cache { width: 0; margin-left: 0; opacity: 0; transform: scale(.3); }
+  .compte { font-size: 13px; line-height: 1.35; }
+  .compte b { display: block; font-size: 15px; }
+  .compte small { color: var(--gris); }
+  .compo-pied .note { flex: 1; min-width: 220px; font-size: 11.5px; color: var(--gris); line-height: 1.5; }
+  .compo-pied .cta { padding: 13px 18px; border-radius: 14px; background: var(--vert); color: var(--noir); font-weight: 700; font-size: 13.5px; white-space: nowrap; }
 
   /* ---------- 03 · Performances ---------- */
   .perfs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 40px); }
@@ -240,26 +269,31 @@
 
   /* ---------- Portrait et petits écrans ---------- */
   @media (orientation: portrait), (max-width: 760px) {
-    .pack, .composer, .perfs, .son { grid-template-columns: minmax(0, 1fr); align-items: start; min-height: 0; }
+    .cartes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pack, .perfs, .son { grid-template-columns: minmax(0, 1fr); align-items: start; min-height: 0; }
     .pack .visuel-pack { order: -1; }
-    .recap { position: relative; }
     .fiche { grid-template-columns: minmax(0, 1fr); grid-template-rows: 38svh minmax(0, 1fr); }
     .galerie { min-height: 0; }
     .son .visu-son { order: -1; }
     .courbe img { max-height: 34svh; object-fit: contain; }
   }
   @media (max-width: 760px) {
-    .choix-sil { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .barre .titre { display: none; }
     .onglet { flex-direction: column; gap: 3px; padding: 10px 4px; }
     .onglet span { font-size: 10px; letter-spacing: .04em; }
     .onglet .long { display: none; } .onglet .court { display: inline; }
-    .etape h2 { flex-wrap: wrap; font-size: clamp(17px, 5.4vw, 24px); }
     .jauges { grid-template-columns: 1fr 1fr; }
     .fiche dl div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   }
+  @media (max-width: 520px) {
+    .cartes { grid-template-columns: minmax(0, 1fr); }
+    .piece { flex-direction: row; }
+    .piece .ph { width: 38%; aspect-ratio: auto; flex: none; }
+    .piece .detail { min-height: 0; }
+    .total { text-align: left; }
+    .compo-pied .cta { width: 100%; text-align: center; }
+  }
   @media (max-width: 420px) {
-    .choix-sil { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .puce-prix small { display: none; }
     .verdict { grid-template-columns: minmax(0, 1fr); }
     .onglet span { font-variation-settings: "wght" 650, "wdth" 88, "slnt" 0; }
@@ -308,27 +342,26 @@
 
     <!-- 02 · Composer -->
     <section class="ecran" id="e-composer" aria-label="Composer mon pack">
-      <div class="composer">
-        <div>
-          <div class="etape" data-a>
-            <p class="etiquette carre">Étape 1 sur 2</p>
-            <h2 class="cf">Technologie catalyseur <em>DownPipe</em></h2>
-            <div class="choix-cata" id="choix-cata" role="radiogroup" aria-label="Technologie catalyseur"></div>
+      <div class="compo">
+        <div class="compo-tete" data-a>
+          <div>
+            <p class="etiquette carre">Composer · Stage 2 / 340</p>
+            <h2 class="cf">Votre pack, <span>pièce par pièce.</span></h2>
           </div>
-          <div class="etape" data-a>
-            <p class="etiquette carre">Étape 2 sur 2</p>
-            <h2 class="cf">Silencieux <em>ValveTronic</em></h2>
-            <div class="choix-sil" id="choix-sil" role="radiogroup" aria-label="Silencieux ValveTronic"></div>
+          <div class="total">
+            <small class="etiquette">Total TTC</small>
+            <b id="prix"></b>
+            <span id="ref"></span>
+            <i class="bulle" id="bulle"></i>
           </div>
         </div>
-        <aside class="recap" data-a>
-          <p class="etiquette carre">Votre Stage 2</p>
-          <p class="prix cf" id="prix"></p>
-          <p class="ref" id="ref"></p>
-          <ul id="recap-liste"></ul>
-          <p class="note">Puissance potentielle 330–345 ch et 390–440 Nm, selon la cartographie moteur et boîte. Cartographie à prévoir pour l’installation.</p>
+        <div class="cartes" id="cartes"></div>
+        <div class="compo-pied" data-a>
+          <div class="pile" id="pile"></div>
+          <p class="compte" id="compte"></p>
+          <p class="note">Puissance potentielle 330–345 ch et 390–440 Nm selon la cartographie moteur et boîte. Cartographie à prévoir pour l’installation.</p>
           <p class="cta">Intéressé ? Parlez-en à notre équipe</p>
-        </aside>
+        </div>
       </div>
     </section>
 
@@ -437,8 +470,9 @@
   // Compteur animé
   function compter(el, de, a, ms = 900, format = n => Math.round(n)) {
     if (sansAnim) { el.textContent = format(a); return; }
-    const t0 = performance.now();
-    const pas = t => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = format(de + (a - de) * e); if (k < 1) requestAnimationFrame(pas); };
+    const t0 = performance.now(), jeton = el._jeton = (el._jeton || 0) + 1;
+    el.textContent = format(de);
+    const pas = t => { if (el._jeton !== jeton) return; const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = format(de + (a - de) * e); if (k < 1) requestAnimationFrame(pas); };
     requestAnimationFrame(pas);
   }
 
@@ -521,54 +555,82 @@
   $("galerie").addEventListener("pointerdown", e => gx = e.clientX);
   $("galerie").addEventListener("pointerup", e => { if (gx === null) return; const dx = e.clientX - gx; gx = null; montrerDiapo(diapo + (Math.abs(dx) > 40 ? (dx < 0 ? 1 : -1) : 1)); });
 
-  // ---------- 02 · Composer ----------
+  // ---------- 02 · Composer : une carte par pièce ----------
   const choix = { cata: "decat", sil: "carbone" };
-  let prixAffiche = 0;
+  let dernierSil = "carbone", prixAffiche = 0, prixPrecedent = null;
+  const TEINTE = { origine: "linear-gradient(135deg,#D9DADC,#8E9196)", chrome: "linear-gradient(135deg,#FFFFFF,#9EA3A8 55%,#E8EAEC)", carbone: "repeating-linear-gradient(45deg,#3A3A3A 0 3px,#1B1B1B 3px 6px)", pvd: "linear-gradient(135deg,#4A4A4F,#0B0B0C)" };
+  const cadenas = '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M1.5 5.2 4 7.5l4.5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const finitions = P.silencieux.filter(s => s.img);
+  const CARTES = [
+    { id: "downpipe", n: "01", titre: "DownPipe EVOX", img: "downpipe-1.jpg", badge: "Inclus" },
+    { id: "echangeur", n: "02", titre: "Échangeur-Intercooler EVOX", img: "echangeur-1.jpg", badge: "Inclus", detail: "Cœur de 3,9 L contre 2,5 L d’origine, architecture Bar & Plate." },
+    { id: "admission", n: "03", titre: "Kit admission carbone Gruppe M", img: "admission-1.jpg", badge: "Inclus", detail: "Double entrée d’air : prise latérale et grille arrière." },
+    { id: "silencieux", n: "04", titre: "Silencieux EVOX ValveTronic", img: "silencieux-carbone.jpg", badge: "Option" }
+  ];
+  CARTES.forEach(c => {
+    const el = document.createElement("article");
+    el.className = "piece"; el.id = "c-" + c.id; el.setAttribute("data-a", "");
+    let bas = `<div class="inclus"><i>${cadenas}</i>Inclus dans le pack</div>`;
+    if (c.id === "downpipe") bas = `<div class="seg" id="seg-cata">${P.catalyseurs.map(k => `<button data-id="${k.id}">${k.nom}<small data-delta></small></button>`).join("")}</div>`;
+    if (c.id === "silencieux") bas = `<div class="interrupteur-mini"><span id="sil-etat">Ajouté au pack</span><button class="bascule-on" id="sil-bascule" role="switch" aria-label="Ajouter ou retirer le silencieux"></button></div>
+      <div class="finitions" id="finitions">${finitions.map(s => `<button data-id="${s.id}"><i style="background:${TEINTE[s.id]}"></i>${s.court}</button>`).join("")}</div>`;
+    el.innerHTML = `<div class="ph"><img src="assets/${c.img}" alt="${c.titre}"><span class="num cf">${c.n}</span><span class="badge${c.badge === "Option" ? " opt" : ""}">${c.badge}</span>
+        ${c.id === "silencieux" ? `<button class="ajouter" id="sil-ajouter"><span>+ Ajouter le silencieux</span></button>` : ""}</div>
+      <div class="txt"><h3>${c.titre}</h3><p class="detail" data-detail>${c.detail || ""}</p><div class="bas">${bas}</div></div>`;
+    $("cartes").appendChild(el);
+  });
+  $("seg-cata").querySelectorAll("button").forEach(b => b.onclick = () => { if (choix.cata === b.dataset.id) return; choix.cata = b.dataset.id; majCompo(true, "downpipe"); });
+  $("finitions").querySelectorAll("button").forEach(b => b.onclick = () => { if (choix.sil === b.dataset.id) return; choix.sil = dernierSil = b.dataset.id; majCompo(true, "silencieux"); });
+  const basculerSil = () => { choix.sil = choix.sil === "sans" ? dernierSil : "sans"; majCompo(true, "silencieux"); };
+  $("sil-bascule").onclick = basculerSil; $("sil-ajouter").onclick = basculerSil;
+  $("pile").innerHTML = CARTES.map(c => `<span data-id="${c.id}" style="background-image:url(assets/${c.img})"></span>`).join("");
 
-  P.catalyseurs.forEach(c => {
-    const b = document.createElement("button");
-    b.className = "carte"; b.setAttribute("role", "radio"); b.dataset.id = c.id;
-    b.innerHTML = `<span class="coche">${coche}</span><span class="delta" data-delta></span>
-      <span class="vignette"><img src="assets/${c.id === "cata" ? "downpipe-2" : "downpipe-3"}.jpg" alt=""></span>
-      <span class="corps"><b>${c.nom}</b><small>${c.produit}</small></span>`;
-    b.onclick = () => { choix.cata = c.id; majCompo(true); };
-    $("choix-cata").appendChild(b);
-  });
-  P.silencieux.forEach(s => {
-    const b = document.createElement("button");
-    b.className = "carte"; b.setAttribute("role", "radio"); b.dataset.id = s.id;
-    b.innerHTML = `<span class="coche">${coche}</span>
-      <span class="vignette">${s.img ? `<img src="assets/${s.img}" alt="">` : `<span class="vide cf">Sans</span>`}</span>
-      <span class="corps"><b>${s.court}</b><small data-delta></small></span>`;
-    b.onclick = () => { choix.sil = s.id; majCompo(true); };
-    $("choix-sil").appendChild(b);
-  });
-  function majCompo(anime) {
+  function changerImage(img, src, effet) {
+    if (img.getAttribute("src") === src && effet !== "flip") return;
+    if (effet === "flip") { img.classList.remove("flip"); void img.offsetWidth; img.classList.add("flip"); setTimeout(() => img.src = src, 300); return; }
+    img.classList.add("sort");
+    setTimeout(() => { img.src = src; img.onload = () => img.classList.remove("sort"); if (img.complete) img.classList.remove("sort"); }, 260);
+  }
+  function secouer(id) { const el = $("c-" + id); el.classList.remove("secoue"); void el.offsetWidth; el.classList.add("secoue"); }
+
+  function majCompo(anime, quoi) {
     const [prix, ref] = P.prix[choix.cata][choix.sil];
-    const cata = P.catalyseurs.find(c => c.id === choix.cata), sil = P.silencieux.find(s => s.id === choix.sil);
-    document.querySelectorAll("#choix-cata .carte").forEach(b => {
-      b.setAttribute("aria-checked", b.dataset.id === choix.cata);
+    const cata = P.catalyseurs.find(c => c.id === choix.cata), sil = P.silencieux.find(s => s.id === choix.sil), avec = choix.sil !== "sans";
+    // DownPipe
+    const seg = $("seg-cata");
+    seg.classList.toggle("droite", choix.cata === "decat");
+    seg.querySelectorAll("button").forEach(b => {
+      b.setAttribute("aria-pressed", b.dataset.id === choix.cata);
       const d = P.prix[b.dataset.id][choix.sil][0] - prix;
-      b.querySelector("[data-delta]").textContent = d === 0 ? "Choisi" : (d > 0 ? "+" : "−") + euros(Math.abs(d));
+      b.querySelector("[data-delta]").textContent = d === 0 ? "choisi" : (d > 0 ? "+" : "−") + euros(Math.abs(d));
     });
-    document.querySelectorAll("#choix-sil .carte").forEach(b => {
-      b.setAttribute("aria-checked", b.dataset.id === choix.sil);
-      const d = P.prix[choix.cata][b.dataset.id][0] - prix;
-      b.querySelector("[data-delta]").textContent = d === 0 ? "Choisi" : (d > 0 ? "+" : "−") + euros(Math.abs(d));
-    });
+    $("c-downpipe").querySelector("[data-detail]").textContent = cata.id === "cata" ? "SuperSport 200 cellules, avec catalyseur sport." : "Version Race, sans catalyseur.";
+    // Silencieux
+    const cs = $("c-silencieux");
+    cs.classList.toggle("retire", !avec);
+    $("sil-bascule").setAttribute("aria-checked", avec);
+    $("sil-etat").textContent = avec ? "Ajouté au pack" : "Non inclus";
+    cs.querySelector("[data-detail]").textContent = avec ? sil.nom : "Touchez pour l’ajouter : A110, ou A110 R / R Look en 3 finitions.";
+    $("finitions").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", avec && b.dataset.id === choix.sil));
+    const fin = P.silencieux.find(s => s.id === (avec ? choix.sil : dernierSil));
+    changerImage(cs.querySelector(".ph img"), `assets/${fin.img}`);
+    $("son-photo").src = `assets/${fin.img}`;
+    // Animations ciblées
+    if (anime && quoi === "downpipe") { changerImage($("c-downpipe").querySelector(".ph img"), "assets/downpipe-1.jpg", "flip"); secouer("downpipe"); }
+    if (anime && quoi === "silencieux") secouer("silencieux");
+    // Pile des pièces + total
+    $("pile").querySelector('[data-id="silencieux"]').classList.toggle("cache", !avec);
+    $("compte").innerHTML = `<b>${avec ? 4 : 3} pièces</b><small>${cata.nom} · ${avec ? "silencieux " + sil.court : "sans silencieux"}</small>`;
     compter($("prix"), anime ? prixAffiche : prix, prix, 700, n => euros(Math.round(n)));
     compter($("puce-montant"), anime ? prixAffiche : prix, prix, 700, n => euros(Math.round(n)));
-    prixAffiche = prix;
-    $("ref").textContent = `Référence ${ref} · Prix TTC`;
-    const lignes = [
-      [true, cata.produit + (cata.id === "cata" ? " · catalyseur sport" : " · decat")],
-      [true, "Échangeur-Intercooler EVOX Performance · 3,9 L"],
-      [true, "Kit admission directe carbone Gruppe M"],
-      [sil.id !== "sans", sil.id === "sans" ? "Sans silencieux ValveTronic" : "Silencieux EVOX ValveTronic · " + sil.nom]
-    ];
-    $("recap-liste").innerHTML = lignes.map(([ok, t]) => `<li class="${ok ? "" : "non"}${anime ? " pop" : ""}"><i>${ok ? coche : ""}</i><span>${t}</span></li>`).join("");
-    if (anime) { $("puce-prix").classList.add("flash"); setTimeout(() => $("puce-prix").classList.remove("flash"), 700); }
-    if (sil.img) $("son-photo").src = `assets/${sil.img}`;
+    $("ref").textContent = `Réf. ${ref}`;
+    if (anime && prixPrecedent !== null && prix !== prixPrecedent) {
+      const d = prix - prixPrecedent, bu = $("bulle");
+      bu.textContent = (d > 0 ? "+" : "−") + euros(Math.abs(d)); bu.className = "bulle " + (d > 0 ? "plus" : "moins");
+      void bu.offsetWidth; bu.classList.add("monte");
+      $("puce-prix").classList.add("flash"); setTimeout(() => $("puce-prix").classList.remove("flash"), 700);
+    }
+    prixAffiche = prix; prixPrecedent = prix;
   }
 
   // ---------- 03 · Performances ----------
@@ -655,7 +717,7 @@
   function reveil() {
     clearInterval(veille.boucle);
     $("veille").classList.add("cachee");
-    choix.cata = "decat"; choix.sil = "carbone"; puissance = 340; temp = 1; posValve = "open";
+    choix.cata = "decat"; choix.sil = dernierSil = "carbone"; puissance = 340; temp = 1; posValve = "open";
     majCompo(false); majGraphe(); majSon();
     ecranActuel = null; aller("e-pack");
   }
