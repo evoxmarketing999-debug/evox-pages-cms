@@ -28,7 +28,7 @@ window.PACK = {
     decat: { origine: [7649, "928959-6"], sans: [5749, "928959"],   chrome: [8249, "928959-7"], carbone: [8549, "928959-8"], pvd: [8449, "928959-9"] }
   },
 
-  // Les 3 éléments du pack + l'option. pt = position du point sur assets/pack.jpg (fractions largeur / hauteur)
+  // Les 3 éléments du pack + l'option. situ = photos « en situation » (montées sur voiture), affichées avec le bouton « Voir monté » des cartes. pt = position du point sur assets/pack.jpg (fractions largeur / hauteur)
   pieces: [
     { id: "downpipe", n: "01", nom: "DownPipe EVOX", sous: "SuperSport 200 cellules ou Race", pt: [0.67, 0.17],
       photos: ["downpipe-1.jpg", "downpipe-2.jpg", "downpipe-3.jpg", "downpipe-4.jpg"],
@@ -40,7 +40,8 @@ window.PACK = {
         ["Précision", "Pièces conçues par modélisation 3D, montage comme à l’origine."]
       ] },
     { id: "echangeur", n: "02", nom: "Échangeur-Intercooler EVOX", sous: "Performance · 3,9 L", pt: [0.22, 0.31],
-      photos: ["echangeur-1.jpg", "echangeur-2.jpg", "echangeur-3.jpg"],
+      photos: ["situ-echangeur-1.jpg", "echangeur-1.jpg", "echangeur-2.jpg", "echangeur-3.jpg"],
+      situ: ["situ-echangeur-1.jpg"],
       accroche: "Développé pour les contraintes thermiques des configurations Stage 2 et au-delà.",
       points: [
         ["Volume", "Cœur haute capacité de 3,9 L, contre 2,5 L pour l’échangeur d’origine."],
@@ -49,7 +50,8 @@ window.PACK = {
         ["Endurance", "Puissance maintenue dans la durée : accélérations répétées, usage circuit."]
       ] },
     { id: "admission", n: "03", nom: "Kit admission carbone Gruppe M", sous: "Admission directe · double entrée", pt: [0.56, 0.66],
-      photos: ["admission-1.jpg", "a110-1.jpg", "a110-2.jpg", "a110-3.jpg"],
+      photos: ["a110-1.jpg", "admission-1.jpg", "a110-2.jpg", "a110-3.jpg"],
+      situ: ["a110-1.jpg", "a110-2.jpg", "a110-3.jpg"],
       accroche: "Deux entrées d’air : la prise latérale et la grille arrière.",
       points: [
         ["Air frais", "2 fois plus d’air frais qu’à l’origine, jusqu’à +200 % de volume d’air admis."],
@@ -58,7 +60,8 @@ window.PACK = {
         ["Matière", "Carbone, conçu avec des technologies numériques de dernière génération."]
       ] },
     { id: "silencieux", n: "+", nom: "Silencieux EVOX ValveTronic", sous: "En option · A110, A110 R ou R Look", pt: null,
-      photos: ["silencieux-carbone.jpg", "silencieux-chrome.jpg", "silencieux-pvd.jpg", "silencieux-origine.jpg"],
+      photos: ["situ-silencieux-1.jpg", "situ-silencieux-2.jpg", "situ-silencieux-3.jpg", "silencieux-carbone.jpg", "silencieux-chrome.jpg", "silencieux-pvd.jpg", "silencieux-origine.jpg"],
+      situ: ["situ-silencieux-1.jpg", "situ-silencieux-2.jpg", "situ-silencieux-3.jpg"],
       accroche: "Un son contrôlable par télécommande, sur deux positions.",
       points: [
         ["Open", "Votre Alpine fait le son d’une vraie voiture de sport : rauque, agressif, envoûtant."],

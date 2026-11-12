@@ -145,6 +145,14 @@
   .piece.retire { box-shadow: inset 0 0 0 2px rgba(255,255,255,.12); }
   .piece.retire .ph { background: repeating-linear-gradient(135deg, #E6E5E1 0 10px, #EFEFEC 10px 20px); }
 
+  .monte { position: absolute; left: 10px; bottom: 10px; z-index: 3; display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 999px;
+    background: rgba(17,17,14,.82); color: var(--blanc); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .3s, color .3s; }
+  .monte i { width: 7px; height: 7px; border-radius: 50%; background: var(--vert); }
+  .piece.situ .monte { background: var(--vert); color: var(--noir); } .piece.situ .monte i { background: var(--noir); }
+  .piece.situ .ph img { object-fit: cover; padding: 0; }
+  .piece .ph .compteur-situ { position: absolute; right: 10px; bottom: 12px; z-index: 3; font-size: 11px; font-weight: 700; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.6); opacity: 0; transition: opacity .3s; }
+  .piece.situ .ph .compteur-situ { opacity: 1; }
+  .piece.retire .monte { display: none; }
   .compo-pied { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 16px; border-radius: 20px; background: var(--noir-2); }
   .pile { display: flex; align-items: center; }
   .pile span { width: 44px; height: 44px; border-radius: 50%; background: var(--studio) center / 80% no-repeat; box-shadow: 0 0 0 3px var(--noir-2); margin-left: -10px; flex: none;
@@ -254,6 +262,8 @@
   .galerie .diapo.active { opacity: 1; }
   .galerie .diapo img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.04); transition: transform 6s linear; }
   .galerie .diapo.active img { transform: scale(1.1); }
+  .galerie .diapo.plein img { object-fit: cover; }
+  .galerie .diapo.plein.active img { transform: scale(1.04); }
   .galerie .points-g { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; z-index: 2; }
   .galerie .points-g i { width: 22px; height: 4px; border-radius: 4px; background: rgba(17,17,14,.2); transition: background .3s, width .3s; }
   .galerie .points-g i.on { background: var(--noir); width: 34px; }
@@ -487,7 +497,7 @@
   </div>
 </div>
 
-<script src="assets/pack.js?v=2026-11-12b"></script>
+<script src="assets/pack.js?v=2026-11-13"></script>
 <script src="../ecran-borne.js"></script>
 <script>
   const P = window.PACK, $ = id => document.getElementById(id);
@@ -562,7 +572,7 @@
     $("f-num").textContent = p.pt ? `Élément ${p.n} sur 03` : "En option";
     $("f-nom").textContent = p.nom; $("f-sous").textContent = p.sous; $("f-accroche").textContent = p.accroche;
     $("f-points").innerHTML = p.points.map(([t, d], k) => `<div style="transition-delay:${200 + k * 90}ms"><dt>${t}</dt><dd>${d}</dd></div>`).join("");
-    $("galerie").innerHTML = p.photos.map(f => `<div class="diapo"><img src="assets/${f}" alt="${p.nom}"></div>`).join("") + `<div class="points-g">${p.photos.map(() => "<i></i>").join("")}</div>`;
+    $("galerie").innerHTML = p.photos.map(f => `<div class="diapo${(p.situ || []).includes(f) ? " plein" : ""}"><img src="assets/${f}" alt="${p.nom}"></div>`).join("") + `<div class="points-g">${p.photos.map(() => "<i></i>").join("")}</div>`;
     $("f-vers").onclick = () => { fermerFiche(); aller(p.id === "silencieux" ? "e-son" : "e-composer"); };
     $("f-vers").textContent = p.id === "silencieux" ? "Écouter le caractère Open / Closed ›" : "Composer mon pack ›";
     diapo = 0; montrerDiapo(0);
@@ -603,10 +613,26 @@
     if (c.id === "downpipe") bas = `<div class="seg" id="seg-cata">${P.catalyseurs.map(k => `<button data-id="${k.id}">${k.nom}<small data-delta></small></button>`).join("")}</div>`;
     if (c.id === "silencieux") bas = `<div class="interrupteur-mini"><span id="sil-etat">Ajouté au pack</span><button class="bascule-on" id="sil-bascule" role="switch" aria-label="Ajouter ou retirer le silencieux"></button></div>
       <div class="finitions" id="finitions">${finitions.map(s => `<button data-id="${s.id}"><i style="background:${TEINTE[s.id]}"></i>${s.court}</button>`).join("")}</div>`;
+    const situ = (P.pieces.find(p => p.id === c.id) || {}).situ || [];
     el.innerHTML = `<div class="ph"><img src="assets/${c.img}" alt="${c.titre}"><span class="num cf">${c.n}</span><span class="badge${c.badge === "Option" ? " opt" : ""}">${c.badge}</span>
+        ${situ.length ? `<button class="monte" data-monte><i></i><span>Voir monté</span></button><span class="compteur-situ"></span>` : ""}
         ${c.id === "silencieux" ? `<button class="ajouter" id="sil-ajouter"><span>+ Ajouter le silencieux</span></button>` : ""}</div>
       <div class="txt"><h3>${c.titre}</h3><p class="detail" data-detail>${c.detail || ""}</p><div class="bas">${bas}</div></div>`;
     $("cartes").appendChild(el);
+    if (situ.length) {
+      let k = -1; // -1 = photo de la pièce, sinon index de la photo en situation
+      const img = el.querySelector(".ph img"), cpt = el.querySelector(".compteur-situ");
+      const montrer = () => {
+        el.classList.toggle("situ", k >= 0);
+        el.querySelector("[data-monte] span").textContent = k >= 0 ? "Voir la pièce" : "Voir monté";
+        cpt.textContent = k >= 0 ? `${k + 1} / ${situ.length}` : "";
+        const fin = c.id === "silencieux" ? P.silencieux.find(s => s.id === (choix.sil === "sans" ? dernierSil : choix.sil)).img : c.img;
+        changerImage(img, `assets/${k >= 0 ? situ[k] : fin}`);
+      };
+      el.querySelector("[data-monte]").onclick = e => { e.stopPropagation(); k = k >= 0 ? -1 : 0; montrer(); };
+      el.querySelector(".ph").addEventListener("click", e => { if (k < 0 || e.target.closest("button")) return; k = (k + 1) % situ.length; montrer(); });
+      el.vuePiece = () => { if (k >= 0) { k = -1; montrer(); } };
+    }
   });
   $("seg-cata").querySelectorAll("button").forEach(b => b.onclick = () => { if (choix.cata === b.dataset.id) return; choix.cata = b.dataset.id; majCompo(true, "downpipe"); });
   $("finitions").querySelectorAll("button").forEach(b => b.onclick = () => { if (choix.sil === b.dataset.id) return; choix.sil = dernierSil = b.dataset.id; majCompo(true, "silencieux"); });
@@ -642,7 +668,8 @@
     cs.querySelector("[data-detail]").textContent = avec ? sil.nom : "Touchez pour l’ajouter : A110, ou A110 R / R Look en 3 finitions.";
     $("finitions").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", avec && b.dataset.id === choix.sil));
     const fin = P.silencieux.find(s => s.id === (avec ? choix.sil : dernierSil));
-    changerImage(cs.querySelector(".ph img"), `assets/${fin.img}`);
+    if (anime && quoi === "silencieux" && cs.classList.contains("situ")) cs.vuePiece();
+    else if (!cs.classList.contains("situ")) changerImage(cs.querySelector(".ph img"), `assets/${fin.img}`);
     $("son-photo").src = `assets/${fin.img}`;
     // Animations ciblées
     if (anime && quoi === "downpipe") { changerImage($("c-downpipe").querySelector(".ph img"), "assets/downpipe-1.jpg", "flip"); secouer("downpipe"); }
@@ -812,6 +839,7 @@
     clearInterval(veille.boucle);
     $("veille").classList.add("cachee");
     choix.cata = "decat"; choix.sil = dernierSil = "carbone"; puissance = 340; temp = 1; posValve = "open";
+    document.querySelectorAll(".piece").forEach(p => p.vuePiece && p.vuePiece());
     majCompo(false); majGraphe(); majSon();
     ecranActuel = null; aller("e-pack");
   }
