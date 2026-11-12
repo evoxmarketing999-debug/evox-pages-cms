@@ -21,3 +21,12 @@ Pages du site evox-performance.com (PrestaShop).
 - `index.html` : fiche interactive (veille animée, le pack, configurateur avec prix, performances, son ValveTronic)
 - `assets/pack.js` : contenus et **prix TTC des 10 déclinaisons** (à mettre à jour si les prix du site changent)
 
+## borne/echappement-997/ — Univers Échappement EVOX Porsche 997 MKI
+
+- `index.html` : veille, l'échappement, composer (pièces à cocher, 3.6L / 3.8L, prix de la ligne complète), le son ValveTronic
+- `assets/e997.js` : pièces et **prix TTC** (à mettre à jour si les prix du site changent)
+
+## borne/univers.json — Catalogue des univers (appli Borne EVOX 2.x)
+
+Ajouter un univers = ajouter une entrée (id, nom, sous, url, visite). Il apparaît dans le menu équipe de toutes les tablettes.
+

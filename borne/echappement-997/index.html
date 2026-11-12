@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Échappement 997 MKI — EVOX</title>
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #11110E; --noir-2: #1A1A17; --noir-3: #24241F; --blanc: #FFFFFF; --studio: #EFEFEC;
+    --gris: #9C9C95; --gris-2: #6A6A64; --filet: rgba(255,255,255,.12); --vert: #CCFF00;
+    --ease: cubic-bezier(.22, .8, .24, 1); --ressort: cubic-bezier(.34, 1.4, .5, 1);
+    --marge: clamp(16px, 3.4vw, 44px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--noir); color: var(--blanc); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden;
+    user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  img { display: block; max-width: 100%; -webkit-user-drag: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus:not(:focus-visible) { outline: none; }
+  button:focus-visible { outline: 2px solid var(--vert); outline-offset: 3px; }
+  .cf { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
+  .etiquette { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-size: 11px; letter-spacing: .22em; color: var(--gris); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .etiquette.carre::before { content: ""; display: inline-block; width: 7px; height: 7px; background: var(--vert); margin-right: 9px; vertical-align: 1px; }
+
+  /* ---------- Cadre de l'appli ---------- */
+  #app { height: 100svh; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+  .barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px var(--marge) 12px; }
+  .barre .logo { height: clamp(22px, 2.6vw, 30px); }
+  .barre .titre { flex: 1; min-width: 0; font-size: 11px; letter-spacing: .2em; color: var(--gris); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .showroom { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px 10px 12px; border-radius: 999px; background: var(--noir-2); border: 1px solid var(--filet); color: var(--blanc); text-decoration: none;
+    font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 11px; letter-spacing: .14em; font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; flex: none; }
+  .showroom:active { background: var(--vert); color: var(--noir); }
+  @media (max-width: 420px) { .showroom span { display: none; } .showroom { padding: 10px 12px; } }
+  .puce-prix { display: flex; align-items: baseline; gap: 10px; padding: 10px 16px; border: 1px solid var(--filet); border-radius: 999px; white-space: nowrap; transition: border-color .4s, background .4s; }
+  .puce-prix small { font-size: 10px; letter-spacing: .18em; color: var(--gris); }
+  .puce-prix b { font-family: "cofo-peshka-variable"; font-weight: normal; font-variation-settings: "wght" 800, "wdth" 120, "slnt" 0; font-size: 17px; }
+  .puce-prix.flash { border-color: var(--vert); background: rgba(204,255,0,.08); }
+
+  .ecrans { position: relative; overflow: hidden; }
+  .ecran { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 8px var(--marge) 28px; opacity: 0; visibility: hidden; transform: translateX(40px);
+    transition: opacity .5s var(--ease), transform .6s var(--ease), visibility 0s .6s; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ecran::-webkit-scrollbar { display: none; }
+  .ecran.avant { transform: translateX(-40px); }
+  .ecran.actif { opacity: 1; visibility: visible; transform: none; transition: opacity .5s var(--ease), transform .6s var(--ease), visibility 0s; }
+  .ecran [data-a] { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .8s var(--ease); }
+  .ecran.actif.joue [data-a] { opacity: 1; transform: none; }
+
+  .onglets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px var(--marge) max(14px, env(safe-area-inset-bottom)); border-top: 1px solid var(--filet); position: relative; }
+  .onglet { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 6px; border-radius: 14px; color: var(--gris); transition: color .35s, background .35s; min-width: 0; }
+  .onglet i { font-style: normal; font-family: "cofo-peshka-variable"; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; font-size: 11px; color: var(--gris-2); transition: color .35s; }
+  .onglet span { font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 13px; letter-spacing: .06em; font-variation-settings: "wght" 650, "wdth" 112, "slnt" 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .onglet[aria-selected="true"] { color: var(--noir); background: var(--vert); }
+  .onglet .court { display: none; }
+  .onglet[aria-selected="true"] i { color: var(--noir); }
+
+  /* ---------- 01 · Le pack ---------- */
+  .pack { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(20px, 3.5vw, 48px); align-items: center; min-height: 100%; }
+  .pack h1 { line-height: .9; margin-top: 14px; }
+  .pack h1 .s { display: block; font-size: clamp(48px, min(9vw, 12vh), 120px); font-variation-settings: "wght" 900, "wdth" 110, "slnt" -8; }
+  .pack h1 .p { display: block; font-size: clamp(48px, min(9vw, 12vh), 120px); color: var(--vert); font-variation-settings: "wght" 900, "wdth" 110, "slnt" -8; }
+  .pack .chapo { margin-top: 18px; font-size: clamp(14px, 1.5vw, 17px); line-height: 1.55; color: #CFCFC9; max-width: 440px; }
+  .chiffres { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .chiffres span { padding: 9px 14px; border: 1px solid var(--filet); border-radius: 999px; font-size: 13px; font-weight: 600; }
+  .chiffres span.v { border-color: var(--vert); color: var(--vert); }
+  .liste-pieces { margin-top: 26px; display: grid; gap: 8px; }
+  .piece-ligne { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 16px; background: var(--noir-2); text-align: left; transition: background .3s, transform .3s var(--ease); }
+  .piece-ligne:active { transform: scale(.98); background: var(--noir-3); }
+  .piece-ligne .num { font-size: 13px; color: var(--vert); width: 26px; flex: none; }
+  .piece-ligne .txt { flex: 1; min-width: 0; }
+  .piece-ligne b { display: block; font-size: 15px; font-weight: 600; }
+  .piece-ligne small { display: block; font-size: 12px; color: var(--gris); margin-top: 2px; }
+  .piece-ligne .fl { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--filet); display: grid; place-items: center; flex: none; }
+  .piece-ligne.option { background: transparent; border: 1px dashed rgba(255,255,255,.18); }
+
+  .studio { position: relative; background: var(--studio); border-radius: 22px; overflow: hidden; aspect-ratio: 1400 / 933; width: 100%; }
+  .studio > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .studio::after { content: ""; position: absolute; inset: 0; pointer-events: none; transform: translateX(-120%);
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.75) 50%, transparent 62%); }
+  .ecran.actif.joue .studio::after { animation: balaye 1.6s var(--ease) .5s; }
+  .point { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; display: grid; place-items: center; z-index: 2; }
+  .point::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--noir); box-shadow: 0 0 0 3px var(--vert); }
+  .point::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--vert); animation: onde 2.2s ease-out infinite; }
+  .point b { position: relative; font-family: "cofo-peshka-variable"; font-weight: normal; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; font-size: 12px; color: var(--vert); }
+  .point:nth-of-type(2)::after { animation-delay: .7s; } .point:nth-of-type(3)::after { animation-delay: 1.4s; }
+  .legende-studio { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 12px; color: var(--gris); }
+  @keyframes onde { 0% { transform: scale(.55); opacity: 1; } 100% { transform: scale(1.35); opacity: 0; } }
+  @keyframes balaye { to { transform: translateX(120%); } }
+
+  /* ---------- 02 · Composer : une carte par pièce ---------- */
+  .compo { display: flex; flex-direction: column; gap: clamp(14px, 2vh, 22px); min-height: 100%; }
+  .compo-tete { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+  .compo-tete h2 { font-size: clamp(22px, min(3vw, 5vh), 40px); line-height: 1; margin-top: 8px; font-variation-settings: "wght" 850, "wdth" 125, "slnt" 0; }
+  .compo-tete h2 span { color: var(--gris); }
+  .total { position: relative; text-align: right; }
+  .total small { display: block; font-size: 10px; letter-spacing: .2em; color: var(--gris); }
+  .total b { display: block; font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(30px, min(4vw, 7vh), 52px); line-height: 1.05; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; white-space: nowrap; }
+  .total span { display: block; font-size: 11px; color: var(--gris); }
+  .bulle { position: absolute; right: 0; top: -6px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; pointer-events: none; opacity: 0; }
+  .bulle.plus { background: var(--vert); color: var(--noir); } .bulle.moins { background: var(--blanc); color: var(--noir); }
+  .bulle.monte { animation: bulle 1.4s var(--ease) forwards; }
+  @keyframes bulle { 0% { opacity: 0; transform: translateY(14px) scale(.8); } 18% { opacity: 1; transform: translateY(-6px) scale(1.05); } 70% { opacity: 1; transform: translateY(-14px); } 100% { opacity: 0; transform: translateY(-30px); } }
+
+  .cartes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 16px); }
+  .piece { position: relative; display: flex; flex-direction: column; background: var(--noir-2); border-radius: 26px; overflow: hidden; text-align: left;
+    transition: transform .5s var(--ressort), box-shadow .5s var(--ease); }
+  .piece.secoue { animation: secoue .55s var(--ressort); }
+  @keyframes secoue { 0% { transform: scale(1); } 35% { transform: scale(.965); } 100% { transform: scale(1); } }
+  .piece .ph { position: relative; background: var(--studio); aspect-ratio: 4 / 3; overflow: hidden; }
+  .piece .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6%;
+    transition: opacity .55s var(--ease), transform .7s var(--ressort), filter .55s var(--ease); }
+  .piece .ph img.sort { opacity: 0; transform: scale(.82) translateY(10px); }
+  .piece .ph img.flip { animation: flip .7s var(--ease); }
+  @keyframes flip { 0% { transform: none; } 45% { transform: perspective(600px) rotateY(80deg) scale(.92); opacity: .4; } 100% { transform: none; } }
+  .piece .num { position: absolute; top: 12px; left: 14px; font-size: 12px; color: var(--noir); }
+  .piece .badge { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: var(--noir); color: var(--blanc); font-size: 11px; font-weight: 700; z-index: 2; }
+  .piece .badge.opt { background: var(--vert); color: var(--noir); }
+  .piece .txt { padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1; }
+  .piece h3 { font-size: 16px; font-weight: 700; line-height: 1.25; }
+  .piece .detail { font-size: 12.5px; color: var(--gris); margin-top: 4px; line-height: 1.4; min-height: 2.8em; transition: opacity .3s; }
+  .piece .bas { margin-top: auto; padding-top: 12px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--noir-3); border-radius: 12px; padding: 4px; position: relative; }
+  .seg::before { content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 9px; background: var(--blanc); transition: transform .45s var(--ressort); }
+  .seg.droite::before { transform: translateX(100%); }
+  .seg button { position: relative; padding: 9px 4px; font-size: 12.5px; font-weight: 700; color: var(--gris); transition: color .3s; min-width: 0; }
+  .seg button[aria-pressed="true"] { color: var(--noir); }
+  .seg button small { display: block; font-size: 10.5px; font-weight: 600; opacity: .7; }
+  .inclus { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--gris); padding: 10px 12px; border-radius: 12px; background: var(--noir-3); }
+  .inclus i { width: 18px; height: 18px; border-radius: 50%; background: var(--vert); color: var(--noir); display: grid; place-items: center; flex: none; }
+  .finitions { display: grid; grid-template-columns: repeat(auto-fit, minmax(54px, 1fr)); gap: 5px; transition: opacity .4s; }
+  .finitions button { padding: 8px 2px 7px; border-radius: 10px; background: var(--noir-3); font-size: 10.5px; white-space: nowrap; font-weight: 700; color: var(--gris); border: 2px solid transparent; transition: border-color .3s, color .3s; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .finitions button i { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+  .finitions button[aria-pressed="true"] { border-color: var(--vert); color: var(--blanc); }
+  .interrupteur-mini { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 12.5px; font-weight: 700; }
+  .bascule-on { width: 52px; height: 30px; border-radius: 999px; background: var(--vert); position: relative; flex: none; transition: background .35s; }
+  .bascule-on::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--noir); transform: translateX(22px); transition: transform .45s var(--ressort), background .35s; }
+  .piece.retire .bascule-on { background: var(--noir-3); } .piece.retire .bascule-on::after { transform: none; background: var(--gris); }
+  .piece.retire .ph img { opacity: .18; filter: grayscale(1); transform: scale(.86); }
+  .piece.retire .finitions { opacity: .3; pointer-events: none; }
+  .piece .ajouter { position: absolute; inset: 0; display: grid; place-items: center; z-index: 3; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+  .piece .ajouter span { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 999px; background: var(--noir); color: var(--blanc); font-weight: 700; font-size: 13px;
+    box-shadow: 0 0 0 2px var(--vert); transform: scale(.8); transition: transform .5s var(--ressort); }
+  .piece.retire .ajouter { opacity: 1; pointer-events: auto; }
+  .piece.retire .ajouter span { transform: none; }
+  .piece.retire { box-shadow: inset 0 0 0 2px rgba(255,255,255,.12); }
+  .piece.retire .ph { background: repeating-linear-gradient(135deg, #E6E5E1 0 10px, #EFEFEC 10px 20px); }
+
+  .monte { position: absolute; left: 10px; bottom: 10px; z-index: 3; display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 999px;
+    background: rgba(17,17,14,.82); color: var(--blanc); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .3s, color .3s; }
+  .monte i { width: 7px; height: 7px; border-radius: 50%; background: var(--vert); }
+  .piece.situ .monte { background: var(--vert); color: var(--noir); } .piece.situ .monte i { background: var(--noir); }
+  .piece.situ .ph img { object-fit: cover; padding: 0; }
+  .piece .ph .compteur-situ { position: absolute; right: 10px; bottom: 12px; z-index: 3; font-size: 11px; font-weight: 700; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.6); opacity: 0; transition: opacity .3s; }
+  .piece.situ .ph .compteur-situ { opacity: 1; }
+  .piece.retire .monte { display: none; }
+  .seg-fam { margin-bottom: 8px; }
+  .seg-fam button { font-size: 11.5px; line-height: 1.2; overflow-wrap: anywhere; }
+  .piece.titane .badge.opt { background: linear-gradient(120deg, #D9B56E, #7B5BD6 50%, #2E86DE); color: #fff; }
+  .piece.retire .seg-fam { opacity: .3; pointer-events: none; }
+  .compo-pied { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 16px; border-radius: 20px; background: var(--noir-2); }
+  .pile { display: flex; align-items: center; }
+  .pile span { width: 44px; height: 44px; border-radius: 50%; background: var(--studio) center / 80% no-repeat; box-shadow: 0 0 0 3px var(--noir-2); margin-left: -10px; flex: none;
+    transition: width .5s var(--ressort), margin .5s var(--ressort), opacity .4s, transform .5s var(--ressort); }
+  .pile span:first-child { margin-left: 0; }
+  .pile span.cache { width: 0; margin-left: 0; opacity: 0; transform: scale(.3); }
+  .compte { font-size: 13px; line-height: 1.35; }
+  .compte b { display: block; font-size: 15px; }
+  .compte small { color: var(--gris); }
+  .compo-pied .note { flex: 1; min-width: 220px; font-size: 11.5px; color: var(--gris); line-height: 1.5; }
+  .compo-pied .cta { padding: 13px 18px; border-radius: 14px; background: var(--vert); color: var(--noir); font-weight: 700; font-size: 13.5px; white-space: nowrap; }
+
+  /* ---------- 03 · Performances ---------- */
+  .perfs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 40px); }
+  .jauges { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .jauge { background: var(--noir-2); border-radius: 22px; padding: 18px 16px 16px; text-align: center; position: relative; }
+  .jauge svg { width: 100%; max-width: 230px; display: block; margin: 0 auto; overflow: visible; }
+  .jauge .fond { stroke: var(--noir-3); }
+  .jauge .arc { stroke: var(--vert); stroke-linecap: round; transition: stroke-dashoffset 1.8s var(--ease); }
+  .jauge .val { margin-top: -54px; font-size: clamp(38px, 4.6vw, 56px); line-height: 1; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; }
+  .jauge .unite { font-size: 12px; letter-spacing: .2em; color: var(--gris); margin-top: 4px; }
+  .jauge .sous { font-size: 12px; color: var(--gris); margin-top: 12px; line-height: 1.4; }
+  .bloc { background: var(--noir-2); border-radius: 22px; padding: clamp(16px, 2.2vw, 24px); }
+  .bloc h3 { font-size: clamp(16px, 1.8vw, 20px); margin: 8px 0 4px; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; }
+  .bloc > p { font-size: 13px; color: var(--gris); line-height: 1.5; }
+  .lecture { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 12px; min-height: 30px; }
+  .lecture .regime { font-size: 12px; color: var(--gris); letter-spacing: .06em; }
+  .lecture b { font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(20px, 2.4vw, 26px); font-variation-settings: "wght" 850, "wdth" 115, "slnt" 0; }
+  .lecture b.ch { color: var(--vert); }
+  .lecture b small { font-size: .5em; color: var(--gris); margin-left: 3px; }
+  .graphe-banc { position: relative; margin-top: 6px; touch-action: none; cursor: crosshair; }
+  .graphe-banc svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .graphe-banc .grille line { stroke: rgba(255,255,255,.07); }
+  .graphe-banc .lib { font: 600 var(--fs, 10px) Montserrat, sans-serif; fill: #6A6A64; }
+  .graphe-banc .lib.ch { fill: #9DB33A; } 
+  .graphe-banc .trait-ch { fill: none; stroke: var(--vert); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+  .graphe-banc .trait-nm { fill: none; stroke: #FFFFFF; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; opacity: .9; }
+  .graphe-banc .aire { fill: url(#degrade-ch); opacity: 0; transition: opacity 1.2s var(--ease) 1.4s; }
+  .graphe-banc.trace .aire { opacity: 1; }
+  .graphe-banc .pic { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.4); transition: opacity .5s var(--ease), transform .6s var(--ressort); }
+  .graphe-banc.trace .pic { opacity: 1; transform: none; }
+  .graphe-banc.trace .pic.p1 { transition-delay: 1.9s; } .graphe-banc.trace .pic.p2 { transition-delay: 1.2s; }
+  .graphe-banc .pic text { font: 800 var(--fs2, 12px) Montserrat, sans-serif; }
+  .graphe-banc .curseur { opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .graphe-banc.lit .curseur { opacity: 1; }
+  .legende-banc { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 8px; font-size: 11.5px; color: var(--gris); }
+  .legende-banc i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+  .legende-banc .original { margin-left: auto; padding: 8px 12px; border-radius: 10px; background: var(--noir-3); color: var(--blanc); font-size: 11.5px; font-weight: 700; }
+  .releve { position: fixed; inset: 0; z-index: 40; background: rgba(5,5,4,.92); display: grid; place-items: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+  .releve.ouvert { opacity: 1; pointer-events: auto; }
+  .releve img { max-width: min(760px, 100%); max-height: 82svh; border-radius: 14px; background: #fff; }
+  .releve p { margin-top: 12px; text-align: center; color: var(--gris); font-size: 12px; }
+  .perfs .col { display: grid; gap: 12px; align-content: start; }
+  .segments { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+  .segments button { flex: 1; padding: 11px 8px; border-radius: 12px; background: var(--noir-3); font-size: 13px; font-weight: 700; color: var(--gris); transition: background .3s, color .3s; min-width: 0; }
+  .segments button[aria-pressed="true"] { background: var(--blanc); color: var(--noir); }
+  .segments.temp button[aria-pressed="true"] { background: var(--vert); }
+  .graphe { position: relative; height: 150px; margin: 26px 4px 8px; }
+  .graphe .axe { position: absolute; left: 0; right: 0; bottom: 22px; height: 1px; background: var(--filet); }
+  .graphe .bande { position: absolute; bottom: 22px; height: 42px; background: repeating-linear-gradient(135deg, rgba(204,255,0,.18) 0 6px, rgba(204,255,0,.06) 6px 12px); border: 1px solid rgba(204,255,0,.5); border-radius: 6px;
+    transition: left .8s var(--ease), width .8s var(--ease); }
+  .graphe .bande span { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--vert); white-space: nowrap; }
+  .graphe .repere { position: absolute; bottom: 22px; top: 0; width: 0; transition: left .8s var(--ease); }
+  .graphe .repere::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; }
+  .graphe .repere b { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font-size: 11px; padding: 4px 8px; border-radius: 999px; font-weight: 700; }
+  .graphe .repere.origine::before { background: #FF5A4E; } .graphe .repere.origine b { background: #FF5A4E; color: #fff; top: 30px; }
+  .graphe .repere.evox::before { background: var(--blanc); } .graphe .repere.evox b { background: var(--blanc); color: var(--noir); }
+  .graphe .graduation { position: absolute; bottom: 0; transform: translateX(-50%); font-size: 10px; color: var(--gris-2); }
+  .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .verdict div { border-radius: 12px; padding: 10px 12px; background: var(--noir-3); font-size: 12px; line-height: 1.4; color: var(--gris); }
+  .verdict b { display: block; color: var(--blanc); font-size: 13px; margin-bottom: 2px; }
+  .verdict .ok b { color: var(--vert); } .verdict .ko b { color: #FF7A70; }
+
+  /* ---------- 04 · Le son ---------- */
+  .son { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 40px); align-items: center; min-height: 100%; }
+  .son h2 { font-size: clamp(28px, min(4.2vw, 7vh), 56px); line-height: .98; margin-top: 12px; font-variation-settings: "wght" 900, "wdth" 105, "slnt" -6; }
+  .son h2 span { color: var(--vert); }
+  .interrupteur { display: grid; grid-template-columns: 1fr 1fr; background: var(--noir-2); border-radius: 999px; padding: 6px; margin-top: 24px; position: relative; max-width: 420px; }
+  .interrupteur::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); border-radius: 999px; background: var(--vert); transition: transform .5s var(--ressort); }
+  .interrupteur.ferme::before { transform: translateX(100%); background: var(--blanc); }
+  .interrupteur button { position: relative; padding: 16px; border-radius: 999px; font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 16px; letter-spacing: .1em;
+    font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; color: var(--gris); transition: color .4s; }
+  .interrupteur button[aria-pressed="true"] { color: var(--noir); }
+  .son .texte { margin-top: 20px; font-size: clamp(15px, 1.7vw, 19px); line-height: 1.55; color: #E3E3DE; max-width: 460px; min-height: 5.5em; transition: opacity .3s; }
+  .son .note { margin-top: 10px; font-size: 12px; color: var(--gris); }
+  .visu-son { background: var(--noir-2); border-radius: 26px; padding: clamp(18px, 3vw, 32px); position: relative; overflow: hidden; }
+  .vague { display: flex; align-items: center; justify-content: center; gap: clamp(3px, .5vw, 6px); height: clamp(120px, 18vw, 200px); }
+  .vague i { flex: 1; max-width: 10px; border-radius: 6px; background: var(--vert); height: 10%; transition: height .25s ease, background .4s; }
+  .ferme .vague i { background: var(--blanc); }
+  .valve { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+  .valve svg { width: 72px; height: 72px; flex: none; }
+  .valve .clapet { transform-origin: 36px 36px; transition: transform .7s var(--ressort); }
+  .ferme .valve .clapet { transform: rotate(90deg); }
+  .valve p { font-size: 13px; color: var(--gris); line-height: 1.45; }
+  .valve p b { color: var(--blanc); display: block; font-size: 15px; }
+  .visu-son .photo-sil { margin-top: 16px; background: var(--studio); border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; }
+  .visu-son .photo-sil img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- Fiche d'un élément ---------- */
+  .voile { position: fixed; inset: 0; background: rgba(0,0,0,.6); opacity: 0; pointer-events: none; transition: opacity .45s var(--ease); z-index: 30; }
+  .voile.ouvert { opacity: 1; pointer-events: auto; }
+  .fiche { position: fixed; z-index: 31; left: 50%; bottom: 0; width: min(1080px, 100%); max-height: 92svh; background: var(--noir-2); border-radius: 26px 26px 0 0;
+    transform: translate(-50%, 104%); transition: transform .6s var(--ease); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); overflow: hidden; }
+  .fiche.ouverte { transform: translate(-50%, 0); }
+  .galerie { position: relative; background: var(--studio); min-height: 340px; overflow: hidden; touch-action: pan-y; }
+  .galerie .diapo { position: absolute; inset: 0; opacity: 0; transition: opacity .7s var(--ease); }
+  .galerie .diapo.active { opacity: 1; }
+  .galerie .diapo img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.04); transition: transform 6s linear; }
+  .galerie .diapo.active img { transform: scale(1.1); }
+  .galerie .diapo.plein img { object-fit: cover; }
+  .galerie .diapo.plein.active img { transform: scale(1.04); }
+  .galerie .points-g { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; z-index: 2; }
+  .galerie .points-g i { width: 22px; height: 4px; border-radius: 4px; background: rgba(17,17,14,.2); transition: background .3s, width .3s; }
+  .galerie .points-g i.on { background: var(--noir); width: 34px; }
+  .fiche .infos { padding: clamp(20px, 3vw, 36px); overflow-y: auto; }
+  .fiche .haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .fiche h3 { font-size: clamp(22px, 2.8vw, 34px); line-height: 1; margin-top: 10px; font-variation-settings: "wght" 850, "wdth" 130, "slnt" 0; }
+  .fiche .sous { font-size: 13px; color: var(--gris); margin-top: 6px; }
+  .fermer { width: 46px; height: 46px; border-radius: 50%; background: var(--noir-3); display: grid; place-items: center; flex: none; }
+  .fiche .accroche { margin-top: 18px; font-size: 16px; line-height: 1.5; color: #E3E3DE; }
+  .fiche dl { margin-top: 18px; display: grid; gap: 8px; }
+  .fiche dl div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--noir-3); font-size: 13px; line-height: 1.45;
+    opacity: 0; transform: translateY(12px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+  .fiche.ouverte dl div { opacity: 1; transform: none; }
+  .fiche dt { font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 10px; letter-spacing: .14em; color: var(--vert); padding-top: 2px; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
+  .fiche .vers { margin-top: 18px; width: 100%; padding: 14px; border-radius: 14px; background: var(--vert); color: var(--noir); font-weight: 700; font-size: 14px; }
+
+  /* ---------- Veille ---------- */
+  .veille { position: fixed; inset: 0; z-index: 50; background: #050504; overflow: hidden; display: grid; place-items: center; cursor: pointer;
+    transition: opacity .8s var(--ease), visibility 0s .8s; }
+  .veille.cachee { opacity: 0; visibility: hidden; pointer-events: none; }
+  .veille .fond { position: absolute; inset: -4%; background: url(assets/a110-1.jpg) center / cover; opacity: .32; filter: grayscale(.2) contrast(1.1); animation: kenburns 24s ease-in-out infinite alternate; }
+  .veille::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 20%, #050504 78%); }
+  .veille .contenu { position: relative; z-index: 2; text-align: center; padding: 24px; }
+  .veille .logo { height: clamp(26px, 3.4vw, 40px); margin: 0 auto 4vh; }
+  .veille .grand { line-height: .82; }
+  .veille .grand span { display: block; font-size: clamp(34px, min(12vw, 20vh), 210px); animation: respire 5s ease-in-out infinite alternate; }
+  .veille .grand span + span { color: var(--vert); animation-delay: -2.5s; }
+  .veille .modele { margin-top: 3vh; font-size: clamp(12px, 1.4vw, 15px); letter-spacing: .4em; color: #D6D6D0; }
+  .veille .compteurs { display: flex; justify-content: center; gap: clamp(24px, 6vw, 80px); margin-top: 4vh; }
+  .veille .compteurs b { display: block; font-size: clamp(32px, 5vw, 64px); line-height: 1; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; font-weight: normal; }
+  .veille .compteurs small { display: block; margin-top: 6px; font-size: 11px; letter-spacing: .24em; color: var(--gris); }
+  .veille .toucher { margin-top: 6vh; display: inline-flex; align-items: center; gap: 14px; padding: 16px 26px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); font-size: 13px; letter-spacing: .24em; }
+  .veille .toucher i { width: 10px; height: 10px; border-radius: 50%; background: var(--vert); animation: clignote 1.4s ease-in-out infinite; }
+  @keyframes respire { 0% { font-variation-settings: "wght" 900, "wdth" 60, "slnt" 0; } 100% { font-variation-settings: "wght" 900, "wdth" 150, "slnt" -14; } }
+  @keyframes kenburns { to { transform: scale(1.12) translate(-2%, 1%); } }
+  @keyframes clignote { 50% { opacity: .2; transform: scale(.7); } }
+
+  /* ---------- Portrait et petits écrans ---------- */
+  @media (orientation: portrait), (max-width: 760px) {
+    .cartes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pack, .perfs, .son { grid-template-columns: minmax(0, 1fr); align-items: start; min-height: 0; }
+    .pack .visuel-pack { order: -1; }
+    .fiche { grid-template-columns: minmax(0, 1fr); grid-template-rows: 38svh minmax(0, 1fr); }
+    .galerie { min-height: 0; }
+    .son .visu-son { order: -1; }
+  }
+  @media (max-width: 760px) {
+    .barre .titre { display: none; }
+    .onglet { flex-direction: column; gap: 3px; padding: 10px 4px; }
+    .onglet span { font-size: 10px; letter-spacing: .04em; }
+    .onglet .long { display: none; } .onglet .court { display: inline; }
+    .jauges { grid-template-columns: 1fr 1fr; }
+    .fiche dl div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  }
+  @media (max-width: 520px) {
+    .cartes { grid-template-columns: minmax(0, 1fr); }
+    .piece { flex-direction: row; }
+    .piece .ph { width: 38%; aspect-ratio: auto; flex: none; }
+    .piece .detail { min-height: 0; }
+    .finitions { grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); }
+    .total { text-align: left; }
+    .compo-pied .cta { width: 100%; text-align: center; }
+  }
+  @media (max-width: 420px) {
+    .puce-prix small { display: none; }
+    .verdict { grid-template-columns: minmax(0, 1fr); }
+    .onglet span { font-variation-settings: "wght" 650, "wdth" 88, "slnt" 0; }
+  }
+  /* paysage bas (téléphone couché) */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .barre { padding-top: 10px; padding-bottom: 6px; }
+    .onglets { padding-top: 6px; padding-bottom: 8px; }
+    .onglet { padding: 9px 6px; }
+    .pack, .son { align-items: start; }
+    .pack h1 .s, .pack h1 .p { font-size: clamp(40px, 8vw, 80px); }
+    .fiche { max-height: 96svh; }
+    .galerie { min-height: 0; }
+    .veille .compteurs { margin-top: 2vh; } .veille .toucher { margin-top: 3vh; padding: 10px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  }
+</style>
+<style>
+  /* ---------- Spécifique échappement 997 ---------- */
+  .studio.carre { aspect-ratio: 1 / 1; max-height: 64vh; margin: 0 auto; }
+  .pack h1 .s, .pack h1 .p { font-size: clamp(36px, min(7vw, 10vh), 110px); white-space: nowrap; }
+  .veille .grand span { font-size: clamp(30px, min(9vw, 11vh), 150px); white-space: nowrap; }
+  .veille .v-studio { width: min(34vh, 56vw) !important; }
+  .seg-moteur { display: inline-grid; grid-template-columns: 1fr 1fr; background: var(--noir-2); border-radius: 12px; padding: 4px; position: relative; margin-top: 12px; }
+  .seg-moteur::before { content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 9px; background: var(--vert); transition: transform .45s var(--ressort); }
+  .seg-moteur.droite::before { transform: translateX(100%); }
+  .seg-moteur button { position: relative; padding: 9px 18px; font-size: 13px; font-weight: 700; color: var(--gris); transition: color .3s; }
+  .seg-moteur button[aria-pressed="true"] { color: var(--noir); }
+  .moteur-lib { font-size: 11px; color: var(--gris); margin-left: 10px; }
+  .total .forfait { display: inline-block; margin-top: 6px; padding: 4px 10px; border-radius: 999px; background: var(--vert); color: var(--noir); font-size: 11px; font-weight: 700; opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .5s var(--ressort); }
+  .total .forfait.on { opacity: 1; transform: none; }
+  #seg-sil button { font-size: 11.5px; line-height: 1.2; overflow-wrap: anywhere; }
+  .piece .prix-piece { font-size: 13px; font-weight: 700; margin-top: 6px; }
+  .piece .prix-piece s { color: var(--gris-2); font-weight: 500; margin-left: 6px; }
+  .alerte { display: none; font-size: 12px; line-height: 1.45; color: #FFD27A; background: rgba(255,210,122,.08); border: 1px solid rgba(255,210,122,.3); border-radius: 12px; padding: 10px 12px; }
+  .alerte.on { display: block; }
+  .veille .v-studio { width: min(42vh, 64vw); aspect-ratio: 1; border-radius: 50%; margin: 0 auto 3vh; background: #FFFFFF; box-shadow: 0 0 0 10px rgba(255,255,255,.06), 0 0 80px rgba(204,255,0,.12); display: grid; place-items: center; overflow: hidden; animation: flotte 6s ease-in-out infinite alternate; }
+  .veille .v-studio img { width: 84%; mix-blend-mode: multiply; filter: contrast(1.04) brightness(1.03); }
+  .veille .compteurs b small { display: inline; font-size: .45em; margin-left: 4px; letter-spacing: .1em; color: inherit; }
+  @keyframes flotte { to { transform: translateY(-10px) scale(1.02); } }
+  @media (orientation: landscape) and (max-height: 560px) { .veille .v-studio { width: 30vh; margin-bottom: 1vh; } }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header class="barre">
+    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
+    <p class="titre etiquette">Échappement EVOX · Porsche 997 MKI</p>
+    <div class="puce-prix" id="puce-prix"><small class="etiquette">Votre échappement</small><b id="puce-montant"></b></div>
+  </header>
+
+  <main class="ecrans">
+    <!-- 01 · L'échappement -->
+    <section class="ecran" id="e-ligne" aria-label="L'échappement">
+      <div class="pack">
+        <div>
+          <p class="etiquette carre" data-a>Échappement EVOX · Porsche 997 MKI</p>
+          <h1 class="cf" data-a><span class="s">997 MKI</span><span class="p">Full EVOX</span></h1>
+          <p class="chapo" data-a id="chapo"></p>
+          <div class="chiffres" data-a><span class="v">+15–20 ch</span><span class="v">−4,9 kg</span><span>Inox</span><span>ValveTronic ou SuperSport</span></div>
+          <div class="liste-pieces" id="liste-pieces" data-a></div>
+        </div>
+        <div class="visuel-pack" data-a>
+          <div class="studio carre"><img src="assets/ligne-1.jpg" alt="La ligne d'échappement EVOX complète pour Porsche 997 MKI"></div>
+          <p class="legende-studio"><span>La ligne complète : collecteurs, catalyseurs, silencieux</span><span>Sorties en option</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Composer -->
+    <section class="ecran" id="e-composer" aria-label="Composer mon échappement">
+      <div class="compo">
+        <div class="compo-tete" data-a>
+          <div>
+            <p class="etiquette carre">Composer · Porsche 997 MKI</p>
+            <h2 class="cf">Votre échappement, <span>pièce par pièce.</span></h2>
+            <div><div class="seg-moteur" id="seg-moteur"><button data-m="3.6">997 3.6L</button><button data-m="3.8">997 3.8L</button></div><span class="moteur-lib">Moteur</span></div>
+          </div>
+          <div class="total">
+            <small class="etiquette">Total TTC</small>
+            <b id="prix"></b>
+            <span id="ref"></span>
+            <span class="forfait" id="forfait">Prix ligne complète</span>
+            <i class="bulle" id="bulle"></i>
+          </div>
+        </div>
+        <div class="cartes" id="cartes"></div>
+        <p class="alerte" id="alerte"></p>
+        <div class="compo-pied" data-a>
+          <div class="pile" id="pile"></div>
+          <p class="compte" id="compte"></p>
+          <p class="note">Collecteurs + catalyseurs + silencieux = la ligne complète (+15–20 ch, −4,9 kg), au prix de la ligne. Sorties non compatibles avec le PSE d’origine.</p>
+          <p class="cta">Intéressé ? Parlez-en à notre équipe</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · Le son -->
+    <section class="ecran" id="e-son" aria-label="Le son ValveTronic">
+      <div class="son" id="son">
+        <div>
+          <p class="etiquette carre" data-a>Silencieux EVOX ValveTronic · Porsche 997</p>
+          <h2 class="cf" data-a>Deux caractères,<br><span>une télécommande</span></h2>
+          <div class="interrupteur" id="interrupteur" data-a>
+            <button aria-pressed="true" data-pos="open">Open</button>
+            <button aria-pressed="false" data-pos="closed">Closed</button>
+          </div>
+          <p class="texte" id="son-texte" data-a></p>
+          <p class="note" data-a>Le silencieux SuperSport est dérivé du mode Open. Animation indicative : aucun son n’est diffusé par la tablette.</p>
+        </div>
+        <div class="visu-son" data-a>
+          <div class="vague" id="vague"></div>
+          <div class="valve">
+            <svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="33" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/><g class="clapet"><rect x="8" y="33" width="56" height="6" rx="3" fill="#CCFF00"/><circle cx="36" cy="36" r="5" fill="#11110E" stroke="#CCFF00" stroke-width="2"/></g></svg>
+            <p id="valve-texte"></p>
+          </div>
+          <div class="photo-sil"><img src="assets/app-valvetronic.jpg" alt="Télécommande et appli mobile ValveTronic"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="onglets" role="tablist" aria-label="Sections" style="grid-template-columns: repeat(3, 1fr);">
+    <button class="onglet" role="tab" data-ecran="e-ligne"><i>01</i><span>L’échappement</span></button>
+    <button class="onglet" role="tab" data-ecran="e-composer"><i>02</i><span>Composer</span></button>
+    <button class="onglet" role="tab" data-ecran="e-son"><i>03</i><span>Le son</span></button>
+  </nav>
+</div>
+
+<!-- Fiche d'une pièce -->
+<div class="voile" id="voile"></div>
+<aside class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
+  <div class="galerie" id="galerie"></div>
+  <div class="infos">
+    <div class="haut">
+      <div><p class="etiquette carre" id="f-num"></p><h3 class="cf" id="f-nom"></h3><p class="sous" id="f-sous"></p></div>
+      <button class="fermer" id="fermer" aria-label="Fermer"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1l12 12M13 1 1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </div>
+    <p class="accroche" id="f-accroche"></p>
+    <dl id="f-points"></dl>
+    <button class="vers" id="f-vers">Composer mon échappement ›</button>
+  </div>
+</aside>
+
+<!-- Écran de veille -->
+<div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir l'échappement">
+  <div class="fond" style="background: radial-gradient(ellipse at 50% 40%, #2A2A25 0%, #050504 70%); opacity: 1; animation: none;"></div>
+  <div class="contenu">
+    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
+    <div class="v-studio"><img src="assets/ligne-1.jpg" alt=""></div>
+    <p class="grand cf"><span>997 MKI</span><span>Full EVOX</span></p>
+    <p class="modele cf">Échappement inox · Porsche 997 MKI</p>
+    <div class="compteurs cf">
+      <div><b>+15–20<small>ch</small></b><small>Avec la ligne</small></div>
+      <div><b>−4,9<small>kg</small></b><small>Plus léger</small></div>
+    </div>
+    <p class="toucher cf"><i></i>Touchez pour découvrir</p>
+  </div>
+</div>
+
+<script src="assets/e997.js?v=2026-11-12"></script>
+<script>
+  const E = window.E997, $ = id => document.getElementById(id);
+  const euros = n => n.toLocaleString("fr-FR").replace(/ |\s/g, " ") + " €";
+  const coche = '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M1.5 5.2 4 7.5l4.5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const fleche = '<svg width="12" height="12" viewBox="0 0 12 12"><path d="m4 2 4 4-4 4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const sansAnim = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const P = id => E.pieces.find(p => p.id === id);
+
+  function compter(el, de, a, ms = 900, format = n => Math.round(n)) {
+    if (sansAnim) { el.textContent = format(a); return; }
+    const t0 = performance.now(), jeton = el._jeton = (el._jeton || 0) + 1;
+    el.textContent = format(de);
+    const pas = t => { if (el._jeton !== jeton) return; const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = format(de + (a - de) * e); if (k < 1) requestAnimationFrame(pas); };
+    requestAnimationFrame(pas);
+  }
+
+  // ---------- Navigation ----------
+  const ordre = ["e-ligne", "e-composer", "e-son"];
+  let ecranActuel = null;
+  function aller(id) {
+    if (id === ecranActuel) return;
+    const iN = ordre.indexOf(id);
+    document.querySelectorAll(".ecran").forEach(e => { e.classList.toggle("actif", e.id === id); e.classList.remove("joue"); e.classList.toggle("avant", ordre.indexOf(e.id) < iN); });
+    document.querySelectorAll(".onglet").forEach(o => o.setAttribute("aria-selected", o.dataset.ecran === id));
+    const el = $(id); el.scrollTop = 0;
+    el.querySelectorAll("[data-a]").forEach((x, k) => x.style.transitionDelay = `${120 + k * 90}ms`);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("joue")));
+    ecranActuel = id;
+    if (id === "e-son") lancerVague(); else arreterVague();
+  }
+  document.querySelectorAll(".onglet").forEach(o => o.onclick = () => aller(o.dataset.ecran));
+  let x0 = null, y0 = null;
+  $("app").addEventListener("touchstart", e => { if (e.target.closest(".galerie")) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  $("app").addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.6) { const k = ordre.indexOf(ecranActuel) + (dx < 0 ? 1 : -1); if (k >= 0 && k < ordre.length) aller(ordre[k]); }
+  }, { passive: true });
+
+  // ---------- 01 · L'échappement ----------
+  $("chapo").textContent = E.ligne.accroche;
+  E.pieces.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.className = "piece-ligne" + (p.option ? " option" : "");
+    const sous = p.versions ? p.versions.map(v => v.nom).join(" ou ") : p.finitions ? p.finitions.map(f => f.nom).join(", ") + " · en option" : p.specs;
+    b.innerHTML = `<span class="num cf">${p.n}</span><span class="txt"><b>${p.nom}</b><small>${sous}</small></span><span class="fl">${fleche}</span>`;
+    b.onclick = () => ouvrirFiche(i);
+    $("liste-pieces").appendChild(b);
+  });
+
+  // ---------- Fiche ----------
+  let diapo = 0, minuteurDiapo = null;
+  function ouvrirFiche(i) {
+    const p = E.pieces[i];
+    const photos = p.photos || (p.versions ? p.versions.flatMap(v => v.photos) : p.finitions.flatMap(f => f.photos));
+    $("f-num").textContent = p.option ? "En option" : `Pièce ${p.n} sur 03`;
+    $("f-nom").textContent = p.nom;
+    $("f-sous").textContent = p.versions ? p.versions.map(v => `${v.nom} · ${euros(v.prix[0])}`).join("  ·  ")
+      : p.finitions ? p.finitions.map(f => `${f.nom} · dès ${euros(f.prix["3.8"][0])}`).join("  ·  ") : `${p.specs} · ${euros(p.prix[0])}`;
+    $("f-accroche").textContent = p.accroche;
+    $("f-points").innerHTML = p.points.map(([t, d], k) => `<div style="transition-delay:${200 + k * 90}ms"><dt>${t}</dt><dd>${d}</dd></div>`).join("");
+    $("galerie").innerHTML = photos.map(f => `<div class="diapo"><img src="assets/${f}" alt="${p.nom}"></div>`).join("") + `<div class="points-g">${photos.map(() => "<i></i>").join("")}</div>`;
+    $("f-vers").onclick = () => { fermerFiche(); aller("e-composer"); };
+    diapo = 0; montrerDiapo(0);
+    $("fiche").classList.add("ouverte"); $("voile").classList.add("ouvert"); $("fiche").setAttribute("aria-hidden", "false");
+  }
+  function montrerDiapo(k) {
+    const d = [...$("galerie").querySelectorAll(".diapo")], pts = [...$("galerie").querySelectorAll(".points-g i")];
+    diapo = (k + d.length) % d.length;
+    d.forEach((x, n) => x.classList.toggle("active", n === diapo)); pts.forEach((x, n) => x.classList.toggle("on", n === diapo));
+    clearTimeout(minuteurDiapo); minuteurDiapo = setTimeout(() => montrerDiapo(diapo + 1), 4200);
+  }
+  function fermerFiche() { $("fiche").classList.remove("ouverte"); $("voile").classList.remove("ouvert"); $("fiche").setAttribute("aria-hidden", "true"); clearTimeout(minuteurDiapo); }
+  $("fermer").onclick = fermerFiche; $("voile").onclick = fermerFiche;
+  let gx = null;
+  $("galerie").addEventListener("pointerdown", e => gx = e.clientX);
+  $("galerie").addEventListener("pointerup", e => { if (gx === null) return; const dx = e.clientX - gx; gx = null; montrerDiapo(diapo + (Math.abs(dx) > 40 ? (dx < 0 ? 1 : -1) : 1)); });
+
+  // ---------- 02 · Composer ----------
+  const DEPART = { collecteurs: true, catalyseurs: true, silencieux: true, sorties: false, sil: "ss", fin: "chrome", moteur: "3.8" };
+  const S = { ...DEPART };
+  let prixAffiche = 0, prixPrecedent = null;
+  const TEINTE = { chrome: "linear-gradient(135deg,#FFFFFF,#9EA3A8 55%,#E8EAEC)", noir: "linear-gradient(135deg,#4A4A4F,#0B0B0C)", carbone: "repeating-linear-gradient(45deg,#3A3A3A 0 3px,#1B1B1B 3px 6px)" };
+
+  function calcul(s = S) {
+    const ver = P("silencieux").versions.find(v => v.id === s.sil), fin = P("sorties").finitions.find(f => f.id === s.fin);
+    const ligne = s.collecteurs && s.catalyseurs && s.silencieux;
+    let total = 0, refs = [];
+    if (ligne) { const [px, r] = E.ligne.prix[s.sil]; total += px; refs.push(r); }
+    else {
+      if (s.collecteurs) { total += P("collecteurs").prix[0]; refs.push(P("collecteurs").prix[1]); }
+      if (s.catalyseurs) { total += P("catalyseurs").prix[0]; refs.push(P("catalyseurs").prix[1]); }
+      if (s.silencieux) { total += ver.prix[0]; refs.push(ver.prix[1]); }
+    }
+    if (s.sorties) { const [px, r] = fin.prix[s.moteur]; total += px; refs.push(r); }
+    return { total, refs, ligne, ver, fin };
+  }
+
+  const CARTES = ["collecteurs", "catalyseurs", "silencieux", "sorties"];
+  CARTES.forEach(id => {
+    const p = P(id), el = document.createElement("article");
+    el.className = "piece"; el.id = "c-" + id; el.setAttribute("data-a", "");
+    let extra = "";
+    if (id === "silencieux") extra = `<div class="seg" id="seg-sil">${p.versions.map(v => `<button data-v="${v.id}">${v.nom}<small data-delta></small></button>`).join("")}</div>`;
+    if (id === "sorties") extra = `<div class="finitions" id="fins">${p.finitions.map(f => `<button data-f="${f.id}"><i style="background:${TEINTE[f.id]}"></i>${f.nom}</button>`).join("")}</div>`;
+    el.innerHTML = `<div class="ph"><img src="assets/${p.img || p.versions?.[0].img || p.finitions[0].img}" alt="${p.nom}"><span class="num cf">${p.n}</span>
+        <span class="badge${p.option ? " opt" : ""}">${p.option ? "Option" : "Ligne"}</span>
+        <button class="ajouter" data-ajout><span>+ Ajouter</span></button></div>
+      <div class="txt"><h3>${p.nom}</h3><p class="detail" data-detail></p><p class="prix-piece" data-prix></p>
+        <div class="bas"><div class="interrupteur-mini"><span data-etat></span><button class="bascule-on" data-bascule role="switch" aria-label="Ajouter ou retirer : ${p.nom}"></button></div>${extra}</div></div>`;
+    $("cartes").appendChild(el);
+    const basculer = () => { S[id] = !S[id]; maj(true, id); };
+    el.querySelector("[data-bascule]").onclick = basculer;
+    el.querySelector("[data-ajout]").onclick = basculer;
+  });
+  $("seg-sil").querySelectorAll("button").forEach(b => b.onclick = () => { if (S.sil === b.dataset.v && S.silencieux) return; S.sil = b.dataset.v; S.silencieux = true; maj(true, "silencieux"); });
+  $("fins").querySelectorAll("button").forEach(b => b.onclick = () => { if (S.fin === b.dataset.f && S.sorties) return; S.fin = b.dataset.f; S.sorties = true; maj(true, "sorties"); });
+  $("seg-moteur").querySelectorAll("button").forEach(b => b.onclick = () => { if (S.moteur === b.dataset.m) return; S.moteur = b.dataset.m; maj(true, "moteur"); });
+  $("pile").innerHTML = CARTES.map(id => `<span data-id="${id}"></span>`).join("");
+
+  function changerImage(img, src) {
+    if (img.getAttribute("src") === src) return;
+    img.classList.add("sort");
+    setTimeout(() => { img.src = src; img.onload = () => img.classList.remove("sort"); if (img.complete) img.classList.remove("sort"); }, 260);
+  }
+  function secouer(id) { const el = $("c-" + id); if (!el) return; el.classList.remove("secoue"); void el.offsetWidth; el.classList.add("secoue"); }
+
+  function maj(anime, quoi) {
+    const { total, refs, ligne, ver, fin } = calcul();
+    CARTES.forEach(id => {
+      const el = $("c-" + id), p = P(id), avec = S[id];
+      el.classList.toggle("retire", !avec);
+      el.querySelector("[data-etat]").textContent = avec ? "Dans votre échappement" : "Non inclus";
+      el.querySelector("[data-bascule]").setAttribute("aria-checked", avec);
+      let img = p.img, detail = p.specs, prix = p.prix && p.prix[0];
+      if (id === "silencieux") { img = ver.img; detail = `${ver.specs}. ${ver.detail}`; prix = ver.prix[0]; }
+      if (id === "sorties") { img = fin.img; detail = `${fin.nom} · ${p.specs}${S.moteur === "3.6" ? " · version 3.6L" : ""}`; prix = fin.prix[S.moteur][0]; }
+      changerImage(el.querySelector(".ph img"), `assets/${img}`);
+      el.querySelector("[data-detail]").textContent = detail;
+      el.querySelector("[data-prix]").innerHTML = (id !== "sorties" && ligne) ? `Inclus dans la ligne<s>${euros(prix)}</s>` : `${avec ? "" : "Seul : "}${euros(prix)}`;
+      el.querySelector(".badge").textContent = p.option ? "Option" : (ligne ? "Ligne complète" : "Pièce seule");
+      $("pile").querySelector(`[data-id="${id}"]`).classList.toggle("cache", !avec);
+      $("pile").querySelector(`[data-id="${id}"]`).style.backgroundImage = `url(assets/${img})`;
+    });
+    // écarts de prix sur les choix
+    $("seg-sil").classList.toggle("droite", S.sil === "vt");
+    $("seg-sil").querySelectorAll("button").forEach(b => {
+      b.setAttribute("aria-pressed", S.silencieux && b.dataset.v === S.sil);
+      const d = calcul({ ...S, silencieux: true, sil: b.dataset.v }).total - total;
+      b.querySelector("[data-delta]").textContent = d === 0 ? "choisi" : (d > 0 ? "+" : "−") + euros(Math.abs(d));
+    });
+    $("fins").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", S.sorties && b.dataset.f === S.fin));
+    $("seg-moteur").classList.toggle("droite", S.moteur === "3.8");
+    $("seg-moteur").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === S.moteur));
+    // alertes de compatibilité
+    const al = [];
+    if (S.moteur === "3.6" && ligne && !S.sorties) al.push("997 3.6L : les sorties d’origine ne sont pas compatibles avec la ligne. Prévoir l’option sorties EVOX.");
+    if (S.sorties && S.moteur === "3.6") al.push("997 3.6L : bagues de jonction supplémentaires nécessaires pour les sorties, voir avec notre équipe.");
+    $("alerte").innerHTML = al.join("<br>"); $("alerte").classList.toggle("on", al.length > 0);
+    // total
+    const nb = CARTES.filter(id => S[id]).length;
+    $("compte").innerHTML = nb ? `<b>${nb} pièce${nb > 1 ? "s" : ""}</b><small>${ligne ? `Ligne complète ${ver.nom}` : "Pièces au détail"}${S.sorties ? ` · sorties ${fin.nom}` : ""} · ${S.moteur}L</small>` : `<b>Aucune pièce</b><small>Ajoutez une pièce pour composer</small>`;
+    $("forfait").classList.toggle("on", ligne);
+    compter($("prix"), anime ? prixAffiche : total, total, 700, n => euros(Math.round(n)));
+    compter($("puce-montant"), anime ? prixAffiche : total, total, 700, n => euros(Math.round(n)));
+    $("ref").textContent = refs.length ? `Réf. ${refs.join(" + ")}` : "";
+    if (anime && prixPrecedent !== null && total !== prixPrecedent) {
+      const d = total - prixPrecedent, bu = $("bulle");
+      bu.textContent = (d > 0 ? "+" : "−") + euros(Math.abs(d)); bu.className = "bulle " + (d > 0 ? "plus" : "moins");
+      void bu.offsetWidth; bu.classList.add("monte");
+      $("puce-prix").classList.add("flash"); setTimeout(() => $("puce-prix").classList.remove("flash"), 700);
+    }
+    if (anime && quoi && quoi !== "moteur") secouer(quoi);
+    prixAffiche = total; prixPrecedent = total;
+  }
+
+  // ---------- 03 · Le son ----------
+  const SONS = {
+    open: ["En position Open, votre Porsche fait le son d’une voiture de course : rauque, agressif, métallique, envoûtant. L’émotion monte avec le compte-tours.", "<b>Valves ouvertes</b>Le son d’une voiture de course."],
+    closed: ["En position Closed, votre Porsche est sobre, sage : le grain métallique de l’inox, avec discrétion et élégance, pour le quotidien.", "<b>Valves fermées</b>Confortable au quotidien."]
+  };
+  $("vague").innerHTML = "<i></i>".repeat(36);
+  let posValve = "open", minuteurVague = null;
+  function majSon() {
+    $("son").classList.toggle("ferme", posValve === "closed"); $("interrupteur").classList.toggle("ferme", posValve === "closed");
+    $("interrupteur").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pos === posValve));
+    $("son-texte").textContent = SONS[posValve][0]; $("valve-texte").innerHTML = SONS[posValve][1];
+  }
+  $("interrupteur").querySelectorAll("button").forEach(b => b.onclick = () => { posValve = b.dataset.pos; majSon(); });
+  function lancerVague() {
+    arreterVague(); const i = [...$("vague").children]; let t = 0;
+    minuteurVague = setInterval(() => { t += .35; const fort = posValve === "open";
+      i.forEach((b, k) => { const base = Math.sin(k * .45 + t) * .5 + .5, br = Math.random(); b.style.height = Math.min(100, fort ? 18 + base * 52 + br * 30 : 6 + base * 12 + br * 6) + "%"; }); }, 160);
+  }
+  function arreterVague() { clearInterval(minuteurVague); }
+
+  // ---------- Veille (1 min 20) ----------
+  const INACTIVITE = 80_000;
+  let minuteurVeille = null;
+  function veille() { fermerFiche(); $("veille").classList.remove("cachee"); }
+  function reveil() {
+    $("veille").classList.add("cachee");
+    Object.assign(S, DEPART); posValve = "open"; prixPrecedent = null;
+    maj(false); majSon(); ecranActuel = null; aller("e-ligne");
+  }
+  $("veille").addEventListener("click", reveil);
+  const relancer = () => { clearTimeout(minuteurVeille); minuteurVeille = setTimeout(veille, INACTIVITE); };
+  ["pointerdown", "touchstart", "keydown"].forEach(ev => addEventListener(ev, relancer, { passive: true }));
+  addEventListener("keydown", e => { if (e.key === "Escape") fermerFiche(); });
+
+  maj(false); majSon(); aller("e-ligne"); veille();
+  if (location.hash === "#direct") reveil();
+</script>
+
+</body>
+</html>
