@@ -3,79 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Murs de jantes — EVOX</title>
-<script>/* tablette réglée sur un autre écran (voir ecran-borne.js) */ try { const e = localStorage.getItem("evox-borne-ecran"), u = { "pack-stage2": "pack-stage2/", "wheelforce": "../jantes-wheelforce/?borne", "porsche": "https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne" }[e]; if (u) location.replace(u); } catch (e) {}</script>
+<title>Showroom EVOX</title>
+<script>
+  /* Écran principal de la tablette (réglage équipe, voir ecran-borne.js).
+     - au démarrage et après 2 min sans contact (l'appli recharge cette page) : on va sur l'écran principal ;
+     - quand un client vient d'utiliser la tablette (bouton « Accueil » de l'appli) ou demande le menu (?menu) : on reste sur le menu. */
+  try {
+    const e = localStorage.getItem("evox-borne-ecran");
+    const u = { "pack-stage2": "pack-stage2/", "wheelforce": "../jantes-wheelforce/?borne", "porsche": "https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne" }[e];
+    const derniere = +localStorage.getItem("evox-borne-action") || 0;
+    const recent = Date.now() - derniere < 100000;
+    if (u && !location.search.includes("menu") && !recent) location.replace(u);
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --texte: #F5F5F7; --gris: #A1A1A6; --vert: #CCFF00; --ease: cubic-bezier(.22, .8, .24, 1); }
+  :root { --noir: #11110E; --noir-2: #1A1A17; --blanc: #FFFFFF; --gris: #9C9C95; --vert: #CCFF00; --ease: cubic-bezier(.22, .8, .24, 1); }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  body { background: #0B0B0C; color: var(--texte); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased;
+  body { background: var(--noir); color: var(--blanc); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased;
     display: flex; flex-direction: column; overflow: hidden; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
   a { color: inherit; text-decoration: none; }
+  .cf { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
 
-  header { display: flex; justify-content: space-between; align-items: center; padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 48px) 0; }
-  header img { height: clamp(20px, 2.2vw, 28px); filter: invert(1); }
-  header p { font-size: 13px; color: var(--gris); letter-spacing: .02em; }
-  header p::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 1px; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: clamp(18px, 3vh, 32px) clamp(18px, 4vw, 48px) 0; }
+  header img { height: clamp(22px, 2.6vw, 30px); }
+  header p { font-size: 11px; letter-spacing: .22em; color: var(--gris); padding: 10px 0 10px 10px; }
+  header p::before { content: ""; display: inline-block; width: 7px; height: 7px; background: var(--vert); margin-right: 9px; vertical-align: 1px; }
 
-  h1 { font-family: "Poppins"; font-weight: 700; letter-spacing: -.03em; font-size: clamp(34px, 5.4vw, 64px); line-height: 1.02;
-    padding: clamp(18px, 3vh, 36px) clamp(20px, 4vw, 48px) clamp(18px, 3vh, 32px); }
-  h1 span { color: var(--gris); font-weight: 600; }
+  h1 { padding: clamp(14px, 3vh, 34px) clamp(18px, 4vw, 48px) clamp(14px, 2.6vh, 28px); line-height: .95; }
+  h1 span { display: block; }
+  h1 .a { font-size: clamp(28px, min(5vw, 8vh), 72px); font-variation-settings: "wght" 900, "wdth" 110, "slnt" -8; }
+  h1 .b { font-size: clamp(16px, min(2.2vw, 3.6vh), 30px); color: var(--gris); margin-top: .35em; font-variation-settings: "wght" 650, "wdth" 140, "slnt" 0; }
 
-  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 1.6vw, 20px); padding: 0 clamp(20px, 4vw, 48px) clamp(20px, 4vw, 48px); }
-  .mur { position: relative; border-radius: 28px; overflow: hidden; background: #1C1C1E; display: flex; flex-direction: column; justify-content: flex-end;
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 18px); padding: 0 clamp(18px, 4vw, 48px) clamp(18px, 3vh, 40px); }
+  .univers { position: relative; border-radius: 26px; overflow: hidden; background: var(--noir-2); display: flex; flex-direction: column; justify-content: flex-end; min-height: 0;
     opacity: 0; transform: translateY(18px); animation: entre .9s var(--ease) forwards; }
-  .mur:nth-child(2) { animation-delay: .12s; }
-  .mur img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); animation: respire 14s ease-in-out infinite alternate; }
-  .mur:nth-child(2) img { animation-delay: -7s; }
-  .mur::after { content: ""; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.82)); }
-  .texte { position: relative; z-index: 1; padding: clamp(20px, 3vw, 36px); }
-  .texte small { display: block; font-size: 13px; font-weight: 500; color: var(--gris); letter-spacing: .08em; text-transform: uppercase; }
-  .texte h2 { font-family: "Poppins"; font-weight: 700; letter-spacing: -.025em; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.05; margin-top: 6px; }
-  .texte p { font-size: clamp(14px, 1.4vw, 17px); color: #D2D2D7; margin-top: 8px; line-height: 1.45; }
-  .bouton { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; padding: 13px 22px; border-radius: 999px; background: #fff; color: #1D1D1F;
-    font-family: "Poppins"; font-weight: 600; font-size: 15px; transition: transform .3s var(--ease), background .3s; }
-  .mur:active .bouton { transform: scale(.96); background: var(--vert); }
+  .univers:nth-child(2) { animation-delay: .1s; } .univers:nth-child(3) { animation-delay: .2s; }
+  .univers img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); animation: respire 14s ease-in-out infinite alternate; }
+  .univers:nth-child(2) img { animation-delay: -5s; } .univers:nth-child(3) img { animation-delay: -10s; }
+  .univers::after { content: ""; position: absolute; inset: 35% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.86)); }
+  .texte { position: relative; z-index: 1; padding: clamp(16px, 2.4vw, 30px); }
+  .texte small { display: block; font-size: 11px; letter-spacing: .2em; color: #C9C9C3; }
+  .texte h2 { font-size: clamp(22px, min(2.8vw, 4.6vh), 40px); line-height: 1; margin-top: 8px; font-variation-settings: "wght" 850, "wdth" 120, "slnt" 0; }
+  .texte p { font-size: clamp(13px, 1.3vw, 16px); color: #D6D6D0; margin-top: 8px; line-height: 1.4; }
+  .bouton { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 12px 20px; border-radius: 999px; background: var(--blanc); color: var(--noir);
+    font-weight: 700; font-size: 14px; transition: transform .3s var(--ease), background .3s; }
+  .univers:active .bouton { transform: scale(.96); background: var(--vert); }
+  .univers .ici { position: absolute; top: 14px; left: 14px; z-index: 2; padding: 6px 11px; border-radius: 999px; background: var(--vert); color: var(--noir); font-size: 11px; font-weight: 700; display: none; }
+  .univers.principal .ici { display: inline-block; }
 
   @keyframes entre { to { opacity: 1; transform: none; } }
   @keyframes respire { to { transform: scale(1.09); } }
 
   @media (orientation: portrait) {
-    main { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+    main { grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(3, minmax(0, 1fr)); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mur, .mur img { animation: none; opacity: 1; transform: none; }
+    .univers, .univers img { animation: none; opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
   <header>
-    <img src="../jantes-wheelforce/assets/evox-logo-noir.svg" alt="EVOX Performance">
-    <p data-reglage>Showroom EVOX</p>
+    <img src="pack-stage2/assets/evox-logo.svg" alt="EVOX Performance">
+    <p class="cf" data-reglage>Showroom EVOX</p>
   </header>
-  <h1>Nos murs de jantes. <span>Choisissez.</span></h1>
+  <h1 class="cf"><span class="a">Showroom EVOX.</span><span class="b">Choisissez votre univers.</span></h1>
   <main>
-    <a class="mur" href="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/">
+    <a class="univers" data-id="porsche" href="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne=visite">
       <img src="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/assets/photos/mur.jpg" alt="Le mur des jantes Porsche">
+      <span class="ici">Écran principal</span>
       <div class="texte">
-        <small>Collection Porsche</small>
-        <h2>Jantes Porsche</h2>
+        <small class="cf">Collection Porsche</small>
+        <h2 class="cf">Jantes Porsche</h2>
         <p>12 jantes, de la Fuchs de 1967 à la 991.</p>
         <span class="bouton">Découvrir ›</span>
       </div>
     </a>
-    <a class="mur" href="../jantes-wheelforce/">
+    <a class="univers" data-id="wheelforce" href="../jantes-wheelforce/?borne=visite">
       <img src="../jantes-wheelforce/assets/photos/mur.jpg" alt="Le mur des jantes WheelForce">
+      <span class="ici">Écran principal</span>
       <div class="texte">
-        <small>Collection WheelForce</small>
-        <h2>Jantes WheelForce</h2>
+        <small class="cf">Collection WheelForce</small>
+        <h2 class="cf">Jantes WheelForce</h2>
         <p>6 designs fabriqués en Allemagne, certifiés TÜV.</p>
         <span class="bouton">Découvrir ›</span>
       </div>
     </a>
+    <a class="univers" data-id="pack-stage2" href="pack-stage2/#direct">
+      <img src="pack-stage2/assets/a110-1.jpg" alt="Alpine A110 équipée du pack Stage 2">
+      <span class="ici">Écran principal</span>
+      <div class="texte">
+        <small class="cf">Alpine A110 II</small>
+        <h2 class="cf">Pack Stage 2 / 340</h2>
+        <p>330–345 ch. Composez votre pack pièce par pièce.</p>
+        <span class="bouton">Composer ›</span>
+      </div>
+    </a>
   </main>
+  <script>
+    try { const e = localStorage.getItem("evox-borne-ecran"); document.querySelectorAll(".univers").forEach(u => u.classList.toggle("principal", u.dataset.id === e)); } catch (er) {}
+  </script>
   <script src="ecran-borne.js"></script>
 </body>
 </html>

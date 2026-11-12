@@ -12,6 +12,12 @@
   ];
   const lire = () => { try { return localStorage.getItem(CLE) || ""; } catch (e) { return ""; } };
 
+  // Mémoire du dernier contact : la page d'accueil (borne/index.html) s'en sert pour savoir si on y revient
+  // à cause d'un client (bouton « Accueil » → menu Showroom) ou de l'inactivité (→ écran principal de la tablette).
+  let dernier = 0;
+  const noter = () => { const n = Date.now(); if (n - dernier < 2000) return; dernier = n; try { localStorage.setItem("evox-borne-action", String(n)); } catch (e) {} };
+  ["pointerdown", "touchstart", "scroll", "keydown"].forEach(ev => addEventListener(ev, noter, { passive: true, capture: true }));
+
   function ouvrir() {
     if (document.getElementById("reglage-borne")) return;
     const actuel = lire();

@@ -839,6 +839,11 @@
   const borne = q.has("borne");
   const v = document.getElementById("veille");
   if (!borne) { v.remove(); return; }
+  // Sur la tablette : réglage équipe + mémoire du dernier contact (pour le menu Showroom)
+  const s = document.createElement("script");
+  s.src = "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/ecran-borne.js";
+  // ?borne=visite : ouverte depuis le menu Showroom, pas d'écran de veille (le client vient de choisir)
+  if (q.get("borne") === "visite") { v.remove(); document.body.appendChild(s); return; }
   const ITEMS = W.map(j => ({ img: `assets/dessins/${j.id}.png`, val: j.nom, lib: j.diametres.map(d => d.replace('"', "")).join(" · ") + " pouces" }));
   const roue = document.getElementById("v-roue");
   roue.innerHTML = ITEMS.map(it => `<img src="${it.img}" alt="">`).join("");
@@ -863,8 +868,6 @@
   veille();
   // Réglage équipe (appui long ou 5 appuis sur le surtitre de la veille) : choisir ce qu'affiche la tablette
   v.querySelector(".v-sur").setAttribute("data-reglage", "");
-  const s = document.createElement("script");
-  s.src = "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/ecran-borne.js";
   document.body.appendChild(s);
 })();
 </script>

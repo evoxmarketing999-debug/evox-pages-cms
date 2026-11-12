@@ -31,6 +31,10 @@
   .barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px var(--marge) 12px; }
   .barre .logo { height: clamp(22px, 2.6vw, 30px); }
   .barre .titre { flex: 1; min-width: 0; font-size: 11px; letter-spacing: .2em; color: var(--gris); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .showroom { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px 10px 12px; border-radius: 999px; background: var(--noir-2); border: 1px solid var(--filet); color: var(--blanc); text-decoration: none;
+    font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 11px; letter-spacing: .14em; font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; flex: none; }
+  .showroom:active { background: var(--vert); color: var(--noir); }
+  @media (max-width: 420px) { .showroom span { display: none; } .showroom { padding: 10px 12px; } }
   .puce-prix { display: flex; align-items: baseline; gap: 10px; padding: 10px 16px; border: 1px solid var(--filet); border-radius: 999px; white-space: nowrap; transition: border-color .4s, background .4s; }
   .puce-prix small { font-size: 10px; letter-spacing: .18em; color: var(--gris); }
   .puce-prix b { font-family: "cofo-peshka-variable"; font-weight: normal; font-variation-settings: "wght" 800, "wdth" 120, "slnt" 0; font-size: 17px; }
@@ -355,6 +359,7 @@
 <body>
 <div id="app">
   <header class="barre">
+    <a class="showroom" href="../?menu" aria-label="Retour au menu Showroom"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M8 2 4 6l4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Showroom</span></a>
     <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance" data-reglage>
     <p class="titre etiquette">Pack Performance · Stage 2 / 340 · Alpine A110 II</p>
     <div class="puce-prix" id="puce-prix"><small class="etiquette">Votre pack</small><b id="puce-montant"></b></div>
