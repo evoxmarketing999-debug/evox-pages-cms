@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Murs de jantes — EVOX</title>
+<script>/* tablette réglée sur un autre écran (voir ecran-borne.js) */ try { if (localStorage.getItem("evox-borne-ecran") === "pack-stage2") location.replace("pack-stage2/"); } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -52,7 +53,7 @@
 <body>
   <header>
     <img src="../jantes-wheelforce/assets/evox-logo-noir.svg" alt="EVOX Performance">
-    <p>Showroom EVOX</p>
+    <p data-reglage>Showroom EVOX</p>
   </header>
   <h1>Nos murs de jantes. <span>Choisissez.</span></h1>
   <main>
@@ -75,5 +76,6 @@
       </div>
     </a>
   </main>
+  <script src="ecran-borne.js"></script>
 </body>
 </html>

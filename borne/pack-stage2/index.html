@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Pack Stage 2 / 340 — EVOX × Alpine A110</title>
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #11110E; --noir-2: #1A1A17; --noir-3: #24241F; --blanc: #FFFFFF; --studio: #EFEFEC;
+    --gris: #9C9C95; --gris-2: #6A6A64; --filet: rgba(255,255,255,.12); --vert: #CCFF00;
+    --ease: cubic-bezier(.22, .8, .24, 1); --ressort: cubic-bezier(.34, 1.4, .5, 1);
+    --marge: clamp(16px, 3.4vw, 44px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--noir); color: var(--blanc); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden;
+    user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  img { display: block; max-width: 100%; -webkit-user-drag: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus:not(:focus-visible) { outline: none; }
+  button:focus-visible { outline: 2px solid var(--vert); outline-offset: 3px; }
+  .cf { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
+  .etiquette { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-size: 11px; letter-spacing: .22em; color: var(--gris); font-variation-settings: "wght" 600, "wdth" 150, "slnt" 0; }
+  .etiquette.carre::before { content: ""; display: inline-block; width: 7px; height: 7px; background: var(--vert); margin-right: 9px; vertical-align: 1px; }
+
+  /* ---------- Cadre de l'appli ---------- */
+  #app { height: 100svh; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+  .barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px var(--marge) 12px; }
+  .barre .logo { height: clamp(22px, 2.6vw, 30px); }
+  .barre .titre { flex: 1; min-width: 0; font-size: 11px; letter-spacing: .2em; color: var(--gris); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .puce-prix { display: flex; align-items: baseline; gap: 10px; padding: 10px 16px; border: 1px solid var(--filet); border-radius: 999px; white-space: nowrap; transition: border-color .4s, background .4s; }
+  .puce-prix small { font-size: 10px; letter-spacing: .18em; color: var(--gris); }
+  .puce-prix b { font-family: "cofo-peshka-variable"; font-weight: normal; font-variation-settings: "wght" 800, "wdth" 120, "slnt" 0; font-size: 17px; }
+  .puce-prix.flash { border-color: var(--vert); background: rgba(204,255,0,.08); }
+
+  .ecrans { position: relative; overflow: hidden; }
+  .ecran { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 8px var(--marge) 28px; opacity: 0; visibility: hidden; transform: translateX(40px);
+    transition: opacity .5s var(--ease), transform .6s var(--ease), visibility 0s .6s; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ecran::-webkit-scrollbar { display: none; }
+  .ecran.avant { transform: translateX(-40px); }
+  .ecran.actif { opacity: 1; visibility: visible; transform: none; transition: opacity .5s var(--ease), transform .6s var(--ease), visibility 0s; }
+  .ecran [data-a] { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .8s var(--ease); }
+  .ecran.actif.joue [data-a] { opacity: 1; transform: none; }
+
+  .onglets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px var(--marge) max(14px, env(safe-area-inset-bottom)); border-top: 1px solid var(--filet); position: relative; }
+  .onglet { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 6px; border-radius: 14px; color: var(--gris); transition: color .35s, background .35s; min-width: 0; }
+  .onglet i { font-style: normal; font-family: "cofo-peshka-variable"; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; font-size: 11px; color: var(--gris-2); transition: color .35s; }
+  .onglet span { font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 13px; letter-spacing: .06em; font-variation-settings: "wght" 650, "wdth" 112, "slnt" 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .onglet[aria-selected="true"] { color: var(--noir); background: var(--vert); }
+  .onglet .court { display: none; }
+  .onglet[aria-selected="true"] i { color: var(--noir); }
+
+  /* ---------- 01 · Le pack ---------- */
+  .pack { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(20px, 3.5vw, 48px); align-items: center; min-height: 100%; }
+  .pack h1 { line-height: .9; margin-top: 14px; }
+  .pack h1 .s { display: block; font-size: clamp(48px, min(9vw, 12vh), 120px); font-variation-settings: "wght" 900, "wdth" 110, "slnt" -8; }
+  .pack h1 .p { display: block; font-size: clamp(48px, min(9vw, 12vh), 120px); color: var(--vert); font-variation-settings: "wght" 900, "wdth" 110, "slnt" -8; }
+  .pack .chapo { margin-top: 18px; font-size: clamp(14px, 1.5vw, 17px); line-height: 1.55; color: #CFCFC9; max-width: 440px; }
+  .chiffres { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .chiffres span { padding: 9px 14px; border: 1px solid var(--filet); border-radius: 999px; font-size: 13px; font-weight: 600; }
+  .chiffres span.v { border-color: var(--vert); color: var(--vert); }
+  .liste-pieces { margin-top: 26px; display: grid; gap: 8px; }
+  .piece-ligne { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 16px; background: var(--noir-2); text-align: left; transition: background .3s, transform .3s var(--ease); }
+  .piece-ligne:active { transform: scale(.98); background: var(--noir-3); }
+  .piece-ligne .num { font-size: 13px; color: var(--vert); width: 26px; flex: none; }
+  .piece-ligne .txt { flex: 1; min-width: 0; }
+  .piece-ligne b { display: block; font-size: 15px; font-weight: 600; }
+  .piece-ligne small { display: block; font-size: 12px; color: var(--gris); margin-top: 2px; }
+  .piece-ligne .fl { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--filet); display: grid; place-items: center; flex: none; }
+  .piece-ligne.option { background: transparent; border: 1px dashed rgba(255,255,255,.18); }
+
+  .studio { position: relative; background: var(--studio); border-radius: 22px; overflow: hidden; aspect-ratio: 1400 / 933; width: 100%; }
+  .studio > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .studio::after { content: ""; position: absolute; inset: 0; pointer-events: none; transform: translateX(-120%);
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.75) 50%, transparent 62%); }
+  .ecran.actif.joue .studio::after { animation: balaye 1.6s var(--ease) .5s; }
+  .point { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; display: grid; place-items: center; z-index: 2; }
+  .point::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--noir); box-shadow: 0 0 0 3px var(--vert); }
+  .point::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--vert); animation: onde 2.2s ease-out infinite; }
+  .point b { position: relative; font-family: "cofo-peshka-variable"; font-weight: normal; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; font-size: 12px; color: var(--vert); }
+  .point:nth-of-type(2)::after { animation-delay: .7s; } .point:nth-of-type(3)::after { animation-delay: 1.4s; }
+  .legende-studio { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 12px; color: var(--gris); }
+  @keyframes onde { 0% { transform: scale(.55); opacity: 1; } 100% { transform: scale(1.35); opacity: 0; } }
+  @keyframes balaye { to { transform: translateX(120%); } }
+
+  /* ---------- 02 · Composer ---------- */
+  .composer { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: clamp(18px, 3vw, 40px); align-items: start; }
+  .etape + .etape { margin-top: 26px; }
+  .etape h2 { display: flex; align-items: baseline; gap: 12px; font-size: clamp(20px, 2.4vw, 28px); margin: 8px 0 14px; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; }
+  .etape h2 em { font-style: normal; color: var(--vert); font-size: .6em; }
+  .choix-cata { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .choix-cata .vignette { aspect-ratio: 16 / 8; }
+  .choix-sil { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .carte { position: relative; text-align: left; border-radius: 16px; background: var(--noir-2); border: 2px solid transparent; overflow: hidden;
+    transition: border-color .3s, transform .35s var(--ressort), background .3s; display: flex; flex-direction: column; }
+  .carte:active { transform: scale(.97); }
+  .carte[aria-checked="true"] { border-color: var(--vert); background: var(--noir-3); }
+  .carte .vignette { background: var(--studio); aspect-ratio: 4 / 3; position: relative; overflow: hidden; }
+  .carte .vignette img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+  .carte[aria-checked="true"] .vignette img { transform: scale(1.08); }
+  .carte .vignette .vide { position: absolute; inset: 0; display: grid; place-items: center; color: var(--gris-2); font-size: 11px; letter-spacing: .16em; }
+  .carte .corps { padding: 12px 14px 14px; }
+  .carte b { display: block; font-size: 15px; font-weight: 700; }
+  .carte small { display: block; font-size: 12px; color: var(--gris); margin-top: 3px; line-height: 1.35; }
+  .carte .delta { position: absolute; top: 10px; right: 10px; padding: 4px 9px; border-radius: 999px; background: var(--noir); color: var(--blanc); font-size: 11px; font-weight: 700; z-index: 1; }
+  .carte .coche { position: absolute; top: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: var(--vert); color: var(--noir); display: grid; place-items: center; z-index: 1;
+    transform: scale(0); transition: transform .4s var(--ressort); }
+  .carte[aria-checked="true"] .coche { transform: scale(1); }
+  .choix-sil .corps { padding: 10px 10px 12px; }
+  .choix-sil b { font-size: 13px; }
+  .choix-sil small { font-size: 11px; }
+
+  .recap { position: sticky; top: 0; background: var(--noir-2); border-radius: 22px; padding: clamp(18px, 2.4vw, 28px); overflow: hidden; }
+  .recap::before { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(var(--vert), transparent 70%); opacity: .12; }
+  .recap .prix { margin-top: 10px; font-size: clamp(40px, 5.2vw, 64px); line-height: 1; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; white-space: nowrap; }
+  .recap .prix sup { font-size: .32em; vertical-align: .9em; margin-left: 4px; color: var(--gris); font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; }
+  .recap .ref { font-size: 12px; color: var(--gris); margin-top: 8px; }
+  .recap ul { list-style: none; margin-top: 20px; border-top: 1px solid var(--filet); }
+  .recap li { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--filet); font-size: 13px; line-height: 1.4; }
+  .recap li i { flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--vert); color: var(--noir); display: grid; place-items: center; margin-top: 1px; }
+  .recap li.non i { background: var(--noir-3); color: var(--gris); }
+  .recap li.non { color: var(--gris); }
+  .recap li.pop { animation: pop .6s var(--ressort); }
+  .recap .note { margin-top: 14px; font-size: 11.5px; color: var(--gris); line-height: 1.5; }
+  .recap .cta { margin-top: 16px; padding: 14px; border-radius: 14px; background: var(--vert); color: var(--noir); font-weight: 700; font-size: 14px; text-align: center; }
+  @keyframes pop { 0% { transform: translateX(-10px); opacity: .3; } 100% { transform: none; opacity: 1; } }
+
+  /* ---------- 03 · Performances ---------- */
+  .perfs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 40px); }
+  .jauges { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .jauge { background: var(--noir-2); border-radius: 22px; padding: 18px 16px 16px; text-align: center; position: relative; }
+  .jauge svg { width: 100%; max-width: 230px; display: block; margin: 0 auto; overflow: visible; }
+  .jauge .fond { stroke: var(--noir-3); }
+  .jauge .arc { stroke: var(--vert); stroke-linecap: round; transition: stroke-dashoffset 1.8s var(--ease); }
+  .jauge .val { margin-top: -54px; font-size: clamp(38px, 4.6vw, 56px); line-height: 1; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; }
+  .jauge .unite { font-size: 12px; letter-spacing: .2em; color: var(--gris); margin-top: 4px; }
+  .jauge .sous { font-size: 12px; color: var(--gris); margin-top: 12px; line-height: 1.4; }
+  .bloc { background: var(--noir-2); border-radius: 22px; padding: clamp(16px, 2.2vw, 24px); }
+  .bloc h3 { font-size: clamp(16px, 1.8vw, 20px); margin: 8px 0 4px; font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; }
+  .bloc > p { font-size: 13px; color: var(--gris); line-height: 1.5; }
+  .courbe { margin-top: 12px; background: #fff; border-radius: 14px; overflow: hidden; position: relative; }
+  .courbe img { width: 100%; clip-path: inset(0 100% 0 0); transition: clip-path 2.2s var(--ease) .4s; }
+  .ecran.actif.joue .courbe img { clip-path: inset(0 0 0 0); }
+  .perfs .col { display: grid; gap: 12px; align-content: start; }
+  .segments { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+  .segments button { flex: 1; padding: 11px 8px; border-radius: 12px; background: var(--noir-3); font-size: 13px; font-weight: 700; color: var(--gris); transition: background .3s, color .3s; min-width: 0; }
+  .segments button[aria-pressed="true"] { background: var(--blanc); color: var(--noir); }
+  .segments.temp button[aria-pressed="true"] { background: var(--vert); }
+  .graphe { position: relative; height: 150px; margin: 26px 4px 8px; }
+  .graphe .axe { position: absolute; left: 0; right: 0; bottom: 22px; height: 1px; background: var(--filet); }
+  .graphe .bande { position: absolute; bottom: 22px; height: 42px; background: repeating-linear-gradient(135deg, rgba(204,255,0,.18) 0 6px, rgba(204,255,0,.06) 6px 12px); border: 1px solid rgba(204,255,0,.5); border-radius: 6px;
+    transition: left .8s var(--ease), width .8s var(--ease); }
+  .graphe .bande span { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--vert); white-space: nowrap; }
+  .graphe .repere { position: absolute; bottom: 22px; top: 0; width: 0; transition: left .8s var(--ease); }
+  .graphe .repere::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; }
+  .graphe .repere b { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font-size: 11px; padding: 4px 8px; border-radius: 999px; font-weight: 700; }
+  .graphe .repere.origine::before { background: #FF5A4E; } .graphe .repere.origine b { background: #FF5A4E; color: #fff; top: 30px; }
+  .graphe .repere.evox::before { background: var(--blanc); } .graphe .repere.evox b { background: var(--blanc); color: var(--noir); }
+  .graphe .graduation { position: absolute; bottom: 0; transform: translateX(-50%); font-size: 10px; color: var(--gris-2); }
+  .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .verdict div { border-radius: 12px; padding: 10px 12px; background: var(--noir-3); font-size: 12px; line-height: 1.4; color: var(--gris); }
+  .verdict b { display: block; color: var(--blanc); font-size: 13px; margin-bottom: 2px; }
+  .verdict .ok b { color: var(--vert); } .verdict .ko b { color: #FF7A70; }
+
+  /* ---------- 04 · Le son ---------- */
+  .son { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 40px); align-items: center; min-height: 100%; }
+  .son h2 { font-size: clamp(28px, min(4.2vw, 7vh), 56px); line-height: .98; margin-top: 12px; font-variation-settings: "wght" 900, "wdth" 105, "slnt" -6; }
+  .son h2 span { color: var(--vert); }
+  .interrupteur { display: grid; grid-template-columns: 1fr 1fr; background: var(--noir-2); border-radius: 999px; padding: 6px; margin-top: 24px; position: relative; max-width: 420px; }
+  .interrupteur::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); border-radius: 999px; background: var(--vert); transition: transform .5s var(--ressort); }
+  .interrupteur.ferme::before { transform: translateX(100%); background: var(--blanc); }
+  .interrupteur button { position: relative; padding: 16px; border-radius: 999px; font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 16px; letter-spacing: .1em;
+    font-variation-settings: "wght" 800, "wdth" 140, "slnt" 0; color: var(--gris); transition: color .4s; }
+  .interrupteur button[aria-pressed="true"] { color: var(--noir); }
+  .son .texte { margin-top: 20px; font-size: clamp(15px, 1.7vw, 19px); line-height: 1.55; color: #E3E3DE; max-width: 460px; min-height: 5.5em; transition: opacity .3s; }
+  .son .note { margin-top: 10px; font-size: 12px; color: var(--gris); }
+  .visu-son { background: var(--noir-2); border-radius: 26px; padding: clamp(18px, 3vw, 32px); position: relative; overflow: hidden; }
+  .vague { display: flex; align-items: center; justify-content: center; gap: clamp(3px, .5vw, 6px); height: clamp(120px, 18vw, 200px); }
+  .vague i { flex: 1; max-width: 10px; border-radius: 6px; background: var(--vert); height: 10%; transition: height .25s ease, background .4s; }
+  .ferme .vague i { background: var(--blanc); }
+  .valve { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+  .valve svg { width: 72px; height: 72px; flex: none; }
+  .valve .clapet { transform-origin: 36px 36px; transition: transform .7s var(--ressort); }
+  .ferme .valve .clapet { transform: rotate(90deg); }
+  .valve p { font-size: 13px; color: var(--gris); line-height: 1.45; }
+  .valve p b { color: var(--blanc); display: block; font-size: 15px; }
+  .visu-son .photo-sil { margin-top: 16px; background: var(--studio); border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; }
+  .visu-son .photo-sil img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- Fiche d'un élément ---------- */
+  .voile { position: fixed; inset: 0; background: rgba(0,0,0,.6); opacity: 0; pointer-events: none; transition: opacity .45s var(--ease); z-index: 30; }
+  .voile.ouvert { opacity: 1; pointer-events: auto; }
+  .fiche { position: fixed; z-index: 31; left: 50%; bottom: 0; width: min(1080px, 100%); max-height: 92svh; background: var(--noir-2); border-radius: 26px 26px 0 0;
+    transform: translate(-50%, 104%); transition: transform .6s var(--ease); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); overflow: hidden; }
+  .fiche.ouverte { transform: translate(-50%, 0); }
+  .galerie { position: relative; background: var(--studio); min-height: 340px; overflow: hidden; touch-action: pan-y; }
+  .galerie .diapo { position: absolute; inset: 0; opacity: 0; transition: opacity .7s var(--ease); }
+  .galerie .diapo.active { opacity: 1; }
+  .galerie .diapo img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.04); transition: transform 6s linear; }
+  .galerie .diapo.active img { transform: scale(1.1); }
+  .galerie .points-g { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; z-index: 2; }
+  .galerie .points-g i { width: 22px; height: 4px; border-radius: 4px; background: rgba(17,17,14,.2); transition: background .3s, width .3s; }
+  .galerie .points-g i.on { background: var(--noir); width: 34px; }
+  .fiche .infos { padding: clamp(20px, 3vw, 36px); overflow-y: auto; }
+  .fiche .haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .fiche h3 { font-size: clamp(22px, 2.8vw, 34px); line-height: 1; margin-top: 10px; font-variation-settings: "wght" 850, "wdth" 130, "slnt" 0; }
+  .fiche .sous { font-size: 13px; color: var(--gris); margin-top: 6px; }
+  .fermer { width: 46px; height: 46px; border-radius: 50%; background: var(--noir-3); display: grid; place-items: center; flex: none; }
+  .fiche .accroche { margin-top: 18px; font-size: 16px; line-height: 1.5; color: #E3E3DE; }
+  .fiche dl { margin-top: 18px; display: grid; gap: 8px; }
+  .fiche dl div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--noir-3); font-size: 13px; line-height: 1.45;
+    opacity: 0; transform: translateY(12px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+  .fiche.ouverte dl div { opacity: 1; transform: none; }
+  .fiche dt { font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 10px; letter-spacing: .14em; color: var(--vert); padding-top: 2px; font-variation-settings: "wght" 700, "wdth" 150, "slnt" 0; }
+  .fiche .vers { margin-top: 18px; width: 100%; padding: 14px; border-radius: 14px; background: var(--vert); color: var(--noir); font-weight: 700; font-size: 14px; }
+
+  /* ---------- Veille ---------- */
+  .veille { position: fixed; inset: 0; z-index: 50; background: #050504; overflow: hidden; display: grid; place-items: center; cursor: pointer;
+    transition: opacity .8s var(--ease), visibility 0s .8s; }
+  .veille.cachee { opacity: 0; visibility: hidden; pointer-events: none; }
+  .veille .fond { position: absolute; inset: -4%; background: url(assets/a110-1.jpg) center / cover; opacity: .32; filter: grayscale(.2) contrast(1.1); animation: kenburns 24s ease-in-out infinite alternate; }
+  .veille::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 20%, #050504 78%); }
+  .veille .contenu { position: relative; z-index: 2; text-align: center; padding: 24px; }
+  .veille .logo { height: clamp(26px, 3.4vw, 40px); margin: 0 auto 4vh; }
+  .veille .grand { line-height: .82; }
+  .veille .grand span { display: block; font-size: clamp(34px, min(12vw, 20vh), 210px); animation: respire 5s ease-in-out infinite alternate; }
+  .veille .grand span + span { color: var(--vert); animation-delay: -2.5s; }
+  .veille .modele { margin-top: 3vh; font-size: clamp(12px, 1.4vw, 15px); letter-spacing: .4em; color: #D6D6D0; }
+  .veille .compteurs { display: flex; justify-content: center; gap: clamp(24px, 6vw, 80px); margin-top: 4vh; }
+  .veille .compteurs b { display: block; font-size: clamp(32px, 5vw, 64px); line-height: 1; font-variation-settings: "wght" 900, "wdth" 110, "slnt" 0; font-weight: normal; }
+  .veille .compteurs small { display: block; margin-top: 6px; font-size: 11px; letter-spacing: .24em; color: var(--gris); }
+  .veille .toucher { margin-top: 6vh; display: inline-flex; align-items: center; gap: 14px; padding: 16px 26px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); font-size: 13px; letter-spacing: .24em; }
+  .veille .toucher i { width: 10px; height: 10px; border-radius: 50%; background: var(--vert); animation: clignote 1.4s ease-in-out infinite; }
+  @keyframes respire { 0% { font-variation-settings: "wght" 900, "wdth" 60, "slnt" 0; } 100% { font-variation-settings: "wght" 900, "wdth" 150, "slnt" -14; } }
+  @keyframes kenburns { to { transform: scale(1.12) translate(-2%, 1%); } }
+  @keyframes clignote { 50% { opacity: .2; transform: scale(.7); } }
+
+  /* ---------- Portrait et petits écrans ---------- */
+  @media (orientation: portrait), (max-width: 760px) {
+    .pack, .composer, .perfs, .son { grid-template-columns: minmax(0, 1fr); align-items: start; min-height: 0; }
+    .pack .visuel-pack { order: -1; }
+    .recap { position: relative; }
+    .fiche { grid-template-columns: minmax(0, 1fr); grid-template-rows: 38svh minmax(0, 1fr); }
+    .galerie { min-height: 0; }
+    .son .visu-son { order: -1; }
+    .courbe img { max-height: 34svh; object-fit: contain; }
+  }
+  @media (max-width: 760px) {
+    .choix-sil { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .barre .titre { display: none; }
+    .onglet { flex-direction: column; gap: 3px; padding: 10px 4px; }
+    .onglet span { font-size: 10px; letter-spacing: .04em; }
+    .onglet .long { display: none; } .onglet .court { display: inline; }
+    .etape h2 { flex-wrap: wrap; font-size: clamp(17px, 5.4vw, 24px); }
+    .jauges { grid-template-columns: 1fr 1fr; }
+    .fiche dl div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  }
+  @media (max-width: 420px) {
+    .choix-sil { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .puce-prix small { display: none; }
+    .verdict { grid-template-columns: minmax(0, 1fr); }
+    .onglet span { font-variation-settings: "wght" 650, "wdth" 88, "slnt" 0; }
+  }
+  /* paysage bas (téléphone couché) */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .barre { padding-top: 10px; padding-bottom: 6px; }
+    .onglets { padding-top: 6px; padding-bottom: 8px; }
+    .onglet { padding: 9px 6px; }
+    .pack, .son { align-items: start; }
+    .pack h1 .s, .pack h1 .p { font-size: clamp(40px, 8vw, 80px); }
+    .fiche { max-height: 96svh; }
+    .galerie { min-height: 0; }
+    .veille .compteurs { margin-top: 2vh; } .veille .toucher { margin-top: 3vh; padding: 10px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="barre">
+    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance" data-reglage>
+    <p class="titre etiquette">Pack Performance · Stage 2 / 340 · Alpine A110 II</p>
+    <div class="puce-prix" id="puce-prix"><small class="etiquette">Votre pack</small><b id="puce-montant"></b></div>
+  </header>
+
+  <main class="ecrans">
+    <!-- 01 · Le pack -->
+    <section class="ecran" id="e-pack" aria-label="Le pack">
+      <div class="pack">
+        <div>
+          <p class="etiquette carre" data-a>Pack Performance · Alpine A110 II</p>
+          <h1 class="cf" data-a><span class="s">Stage 2</span><span class="p">/ 340</span></h1>
+          <p class="chapo" data-a>Les éléments clefs de la préparation de votre Alpine A110 II, réunis dans un seul pack.</p>
+          <div class="chiffres" data-a><span class="v">330–345 ch</span><span class="v">390–440 Nm</span><span>Cartographie à prévoir</span></div>
+          <div class="liste-pieces" id="liste-pieces" data-a></div>
+        </div>
+        <div class="visuel-pack" data-a>
+          <div class="studio" id="studio"><img src="assets/pack.jpg" alt="Les éléments du pack : échangeur, downpipe et kit admission carbone"></div>
+          <p class="legende-studio"><span>Touchez un point pour découvrir la pièce</span><span>Silencieux en option</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Composer -->
+    <section class="ecran" id="e-composer" aria-label="Composer mon pack">
+      <div class="composer">
+        <div>
+          <div class="etape" data-a>
+            <p class="etiquette carre">Étape 1 sur 2</p>
+            <h2 class="cf">Technologie catalyseur <em>DownPipe</em></h2>
+            <div class="choix-cata" id="choix-cata" role="radiogroup" aria-label="Technologie catalyseur"></div>
+          </div>
+          <div class="etape" data-a>
+            <p class="etiquette carre">Étape 2 sur 2</p>
+            <h2 class="cf">Silencieux <em>ValveTronic</em></h2>
+            <div class="choix-sil" id="choix-sil" role="radiogroup" aria-label="Silencieux ValveTronic"></div>
+          </div>
+        </div>
+        <aside class="recap" data-a>
+          <p class="etiquette carre">Votre Stage 2</p>
+          <p class="prix cf" id="prix"></p>
+          <p class="ref" id="ref"></p>
+          <ul id="recap-liste"></ul>
+          <p class="note">Puissance potentielle 330–345 ch et 390–440 Nm, selon la cartographie moteur et boîte. Cartographie à prévoir pour l’installation.</p>
+          <p class="cta">Intéressé ? Parlez-en à notre équipe</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 03 · Performances -->
+    <section class="ecran" id="e-perfs" aria-label="Performances">
+      <div class="perfs">
+        <div class="col">
+          <p class="etiquette carre" data-a>Mesuré au banc</p>
+          <div class="jauges" data-a>
+            <div class="jauge" id="j-ch"></div>
+            <div class="jauge" id="j-nm"></div>
+          </div>
+          <div class="bloc" data-a>
+            <p class="etiquette">Pack Stage 2 / 340 · Alpine A110 II</p>
+            <h3 class="cf">La courbe</h3>
+            <p>Puissance et couple relevés au banc Dynojet.</p>
+            <div class="courbe"><img src="assets/dyno.jpg" alt="Courbe de puissance et de couple au banc Dynojet : 340 ch et 409 Nm"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="bloc" data-a>
+            <p class="etiquette carre">Échangeur-intercooler</p>
+            <h3 class="cf">De quel volume a besoin votre moteur ?</h3>
+            <p>Choisissez la puissance visée et la température extérieure : le tableau EVOX donne le litrage d’échangeur recommandé.</p>
+            <div class="segments" id="seg-puissance"></div>
+            <div class="segments temp" id="seg-temp"></div>
+            <div class="graphe" id="graphe"></div>
+            <div class="verdict" id="verdict"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Le son -->
+    <section class="ecran" id="e-son" aria-label="Le son ValveTronic">
+      <div class="son" id="son">
+        <div>
+          <p class="etiquette carre" data-a>Option · Silencieux EVOX ValveTronic</p>
+          <h2 class="cf" data-a>Deux caractères,<br><span>une télécommande</span></h2>
+          <div class="interrupteur" id="interrupteur" data-a>
+            <button aria-pressed="true" data-pos="open">Open</button>
+            <button aria-pressed="false" data-pos="closed">Closed</button>
+          </div>
+          <p class="texte" id="son-texte" data-a></p>
+          <p class="note" data-a>Animation indicative : aucun son n’est diffusé par la tablette.</p>
+        </div>
+        <div class="visu-son" data-a>
+          <div class="vague" id="vague"></div>
+          <div class="valve">
+            <svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="33" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/><g class="clapet"><rect x="8" y="33" width="56" height="6" rx="3" fill="#CCFF00"/><circle cx="36" cy="36" r="5" fill="#11110E" stroke="#CCFF00" stroke-width="2"/></g></svg>
+            <p id="valve-texte"></p>
+          </div>
+          <div class="photo-sil"><img id="son-photo" src="assets/silencieux-carbone.jpg" alt="Silencieux EVOX ValveTronic"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="onglets" role="tablist" aria-label="Sections">
+    <button class="onglet" role="tab" data-ecran="e-pack"><i>01</i><span>Le pack</span></button>
+    <button class="onglet" role="tab" data-ecran="e-composer"><i>02</i><span>Composer</span></button>
+    <button class="onglet" role="tab" data-ecran="e-perfs"><i>03</i><span><span class="long">Performances</span><span class="court">Perfs</span></span></button>
+    <button class="onglet" role="tab" data-ecran="e-son"><i>04</i><span>Le son</span></button>
+  </nav>
+</div>
+
+<!-- Fiche d'un élément du pack -->
+<div class="voile" id="voile"></div>
+<aside class="fiche" id="fiche" role="dialog" aria-modal="true" aria-labelledby="f-nom" aria-hidden="true">
+  <div class="galerie" id="galerie"></div>
+  <div class="infos">
+    <div class="haut">
+      <div><p class="etiquette carre" id="f-num"></p><h3 class="cf" id="f-nom"></h3><p class="sous" id="f-sous"></p></div>
+      <button class="fermer" id="fermer" aria-label="Fermer"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 1l12 12M13 1 1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </div>
+    <p class="accroche" id="f-accroche"></p>
+    <dl id="f-points"></dl>
+    <button class="vers" id="f-vers">Composer mon pack ›</button>
+  </div>
+</aside>
+
+<!-- Écran de veille -->
+<div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir le pack">
+  <div class="fond"></div>
+  <div class="contenu">
+    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance" data-reglage>
+    <p class="grand cf"><span>Stage 2</span><span>/ 340</span></p>
+    <p class="modele cf">Pack Performance · Alpine A110 II</p>
+    <div class="compteurs cf">
+      <div><b id="v-ch">0</b><small>Chevaux au banc</small></div>
+      <div><b id="v-nm">0</b><small>Nm de couple</small></div>
+    </div>
+    <p class="toucher cf"><i></i>Touchez pour découvrir</p>
+  </div>
+</div>
+
+<script src="assets/pack.js?v=2026-11-12"></script>
+<script src="../ecran-borne.js"></script>
+<script>
+  const P = window.PACK, $ = id => document.getElementById(id);
+  const euros = n => n.toLocaleString("fr-FR").replace(/ |\s/g, " ") + " €";
+  const coche = '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M1.5 5.2 4 7.5l4.5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const fleche = '<svg width="12" height="12" viewBox="0 0 12 12"><path d="m4 2 4 4-4 4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const sansAnim = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Compteur animé
+  function compter(el, de, a, ms = 900, format = n => Math.round(n)) {
+    if (sansAnim) { el.textContent = format(a); return; }
+    const t0 = performance.now();
+    const pas = t => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = format(de + (a - de) * e); if (k < 1) requestAnimationFrame(pas); };
+    requestAnimationFrame(pas);
+  }
+
+  // ---------- Navigation entre écrans ----------
+  const ordre = ["e-pack", "e-composer", "e-perfs", "e-son"];
+  let ecranActuel = null;
+  function aller(id) {
+    if (id === ecranActuel) return;
+    const iNouveau = ordre.indexOf(id), iAncien = ordre.indexOf(ecranActuel);
+    document.querySelectorAll(".ecran").forEach(e => {
+      const i = ordre.indexOf(e.id);
+      e.classList.toggle("actif", e.id === id);
+      e.classList.remove("joue");
+      e.classList.toggle("avant", i < iNouveau);
+    });
+    document.querySelectorAll(".onglet").forEach(o => o.setAttribute("aria-selected", o.dataset.ecran === id));
+    const el = $(id); el.scrollTop = 0;
+    el.querySelectorAll("[data-a]").forEach((x, k) => x.style.transitionDelay = `${120 + k * 90}ms`);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("joue")));
+    ecranActuel = id;
+    if (id === "e-perfs") lancerJauges();
+    if (id === "e-son") lancerVague(); else arreterVague();
+
+  }
+  document.querySelectorAll(".onglet").forEach(o => o.onclick = () => aller(o.dataset.ecran));
+  // glisser à gauche / à droite pour changer d'écran
+  let x0 = null, y0 = null;
+  $("app").addEventListener("touchstart", e => { if (e.target.closest(".galerie")) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  $("app").addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+      const k = ordre.indexOf(ecranActuel) + (dx < 0 ? 1 : -1);
+      if (k >= 0 && k < ordre.length) aller(ordre[k]);
+    }
+  }, { passive: true });
+
+  // ---------- 01 · Le pack ----------
+  P.pieces.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.className = "piece-ligne" + (p.pt ? "" : " option");
+    b.innerHTML = `<span class="num cf">${p.n}</span><span class="txt"><b>${p.nom}</b><small>${p.sous}</small></span><span class="fl">${fleche}</span>`;
+    b.onclick = () => ouvrirFiche(i);
+    $("liste-pieces").appendChild(b);
+    if (p.pt) {
+      const pt = document.createElement("button");
+      pt.className = "point"; pt.style.left = `${p.pt[0] * 100}%`; pt.style.top = `${p.pt[1] * 100}%`;
+      pt.setAttribute("aria-label", p.nom); pt.innerHTML = `<b>${p.n}</b>`;
+      pt.onclick = () => ouvrirFiche(i);
+      $("studio").appendChild(pt);
+    }
+  });
+
+  // ---------- Fiche ----------
+  let diapo = 0, minuteurDiapo = null, ficheOuverte = false;
+  function ouvrirFiche(i) {
+    const p = P.pieces[i];
+    $("f-num").textContent = p.pt ? `Élément ${p.n} sur 03` : "En option";
+    $("f-nom").textContent = p.nom; $("f-sous").textContent = p.sous; $("f-accroche").textContent = p.accroche;
+    $("f-points").innerHTML = p.points.map(([t, d], k) => `<div style="transition-delay:${200 + k * 90}ms"><dt>${t}</dt><dd>${d}</dd></div>`).join("");
+    $("galerie").innerHTML = p.photos.map(f => `<div class="diapo"><img src="assets/${f}" alt="${p.nom}"></div>`).join("") + `<div class="points-g">${p.photos.map(() => "<i></i>").join("")}</div>`;
+    $("f-vers").onclick = () => { fermerFiche(); aller(p.id === "silencieux" ? "e-son" : "e-composer"); };
+    $("f-vers").textContent = p.id === "silencieux" ? "Écouter le caractère Open / Closed ›" : "Composer mon pack ›";
+    diapo = 0; montrerDiapo(0);
+    $("fiche").classList.add("ouverte"); $("voile").classList.add("ouvert"); $("fiche").setAttribute("aria-hidden", "false");
+    ficheOuverte = true;
+  }
+  function montrerDiapo(k) {
+    const d = [...$("galerie").querySelectorAll(".diapo")], pts = [...$("galerie").querySelectorAll(".points-g i")];
+    diapo = (k + d.length) % d.length;
+    d.forEach((x, n) => x.classList.toggle("active", n === diapo)); pts.forEach((x, n) => x.classList.toggle("on", n === diapo));
+    clearTimeout(minuteurDiapo); minuteurDiapo = setTimeout(() => montrerDiapo(diapo + 1), 4200);
+  }
+  function fermerFiche() {
+    $("fiche").classList.remove("ouverte"); $("voile").classList.remove("ouvert"); $("fiche").setAttribute("aria-hidden", "true");
+    clearTimeout(minuteurDiapo); ficheOuverte = false;
+  }
+  $("fermer").onclick = fermerFiche; $("voile").onclick = fermerFiche;
+  let gx = null;
+  $("galerie").addEventListener("pointerdown", e => gx = e.clientX);
+  $("galerie").addEventListener("pointerup", e => { if (gx === null) return; const dx = e.clientX - gx; gx = null; montrerDiapo(diapo + (Math.abs(dx) > 40 ? (dx < 0 ? 1 : -1) : 1)); });
+
+  // ---------- 02 · Composer ----------
+  const choix = { cata: "decat", sil: "carbone" };
+  let prixAffiche = 0;
+
+  P.catalyseurs.forEach(c => {
+    const b = document.createElement("button");
+    b.className = "carte"; b.setAttribute("role", "radio"); b.dataset.id = c.id;
+    b.innerHTML = `<span class="coche">${coche}</span><span class="delta" data-delta></span>
+      <span class="vignette"><img src="assets/${c.id === "cata" ? "downpipe-2" : "downpipe-3"}.jpg" alt=""></span>
+      <span class="corps"><b>${c.nom}</b><small>${c.produit}</small></span>`;
+    b.onclick = () => { choix.cata = c.id; majCompo(true); };
+    $("choix-cata").appendChild(b);
+  });
+  P.silencieux.forEach(s => {
+    const b = document.createElement("button");
+    b.className = "carte"; b.setAttribute("role", "radio"); b.dataset.id = s.id;
+    b.innerHTML = `<span class="coche">${coche}</span>
+      <span class="vignette">${s.img ? `<img src="assets/${s.img}" alt="">` : `<span class="vide cf">Sans</span>`}</span>
+      <span class="corps"><b>${s.court}</b><small data-delta></small></span>`;
+    b.onclick = () => { choix.sil = s.id; majCompo(true); };
+    $("choix-sil").appendChild(b);
+  });
+  function majCompo(anime) {
+    const [prix, ref] = P.prix[choix.cata][choix.sil];
+    const cata = P.catalyseurs.find(c => c.id === choix.cata), sil = P.silencieux.find(s => s.id === choix.sil);
+    document.querySelectorAll("#choix-cata .carte").forEach(b => {
+      b.setAttribute("aria-checked", b.dataset.id === choix.cata);
+      const d = P.prix[b.dataset.id][choix.sil][0] - prix;
+      b.querySelector("[data-delta]").textContent = d === 0 ? "Choisi" : (d > 0 ? "+" : "−") + euros(Math.abs(d));
+    });
+    document.querySelectorAll("#choix-sil .carte").forEach(b => {
+      b.setAttribute("aria-checked", b.dataset.id === choix.sil);
+      const d = P.prix[choix.cata][b.dataset.id][0] - prix;
+      b.querySelector("[data-delta]").textContent = d === 0 ? "Choisi" : (d > 0 ? "+" : "−") + euros(Math.abs(d));
+    });
+    compter($("prix"), anime ? prixAffiche : prix, prix, 700, n => euros(Math.round(n)));
+    compter($("puce-montant"), anime ? prixAffiche : prix, prix, 700, n => euros(Math.round(n)));
+    prixAffiche = prix;
+    $("ref").textContent = `Référence ${ref} · Prix TTC`;
+    const lignes = [
+      [true, cata.produit + (cata.id === "cata" ? " · catalyseur sport" : " · decat")],
+      [true, "Échangeur-Intercooler EVOX Performance · 3,9 L"],
+      [true, "Kit admission directe carbone Gruppe M"],
+      [sil.id !== "sans", sil.id === "sans" ? "Sans silencieux ValveTronic" : "Silencieux EVOX ValveTronic · " + sil.nom]
+    ];
+    $("recap-liste").innerHTML = lignes.map(([ok, t]) => `<li class="${ok ? "" : "non"}${anime ? " pop" : ""}"><i>${ok ? coche : ""}</i><span>${t}</span></li>`).join("");
+    if (anime) { $("puce-prix").classList.add("flash"); setTimeout(() => $("puce-prix").classList.remove("flash"), 700); }
+    if (sil.img) $("son-photo").src = `assets/${sil.img}`;
+  }
+
+  // ---------- 03 · Performances ----------
+  function jauge(el, val, max, unite, sous) {
+    const L = 251.3; // demi-cercle r=80
+    el.innerHTML = `<svg viewBox="0 0 200 116"><path class="fond" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="14"/>
+      <path class="arc" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="14" stroke-dasharray="${L}" stroke-dashoffset="${L}"/></svg>
+      <div class="val cf">0</div><div class="unite cf">${unite}</div><div class="sous">${sous}</div>`;
+    el.dataset.val = val; el.dataset.max = max;
+  }
+  jauge($("j-ch"), P.banc.ch, 400, "ch", `Puissance max. à ${P.banc.chRegime} tr/min`);
+  jauge($("j-nm"), P.banc.nm, 500, "Nm", `Couple max. à ${P.banc.nmRegime} tr/min`);
+  function lancerJauges() {
+    ["j-ch", "j-nm"].forEach((id, k) => {
+      const el = $(id), arc = el.querySelector(".arc"), v = +el.dataset.val, m = +el.dataset.max;
+      arc.style.transition = "none"; arc.style.strokeDashoffset = 251.3; el.querySelector(".val").textContent = "0";
+      setTimeout(() => { arc.style.transition = ""; arc.style.strokeDashoffset = 251.3 * (1 - v / m); compter(el.querySelector(".val"), 0, v, 1800); }, 450 + k * 200);
+    });
+  }
+
+  const L = P.litrage, MIN = 2, MAX = 4.6;
+  let puissance = 340, temp = 1;
+  const pos = v => ((v - MIN) / (MAX - MIN)) * 100;
+  L.lignes.forEach(([ch]) => {
+    const b = document.createElement("button"); b.textContent = ch + " ch"; b.dataset.v = ch;
+    b.onclick = () => { puissance = ch; majGraphe(); }; $("seg-puissance").appendChild(b);
+  });
+  L.temperatures.forEach((t, k) => {
+    const b = document.createElement("button"); b.textContent = t; b.dataset.v = k;
+    b.onclick = () => { temp = k; majGraphe(); }; $("seg-temp").appendChild(b);
+  });
+  $("graphe").innerHTML = `<div class="axe"></div><div class="bande" id="bande"><span id="bande-txt"></span></div>
+    <div class="repere origine" id="r-origine"><b>Origine 2,5 L</b></div><div class="repere evox" id="r-evox"><b>EVOX 3,9 L</b></div>` +
+    [2, 2.5, 3, 3.5, 4, 4.5].map(v => `<span class="graduation" style="left:${pos(v)}%">${String(v).replace(".", ",")} L</span>`).join("");
+  function etat(vol, [lo, hi]) { return vol >= hi ? ["ok", "Couvre le besoin"] : vol >= lo ? ["ok", "Dans la plage recommandée"] : ["ko", "En dessous du besoin"]; }
+  function majGraphe() {
+    const ligne = L.lignes.find(l => l[0] === puissance), plage = ligne[1 + temp];
+    document.querySelectorAll("#seg-puissance button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.v === puissance));
+    document.querySelectorAll("#seg-temp button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.v === temp));
+    $("bande").style.left = pos(plage[0]) + "%"; $("bande").style.width = (pos(plage[1]) - pos(plage[0])) + "%";
+    $("bande-txt").textContent = `Besoin : ${String(plage[0]).replace(".", ",")}–${String(plage[1]).replace(".", ",")} L`;
+    $("r-origine").style.left = pos(L.origine) + "%"; $("r-evox").style.left = pos(L.evox) + "%";
+    const o = etat(L.origine, plage), e = etat(L.evox, plage);
+    $("verdict").innerHTML = `<div class="${o[0]}"><b>Origine · 2,5 L</b>${o[1]}</div><div class="${e[0]}"><b>EVOX · 3,9 L</b>${e[1]}</div>`;
+  }
+
+  // ---------- 04 · Le son ----------
+  const sonPieces = P.pieces.find(p => p.id === "silencieux").points;
+  const barres = 36;
+  $("vague").innerHTML = "<i></i>".repeat(barres);
+  let posValve = "open", minuteurVague = null;
+  function majSon() {
+    $("son").classList.toggle("ferme", posValve === "closed");
+    $("interrupteur").classList.toggle("ferme", posValve === "closed");
+    $("interrupteur").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pos === posValve));
+    const t = sonPieces.find(([k]) => k.toLowerCase() === posValve)[1];
+    $("son-texte").textContent = t;
+    $("valve-texte").innerHTML = posValve === "open" ? "<b>Valves ouvertes</b>Le son d’une vraie voiture de sport." : "<b>Valves fermées</b>Sobre, pour un usage confortable au quotidien.";
+  }
+  $("interrupteur").querySelectorAll("button").forEach(b => b.onclick = () => { posValve = b.dataset.pos; majSon(); });
+  function lancerVague() {
+    arreterVague();
+    const i = [...$("vague").children]; let t = 0;
+    minuteurVague = setInterval(() => {
+      t += .35; const fort = posValve === "open";
+      i.forEach((b, k) => {
+        const base = Math.sin(k * .45 + t) * .5 + .5, bruit = Math.random();
+        const h = fort ? 18 + base * 52 + bruit * 30 : 6 + base * 12 + bruit * 6;
+        b.style.height = Math.min(100, h) + "%";
+      });
+    }, 160);
+  }
+  function arreterVague() { clearInterval(minuteurVague); }
+
+  // ---------- Veille et inactivité ----------
+  const INACTIVITE = 90_000;
+  let minuteurVeille = null;
+  function veille() {
+    fermerFiche(); $("veille").classList.remove("cachee");
+    compter($("v-ch"), 0, P.banc.ch, 2200); compter($("v-nm"), 0, P.banc.nm, 2200);
+    clearInterval(veille.boucle);
+    veille.boucle = setInterval(() => { compter($("v-ch"), 0, P.banc.ch, 2200); compter($("v-nm"), 0, P.banc.nm, 2200); }, 9000);
+  }
+  function reveil() {
+    clearInterval(veille.boucle);
+    $("veille").classList.add("cachee");
+    choix.cata = "decat"; choix.sil = "carbone"; puissance = 340; temp = 1; posValve = "open";
+    majCompo(false); majGraphe(); majSon();
+    ecranActuel = null; aller("e-pack");
+  }
+  $("veille").addEventListener("click", reveil);
+  const relancer = () => { clearTimeout(minuteurVeille); minuteurVeille = setTimeout(veille, INACTIVITE); };
+  ["pointerdown", "touchstart", "keydown"].forEach(ev => addEventListener(ev, relancer, { passive: true }));
+  addEventListener("keydown", e => { if (e.key === "Escape") fermerFiche(); });
+
+  // Démarrage
+  majCompo(false); majGraphe(); majSon(); aller("e-pack"); veille();
+  if (location.hash === "#direct") reveil();
+</script>
+</body>
+</html>
