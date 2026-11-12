@@ -1,4 +1,5 @@
-// Choix de ce qu'affiche la tablette (réservé à l'équipe) : appui long de 3 s, ou 5 appuis rapides, sur un élément [data-reglage].
+// Écran de la tablette : par défaut le dernier univers utilisé par un client (noté automatiquement ci-dessous).
+// L'équipe peut aussi le choisir : appui long de 3 s, ou 5 appuis rapides, sur un élément [data-reglage].
 // Le choix est gardé dans la tablette (localStorage). La page d'accueil de la borne (borne/index.html)
 // redirige vers l'écran choisi (pack, mur Porsche ou mur WheelForce).
 (() => {
@@ -14,8 +15,15 @@
 
   // Mémoire du dernier contact : la page d'accueil (borne/index.html) s'en sert pour savoir si on y revient
   // à cause d'un client (bouton « Accueil » → menu Showroom) ou de l'inactivité (→ écran principal de la tablette).
+  // + dernier univers utilisé : la tablette y reviendra après inactivité (pack, mur WheelForce, mur Porsche).
+  const UNIVERS = location.pathname.includes("pack-stage2") ? "pack-stage2"
+    : location.pathname.includes("jantes-wheelforce") ? "wheelforce"
+    : location.pathname.includes("evox-mur-jantes-porsche") ? "porsche" : "";
   let dernier = 0;
-  const noter = () => { const n = Date.now(); if (n - dernier < 2000) return; dernier = n; try { localStorage.setItem("evox-borne-action", String(n)); } catch (e) {} };
+  const noter = () => {
+    const n = Date.now(); if (n - dernier < 2000) return; dernier = n;
+    try { localStorage.setItem("evox-borne-action", String(n)); if (UNIVERS) localStorage.setItem(CLE, UNIVERS); } catch (e) {}
+  };
   ["pointerdown", "touchstart", "scroll", "keydown"].forEach(ev => addEventListener(ev, noter, { passive: true, capture: true }));
 
   function ouvrir() {

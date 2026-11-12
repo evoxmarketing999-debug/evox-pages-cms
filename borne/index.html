@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Showroom EVOX</title>
 <script>
-  /* Écran principal de la tablette (réglage équipe, voir ecran-borne.js).
+  /* Écran de la tablette = dernier univers utilisé par un client, ou réglage équipe (voir ecran-borne.js).
      - au démarrage et après 2 min sans contact (l'appli recharge cette page) : on va sur l'écran principal ;
      - quand un client vient d'utiliser la tablette (bouton « Accueil » de l'appli) ou demande le menu (?menu) : on reste sur le menu. */
   try {
@@ -75,7 +75,7 @@
   <main>
     <a class="univers" data-id="porsche" href="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/?borne=visite">
       <img src="https://evoxmarketing999-debug.github.io/evox-mur-jantes-porsche/v2/assets/photos/mur.jpg" alt="Le mur des jantes Porsche">
-      <span class="ici">Écran principal</span>
+      <span class="ici">Écran de cette tablette</span>
       <div class="texte">
         <small class="cf">Collection Porsche</small>
         <h2 class="cf">Jantes Porsche</h2>
@@ -85,7 +85,7 @@
     </a>
     <a class="univers" data-id="wheelforce" href="../jantes-wheelforce/?borne=visite">
       <img src="../jantes-wheelforce/assets/photos/mur.jpg" alt="Le mur des jantes WheelForce">
-      <span class="ici">Écran principal</span>
+      <span class="ici">Écran de cette tablette</span>
       <div class="texte">
         <small class="cf">Collection WheelForce</small>
         <h2 class="cf">Jantes WheelForce</h2>
@@ -95,7 +95,7 @@
     </a>
     <a class="univers" data-id="pack-stage2" href="pack-stage2/#direct">
       <img src="pack-stage2/assets/a110-1.jpg" alt="Alpine A110 équipée du pack Stage 2">
-      <span class="ici">Écran principal</span>
+      <span class="ici">Écran de cette tablette</span>
       <div class="texte">
         <small class="cf">Alpine A110 II</small>
         <h2 class="cf">Pack Stage 2 / 340</h2>
@@ -107,6 +107,6 @@
   <script>
     try { const e = localStorage.getItem("evox-borne-ecran"); document.querySelectorAll(".univers").forEach(u => u.classList.toggle("principal", u.dataset.id === e)); } catch (er) {}
   </script>
-  <script src="ecran-borne.js?v=2026-11-13a"></script>
+  <script src="ecran-borne.js?v=2026-11-13b"></script>
 </body>
 </html>
