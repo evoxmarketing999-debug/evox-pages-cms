@@ -63,6 +63,20 @@
       "sous": "Admissions carbone · 140 pièces",
       "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/eventuri/",
       "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/eventuri/#direct"
+    },
+    {
+      "id": "do88",
+      "nom": "do88",
+      "sous": "Refroidissement et admission · 318 pièces",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/marque/?id=do88",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/marque/?id=do88#direct"
+    },
+    {
+      "id": "gruppem",
+      "nom": "Gruppe M",
+      "sous": "Kits admission carbone · 96 kits",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/marque/?id=gruppem",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/marque/?id=gruppem#direct"
     }
   ]
 }
