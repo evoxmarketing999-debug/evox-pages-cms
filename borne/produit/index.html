@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Produit — EVOX</title>
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Interface produit générique de la borne : ?id=<dossier> charge <dossier>/donnees.js (textes, options, prix, photos). -->
+<style>
+  /* Interface produit EVOX — style épuré (esprit Apple) : fond clair, cartes blanches, Poppins / Montserrat, CoFo pour le technique. */
+  :root {
+    --fond: #F5F5F7; --carte: #FFFFFF; --encre: #11110E; --texte: #1D1D1F; --gris: #6E6E73; --gris-2: #A1A1A6; --filet: #E5E5EA;
+    --vert: #CCFF00; --noir: #11110E; --noir-2: #1C1C1E; --noir-3: #2C2C2E;
+    --ease: cubic-bezier(.22, .8, .24, 1); --ressort: cubic-bezier(.34, 1.4, .5, 1);
+    --marge: clamp(16px, 3.6vw, 48px); --rayon: 28px;
+    --ombre: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--fond); color: var(--texte); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden;
+    user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  img { display: block; max-width: 100%; -webkit-user-drag: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus:not(:focus-visible) { outline: none; }
+  button:focus-visible { outline: 2px solid var(--encre); outline-offset: 3px; }
+  .cf, .tech { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-variation-settings: "wght" 650, "wdth" 140, "slnt" 0; }
+  .etiquette { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-size: 11px; letter-spacing: .2em; color: var(--gris); font-variation-settings: "wght" 650, "wdth" 140, "slnt" 0; }
+  .etiquette.carre::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(17,17,14,.25); margin-right: 9px; vertical-align: 1px; }
+
+  /* ---------- Cadre ---------- */
+  #app { height: 100svh; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); overflow: hidden; position: relative; }
+  .barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px var(--marge); background: rgba(245,245,247,.78);
+    backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.06); z-index: 5; }
+  .barre .logo { height: clamp(20px, 2.2vw, 26px); }
+  .barre .titre { flex: 1; min-width: 0; text-align: center; font-family: "Poppins"; font-weight: 600; font-size: 13px; letter-spacing: -.01em; color: var(--texte); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; }
+  .puce-prix { display: flex; align-items: baseline; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--carte); box-shadow: var(--ombre); white-space: nowrap; transition: box-shadow .4s; }
+  .puce-prix small { font-size: 10px; letter-spacing: .16em; color: var(--gris); }
+  .puce-prix b { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+  .puce-prix.flash { box-shadow: 0 0 0 3px var(--vert), var(--ombre); }
+
+  .ecrans { position: relative; overflow: hidden; }
+  .ecran { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: clamp(20px, 4vh, 44px) var(--marge) 120px; opacity: 0; visibility: hidden; transform: translateY(16px);
+    transition: opacity .55s var(--ease), transform .7s var(--ease), visibility 0s .7s; scrollbar-width: none; }
+  .ecran::-webkit-scrollbar { display: none; }
+  .ecran.actif { opacity: 1; visibility: visible; transform: none; transition: opacity .55s var(--ease), transform .7s var(--ease), visibility 0s; }
+  .ecran [data-a] { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .9s var(--ease); }
+  .ecran.actif.joue [data-a] { opacity: 1; transform: none; }
+
+  /* Onglets : contrôle segmenté flottant */
+  .onglets { position: absolute; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: grid; gap: 4px; padding: 5px; border-radius: 999px; z-index: 6;
+    background: rgba(255,255,255,.78); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 8px 30px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.05); width: min(560px, calc(100% - 32px)); }
+  .onglet { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 10px; border-radius: 999px; color: var(--gris); transition: color .3s, background .3s; min-width: 0; }
+  .onglet i { font-style: normal; font-family: "cofo-peshka-variable"; font-size: 10px; letter-spacing: .1em; color: var(--gris-2); font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; }
+  .onglet span { font-family: "Poppins"; font-weight: 600; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .onglet[aria-selected="true"] { background: var(--encre); color: #fff; }
+  .onglet[aria-selected="true"] i { color: var(--vert); }
+
+  /* ---------- 01 · Le produit ---------- */
+  .produit { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 64px); align-items: start; max-width: 1240px; margin: 0 auto; }
+  .produit h1 { margin-top: 14px; font-family: "Poppins"; font-weight: 700; letter-spacing: -.035em; line-height: 1.02; }
+  .produit h1 .s, .produit h1 .p { display: block; white-space: nowrap; font-size: clamp(34px, min(5.6vw, 9vh), 84px); }
+  .produit h1 .s::after { content: "."; }
+  .produit h1 .p { color: var(--gris-2); }
+  .chapo { margin-top: 16px; font-family: "Poppins"; font-weight: 500; font-size: clamp(16px, 1.6vw, 21px); line-height: 1.35; letter-spacing: -.01em; color: var(--texte); max-width: 520px; }
+  .chiffres { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+  .chiffres span { padding: 9px 14px; border-radius: 999px; background: var(--carte); box-shadow: var(--ombre); font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 11px; letter-spacing: .1em; font-variation-settings: "wght" 700, "wdth" 130, "slnt" 0; }
+  .chiffres span.v { background: var(--encre); color: #fff; box-shadow: none; }
+  .chiffres span.v::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 1px; }
+  .points-p { margin-top: 26px; background: var(--carte); border-radius: var(--rayon); box-shadow: var(--ombre); padding: 6px 20px; }
+  .points-p div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 14px; padding: 15px 0; border-bottom: 1px solid var(--filet); font-size: 14px; line-height: 1.5; color: var(--texte); }
+  .points-p div:last-child { border-bottom: 0; }
+  .points-p dt { font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 10px; letter-spacing: .14em; color: var(--encre); padding-top: 3px; font-variation-settings: "wght" 750, "wdth" 140, "slnt" 0; }
+  .vitrine { position: sticky; top: 0; }
+  .vitrine .scene { position: relative; aspect-ratio: 1 / 1; max-height: 60vh; margin: 0 auto; border-radius: var(--rayon); overflow: hidden; background: #fff; box-shadow: var(--ombre); cursor: pointer; }
+  .vitrine .scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 4%; opacity: 0; transform: scale(1.02); transition: opacity .8s var(--ease), transform 6s linear; }
+  .vitrine .scene img.on { opacity: 1; transform: scale(1.07); }
+  .vitrine.situ .scene img { object-fit: cover; padding: 0; }
+  .vitrine .scene .monte { position: absolute; left: 14px; bottom: 14px; z-index: 3; display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px;
+    background: rgba(17,17,14,.86); color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 13px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .vitrine .scene .monte i { width: 7px; height: 7px; border-radius: 50%; background: var(--vert); }
+  .vitrine.situ .scene .monte { background: var(--vert); color: var(--encre); } .vitrine.situ .scene .monte i { background: var(--encre); }
+  .vignettes { display: flex; gap: 10px; margin-top: 14px; overflow-x: auto; scrollbar-width: none; padding: 3px; justify-content: safe center; }
+  .vignettes::-webkit-scrollbar { display: none; }
+  .vignettes button { flex: none; width: 58px; height: 58px; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: var(--ombre); opacity: .5; outline: 2px solid transparent; outline-offset: 2px; transition: opacity .3s, outline-color .3s; }
+  .vignettes button[aria-current="true"] { opacity: 1; outline-color: var(--encre); }
+  .vignettes img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- 02 · Configurer / prix ---------- */
+  .config { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(20px, 3.4vw, 48px); align-items: start; max-width: 1240px; margin: 0 auto; }
+  #c-nom { font-family: "Poppins" !important; font-weight: 700; letter-spacing: -.03em; text-transform: none; font-variation-settings: normal !important; font-size: clamp(24px, min(3vw, 5vh), 40px) !important; }
+  .photo-c { border-radius: var(--rayon); overflow: hidden; background: #fff; box-shadow: var(--ombre); aspect-ratio: 16 / 10; }
+  .photo-c img { width: 100%; height: 100%; object-fit: contain; padding: 4%; }
+  .option { margin-top: 26px; }
+  .option h3 { font-family: "Poppins"; font-weight: 600; font-size: 19px; letter-spacing: -.02em; }
+  .option p { font-size: 13px; color: var(--gris); margin-top: 4px; }
+  .choix-o { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .choix-o button { flex: 1 1 140px; padding: 16px 18px; border-radius: 18px; background: var(--carte); box-shadow: 0 0 0 1px var(--filet); text-align: left; transition: box-shadow .3s, transform .35s var(--ressort); position: relative; }
+  .choix-o button:active { transform: scale(.98); }
+  .choix-o button b { display: block; font-family: "Poppins"; font-weight: 600; font-size: 16px; letter-spacing: -.01em; }
+  .choix-o button small { display: block; font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 10px; letter-spacing: .12em; color: var(--gris); margin-top: 4px; font-variation-settings: "wght" 650, "wdth" 130, "slnt" 0; }
+  .choix-o button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--encre); }
+  .choix-o button[aria-pressed="true"]::after { content: ""; position: absolute; top: 16px; right: 16px; width: 10px; height: 10px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1.5px var(--encre); }
+  .recap-p { background: var(--carte); border-radius: var(--rayon); box-shadow: var(--ombre); padding: clamp(20px, 2.6vw, 32px); position: sticky; top: 0; }
+  .recap-p .prix { margin-top: 10px; font-family: "Poppins"; font-weight: 600; font-size: clamp(40px, 4.6vw, 60px); letter-spacing: -.035em; line-height: 1; white-space: nowrap; }
+  .recap-p .ref { font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--gris); margin-top: 10px; font-variation-settings: "wght" 650, "wdth" 130, "slnt" 0; }
+  .recap-p ul { list-style: none; margin-top: 20px; border-top: 1px solid var(--filet); }
+  .recap-p li { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--filet); font-size: 14px; line-height: 1.45; }
+  .recap-p li i { flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--vert); color: var(--encre); display: grid; place-items: center; margin-top: 1px; }
+  .recap-p .note { margin-top: 14px; font-size: 13px; color: var(--texte); line-height: 1.45; padding: 12px 14px; border-radius: 14px; background: #FAFAF0; box-shadow: inset 0 0 0 1px #ECEFC8; }
+  .recap-p .cta { margin-top: 18px; padding: 16px; border-radius: 999px; background: var(--encre); color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 15px; text-align: center; }
+  .recap-p .cta::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--vert); margin-right: 10px; vertical-align: 1px; }
+  .bulle { position: absolute; right: 22px; top: 22px; padding: 7px 13px; border-radius: 999px; font-family: "Poppins"; font-size: 13px; font-weight: 600; pointer-events: none; opacity: 0; }
+  .bulle.plus { background: var(--vert); color: var(--encre); } .bulle.moins { background: var(--encre); color: #fff; }
+  .bulle.monte { animation: bulle 1.4s var(--ease) forwards; }
+  @keyframes bulle { 0% { opacity: 0; transform: translateY(14px) scale(.8); } 18% { opacity: 1; transform: translateY(-6px) scale(1.05); } 70% { opacity: 1; transform: translateY(-14px); } 100% { opacity: 0; transform: translateY(-30px); } }
+
+  /* ---------- 03 · Le son : section sombre ---------- */
+  #e-son { background: #000; color: #F5F5F7; }
+  #e-son .etiquette { color: #A1A1A6; }
+  .son { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 3.4vw, 48px); align-items: center; max-width: 1240px; margin: 0 auto; min-height: 100%; }
+  .son h2 { font-family: "Poppins"; font-weight: 700; letter-spacing: -.035em; line-height: 1.04; font-size: clamp(30px, min(4.4vw, 7vh), 60px); margin-top: 12px; text-transform: none; font-variation-settings: normal; }
+  .son h2 span { color: #6E6E73; }
+  .modes { display: flex; gap: 4px; margin-top: 26px; background: #1C1C1E; border-radius: 999px; padding: 5px; max-width: 520px; }
+  .modes button { flex: 1; padding: 13px 8px; border-radius: 999px; font-family: "Poppins"; font-weight: 600; font-size: 15px; color: #A1A1A6; transition: background .35s, color .35s; }
+  .modes button[aria-pressed="true"] { background: var(--vert); color: var(--encre); }
+  .son .texte { margin-top: 22px; font-family: "Poppins"; font-weight: 500; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.45; color: #F5F5F7; max-width: 480px; min-height: 4.5em; }
+  .son .note { margin-top: 10px; font-size: 12px; color: #6E6E73; max-width: 480px; }
+  .visu-son { background: #1C1C1E; border-radius: var(--rayon); padding: clamp(18px, 3vw, 32px); }
+  .vague { display: flex; align-items: center; justify-content: center; gap: clamp(3px, .5vw, 6px); height: clamp(110px, 16vw, 180px); }
+  .vague i { flex: 1; max-width: 9px; border-radius: 6px; background: var(--vert); height: 10%; transition: height .25s ease, background .4s; }
+  .son.ferme .vague i { background: #F5F5F7; }
+  .valve { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+  .valve svg { width: 64px; height: 64px; flex: none; }
+  .valve p { font-size: 13px; color: #A1A1A6; line-height: 1.45; }
+  .valve p b { color: #fff; display: block; font-family: "Poppins"; font-weight: 600; font-size: 16px; }
+  .photo-sil { margin-top: 18px; background: #fff; border-radius: 18px; overflow: hidden; aspect-ratio: 16 / 9; }
+  .photo-sil img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* ---------- 04 · Performances ---------- */
+  #e-perfs > * { max-width: 1240px; margin-left: auto; margin-right: auto; }
+  #f-titre { font-family: "Poppins" !important; font-weight: 700; letter-spacing: -.035em; text-transform: none; font-variation-settings: normal !important; font-size: clamp(30px, min(4.4vw, 7vh), 56px) !important; }
+  .intro-p { font-family: "Poppins"; font-weight: 500; font-size: clamp(15px, 1.5vw, 19px); color: var(--gris); margin: 10px auto 24px; line-height: 1.4; }
+  .perfs-p { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); }
+  .releve-p { background: var(--carte); border-radius: var(--rayon); box-shadow: var(--ombre); padding: clamp(16px, 2vw, 24px); }
+  .releve-p h3 { font-family: "Poppins"; font-weight: 600; font-size: 18px; letter-spacing: -.02em; margin-top: 8px; }
+  .releve-p .img { margin-top: 14px; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--filet); }
+  .releve-p .img img { width: 100%; display: block; max-height: 44vh; object-fit: contain; }
+  .gains { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+  .gains div { background: var(--fond); border-radius: 14px; padding: 12px 14px; }
+  .gains b { display: block; font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(17px, 1.9vw, 23px); color: var(--encre); font-variation-settings: "wght" 850, "wdth" 115, "slnt" 0; }
+  .gains b::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(17,17,14,.3); margin-right: 8px; vertical-align: 3px; }
+  .gains small { display: block; font-size: 12px; color: var(--gris); margin-top: 3px; line-height: 1.35; }
+
+  /* ---------- Veille ---------- */
+  .veille { position: fixed; inset: 0; z-index: 50; background: radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, var(--fond) 62%); display: grid; place-items: center; cursor: pointer; overflow: hidden;
+    transition: opacity .8s var(--ease), visibility 0s .8s; }
+  .veille.cachee { opacity: 0; visibility: hidden; pointer-events: none; }
+  .veille .contenu { text-align: center; padding: 24px; width: 100%; }
+  .veille .logo { height: clamp(22px, 2.6vw, 30px); margin: 0 auto 3vh; }
+  .veille .v-studio { width: min(40vh, 62vw); aspect-ratio: 1; margin: 0 auto 2vh; display: grid; place-items: center; position: relative; animation: flotte 6s ease-in-out infinite alternate; }
+  .veille .v-studio::after { content: ""; position: absolute; left: 18%; right: 18%; bottom: 6%; height: 8%; border-radius: 50%; background: radial-gradient(rgba(0,0,0,.16), transparent 70%); z-index: -1; }
+  .veille .v-studio img { width: 100%; mix-blend-mode: multiply; }
+  .veille .grand { font-family: "Poppins"; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+  .veille .grand span { display: block; white-space: nowrap; font-size: clamp(30px, min(8vw, 10vh), 120px); }
+  .veille .grand span + span { color: var(--gris-2); }
+  .veille .modele { margin-top: 2vh; font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: clamp(10px, 1.1vw, 12px); letter-spacing: .26em; color: var(--gris); font-variation-settings: "wght" 650, "wdth" 140, "slnt" 0; }
+  .veille .compteurs { display: flex; justify-content: center; gap: clamp(16px, 4vw, 56px); margin-top: 3.4vh; }
+  .veille .compteurs > div { min-width: 120px; padding: 14px 20px; border-radius: 20px; background: #fff; box-shadow: var(--ombre); }
+  .veille .compteurs b { display: block; font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(24px, 3.2vw, 40px); line-height: 1; font-variation-settings: "wght" 850, "wdth" 115, "slnt" 0; }
+  .veille .compteurs b small { display: inline; font-size: .42em; margin-left: 4px; letter-spacing: .1em; }
+  .veille .compteurs > div > small { display: block; margin-top: 6px; font-size: 12px; color: var(--gris); }
+  .veille .toucher { margin-top: 4vh; display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; border-radius: 999px; background: var(--encre); color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 15px; text-transform: none; letter-spacing: -.01em; }
+  .veille .toucher i { width: 9px; height: 9px; border-radius: 50%; background: var(--vert); animation: clignote 1.4s ease-in-out infinite; }
+  @keyframes flotte { to { transform: translateY(-12px); } }
+  @keyframes clignote { 50% { opacity: .25; transform: scale(.7); } }
+
+  /* ---------- Formats ---------- */
+  @media (orientation: portrait), (max-width: 760px) {
+    .produit, .config, .son { grid-template-columns: minmax(0, 1fr); align-items: start; }
+    .produit .vitrine { order: -1; position: relative; }
+    .vitrine .scene { max-height: 44vh; }
+    .recap-p { position: relative; }
+    .son .visu-son { order: -1; }
+  }
+  @media (max-width: 760px) {
+    .barre .titre { display: none; }
+    .perfs-p { grid-template-columns: minmax(0, 1fr); }
+    .points-p div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .onglet i { display: none; }
+    .onglet span { font-size: 13px; }
+  }
+  @media (max-width: 420px) {
+    .gains { grid-template-columns: minmax(0, 1fr); }
+    .puce-prix small { display: none; }
+    .onglet { padding: 11px 6px; } .onglet span { font-size: 12px; }
+    .veille .compteurs > div { min-width: 0; padding: 12px 14px; }
+  }
+  @media (orientation: landscape) and (max-height: 560px) {
+    .veille .v-studio { width: 26vh; margin-bottom: 1vh; } .veille .logo { margin-bottom: 1vh; }
+    .veille .compteurs { margin-top: 1.5vh; } .veille .toucher { margin-top: 2vh; padding: 11px 20px; }
+    .ecran { padding-bottom: 90px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; } }
+  .veille .compteurs > div > small { font-family: "Montserrat"; text-transform: none; letter-spacing: 0; }
+</style>
+
+</head>
+<body>
+
+<div id="app">
+  <header class="barre">
+    <img class="logo" src="evox-logo-noir.svg" alt="EVOX Performance">
+    <p class="titre etiquette" id="b-titre"></p>
+    <div class="puce-prix" id="puce-prix"><small class="etiquette">Prix TTC</small><b id="puce-montant"></b></div>
+  </header>
+  <main class="ecrans" id="ecrans">
+    <section class="ecran" id="e-produit" aria-label="Le produit">
+      <div class="produit">
+        <div>
+          <p class="etiquette carre" data-a id="p-veh"></p>
+          <h1 class="cf" data-a><span class="s" id="t1"></span><span class="p" id="t2"></span></h1>
+          <p class="chapo" data-a id="p-accroche"></p>
+          <div class="chiffres" data-a id="p-chiffres"></div>
+          <dl class="points-p" data-a id="p-points"></dl>
+        </div>
+        <div class="vitrine" id="vitrine" data-a>
+          <div class="scene" id="scene"></div>
+          <div class="vignettes" id="vignettes"></div>
+        </div>
+      </div>
+    </section>
+    <section class="ecran" id="e-config" aria-label="Configurer">
+      <div class="config">
+        <div data-a>
+          <p class="etiquette carre" id="c-veh"></p>
+          <h2 class="cf" style="font-size:clamp(18px,min(2.4vw,4vh),32px);margin-top:8px;line-height:1.05;font-variation-settings:'wght' 850,'wdth' 115,'slnt' 0" id="c-nom"></h2>
+          <div class="photo-c" style="margin-top:16px"><img id="c-photo" alt=""></div>
+          <div id="options"></div>
+        </div>
+        <aside class="recap-p" data-a>
+          <p class="etiquette carre">Votre configuration</p>
+          <p class="prix" id="prix"></p>
+          <p class="ref" id="ref"></p>
+          <i class="bulle" id="bulle"></i>
+          <ul id="recap"></ul>
+          <div id="notes"></div>
+          <p class="cta">Intéressé ? Parlez-en à notre équipe</p>
+        </aside>
+      </div>
+    </section>
+    <section class="ecran" id="e-son" aria-label="Le son">
+      <div class="son" id="son">
+        <div>
+          <p class="etiquette carre" data-a id="s-veh"></p>
+          <h2 class="cf" data-a id="s-titre"></h2>
+          <div class="modes" id="modes" data-a></div>
+          <p class="texte" id="son-texte" data-a></p>
+          <p class="note" data-a id="s-note"></p>
+        </div>
+        <div class="visu-son" data-a>
+          <div class="vague" id="vague"></div>
+          <div class="valve">
+            <svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="33" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/><g class="clapet" id="clapet" style="transition:transform .7s var(--ressort);transform-origin:36px 36px"><rect x="8" y="33" width="56" height="6" rx="3" fill="#CCFF00"/><circle cx="36" cy="36" r="5" fill="#11110E" stroke="#CCFF00" stroke-width="2"/></g></svg>
+            <p id="valve-texte"></p>
+          </div>
+          <div class="photo-sil"><img id="s-photo" alt=""></div>
+        </div>
+      </div>
+    </section>
+    <section class="ecran" id="e-perfs" aria-label="Performances">
+      <p class="etiquette carre" data-a id="f-veh"></p>
+      <h2 class="cf" data-a style="font-size:clamp(22px,min(3vw,5vh),40px);margin-top:8px" id="f-titre"></h2>
+      <p class="intro-p" data-a id="f-intro"></p>
+      <div class="perfs-p" id="releves" data-a></div>
+    </section>
+  </main>
+  <nav class="onglets" role="tablist" aria-label="Sections" id="onglets"></nav>
+</div>
+
+<div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir">
+  <div class="contenu">
+    <img class="logo" src="evox-logo-noir.svg" alt="EVOX Performance">
+    <div class="v-studio"><img id="v-img" alt=""></div>
+    <p class="grand cf"><span id="v-l1"></span><span id="v-l2"></span></p>
+    <p class="modele cf" id="v-sous"></p>
+    <div class="compteurs cf" id="v-stats"></div>
+    <p class="toucher cf"><i></i>Touchez pour découvrir</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const id = (new URLSearchParams(location.search).get("id") || "").replace(/[^a-z0-9-]/g, "");
+  if (!id) { document.body.innerHTML = "<p style='color:#fff;padding:40px;font-family:sans-serif'>Produit introuvable.</p>"; return; }
+  const s = document.createElement("script");
+  s.src = `${id}/donnees.js?v=2026-11-13`;
+  s.onload = () => demarrer(window.PRODUIT, id + "/");
+  s.onerror = () => { document.body.innerHTML = "<p style='color:#fff;padding:40px;font-family:sans-serif'>Produit introuvable.</p>"; };
+  document.head.appendChild(s);
+
+  function demarrer(D, A) {
+    const euros = n => n.toLocaleString("fr-FR").replace(/ |\s/g, " ") + " €";
+    const coche = '<svg width="10" height="10" viewBox="0 0 10 10"><path d="M1.5 5.2 4 7.5l4.5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const sansAnim = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    document.title = `${D.titre.join(" · ")} — EVOX`;
+    function compter(el, de, a, ms = 700, format = n => euros(Math.round(n))) {
+      if (sansAnim) { el.textContent = format(a); return; }
+      const t0 = performance.now(), jeton = el._jeton = (el._jeton || 0) + 1; el.textContent = format(de);
+      const pas = t => { if (el._jeton !== jeton) return; const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = format(de + (a - de) * e); if (k < 1) requestAnimationFrame(pas); };
+      requestAnimationFrame(pas);
+    }
+
+    // Textes communs
+    $("b-titre").textContent = `${D.nom} · ${D.vehicule}`;
+    ["p-veh", "c-veh", "s-veh", "f-veh"].forEach(k => $(k).textContent = D.vehicule);
+    $("t1").textContent = D.titre[0]; $("t2").textContent = D.titre[1];
+    $("p-accroche").textContent = D.accroche;
+    $("p-chiffres").innerHTML = D.chiffres.map(([t, v]) => `<span class="${v ? "v" : ""}">${esc(t)}</span>`).join("");
+    $("p-points").innerHTML = D.points.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join("");
+    $("c-nom").textContent = D.nom; $("c-photo").src = A + D.photos[0];
+
+    // Onglets selon les écrans disponibles
+    const ECRANS = [["e-produit", "Le produit"], ["e-config", D.options.length ? "Configurer" : "Le prix"]];
+    if (D.son) ECRANS.push(["e-son", "Le son"]);
+    if (D.perfs) ECRANS.push(["e-perfs", "Performances"]);
+    ["e-son", "e-perfs"].forEach(e => { if (!ECRANS.some(x => x[0] === e)) $(e).remove(); });
+    $("onglets").style.gridTemplateColumns = `repeat(${ECRANS.length}, 1fr)`;
+    $("onglets").innerHTML = ECRANS.map(([e, n], k) => `<button class="onglet" role="tab" data-ecran="${e}"><i>0${k + 1}</i><span>${n}</span></button>`).join("");
+    const ordre = ECRANS.map(x => x[0]);
+    let ecranActuel = null;
+    function aller(e) {
+      if (e === ecranActuel) return;
+      const iN = ordre.indexOf(e);
+      document.querySelectorAll(".ecran").forEach(x => { x.classList.toggle("actif", x.id === e); x.classList.remove("joue"); x.classList.toggle("avant", ordre.indexOf(x.id) < iN); });
+      document.querySelectorAll(".onglet").forEach(o => o.setAttribute("aria-selected", o.dataset.ecran === e));
+      const el = $(e); el.scrollTop = 0;
+      el.querySelectorAll("[data-a]").forEach((x, k) => x.style.transitionDelay = `${120 + k * 90}ms`);
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("joue")));
+      ecranActuel = e;
+      if (e === "e-son") lancerVague(); else arreterVague();
+    }
+    document.querySelectorAll(".onglet").forEach(o => o.onclick = () => aller(o.dataset.ecran));
+    let x0 = null, y0 = null;
+    $("app").addEventListener("touchstart", e => { if (e.target.closest(".vignettes")) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    $("app").addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.6) { const k = ordre.indexOf(ecranActuel) + (dx < 0 ? 1 : -1); if (k >= 0 && k < ordre.length) aller(ordre[k]); } }, { passive: true });
+
+    // ---------- Vitrine photos (studio / monté) ----------
+    let modeSitu = false, diapo = 0, minuteurDiapo = null;
+    function vitrine() {
+      const liste = modeSitu ? D.situ : D.photos;
+      $("vitrine").classList.toggle("situ", modeSitu);
+      $("scene").innerHTML = liste.map(f => `<img src="${A + f}" alt="${esc(D.nom)}">`).join("") +
+        (D.situ && D.situ.length ? `<button class="monte" id="monte"><i></i>${modeSitu ? "Voir la pièce" : "Voir monté"}</button>` : "");
+      $("vignettes").innerHTML = liste.map((f, k) => `<button aria-label="Photo ${k + 1}"><img src="${A + f}" alt="" loading="lazy"></button>`).join("");
+      $("vignettes").querySelectorAll("button").forEach((b, k) => b.onclick = () => montrer(k));
+      if ($("monte")) $("monte").onclick = ev => { ev.stopPropagation(); modeSitu = !modeSitu; vitrine(); };
+      montrer(0);
+    }
+    function montrer(k) {
+      const imgs = [...$("scene").querySelectorAll("img")], v = [...$("vignettes").querySelectorAll("button")];
+      if (!imgs.length) return;
+      diapo = (k + imgs.length) % imgs.length;
+      imgs.forEach((im, n) => im.classList.toggle("on", n === diapo)); v.forEach((b, n) => b.setAttribute("aria-current", n === diapo));
+      clearTimeout(minuteurDiapo); minuteurDiapo = setTimeout(() => montrer(diapo + 1), 4200);
+    }
+    $("scene").addEventListener("click", () => montrer(diapo + 1));
+
+    // ---------- Configurer / prix ----------
+    const S = {}; D.options.forEach(o => S[o.id] = o.defaut || o.choix[0].id);
+    let prixAffiche = 0, prixPrecedent = null;
+    const cle = sel => D.options.map(o => sel[o.id]).join("|");
+    const prixDe = sel => D.prix[cle(sel)];
+    $("options").innerHTML = D.options.map(o => `<div class="option"><h3>${esc(o.nom)}</h3>${o.aide ? `<p>${esc(o.aide)}</p>` : ""}
+      <div class="choix-o" data-o="${o.id}">${o.choix.map(c => `<button data-c="${c.id}"><b>${esc(c.nom)}</b><small data-delta></small></button>`).join("")}</div></div>`).join("");
+    document.querySelectorAll(".choix-o button").forEach(b => b.onclick = () => { const o = b.parentElement.dataset.o; if (S[o] === b.dataset.c) return; S[o] = b.dataset.c; maj(true); });
+    function maj(anime) {
+      const [prix, ref] = prixDe(S);
+      document.querySelectorAll(".choix-o").forEach(g => g.querySelectorAll("button").forEach(b => {
+        const o = g.dataset.o; b.setAttribute("aria-pressed", S[o] === b.dataset.c);
+        const d = prixDe({ ...S, [o]: b.dataset.c })[0] - prix;
+        b.querySelector("[data-delta]").textContent = d === 0 ? (S[o] === b.dataset.c ? "choisi" : "même prix") : (d > 0 ? "+" : "−") + euros(Math.abs(d));
+      }));
+      const lignes = [D.nom + " · " + D.vehicule].concat(D.options.map(o => `${o.nom} : ${o.choix.find(c => c.id === S[o.id]).nom}`)).concat(D.inclus.map(t => "Inclus : " + t));
+      $("recap").innerHTML = lignes.map(t => `<li><i>${coche}</i><span>${esc(t)}</span></li>`).join("");
+      $("notes").innerHTML = D.notes.map(t => `<p class="note">${esc(t)}</p>`).join("");
+      compter($("prix"), anime ? prixAffiche : prix, prix); compter($("puce-montant"), anime ? prixAffiche : prix, prix);
+      $("ref").textContent = `Référence ${ref} · Prix TTC`;
+      if (anime && prixPrecedent !== null && prix !== prixPrecedent) {
+        const d = prix - prixPrecedent, bu = $("bulle"); bu.textContent = (d > 0 ? "+" : "−") + euros(Math.abs(d)); bu.className = "bulle " + (d > 0 ? "plus" : "moins"); void bu.offsetWidth; bu.classList.add("monte");
+        $("puce-prix").classList.add("flash"); setTimeout(() => $("puce-prix").classList.remove("flash"), 700);
+      }
+      prixAffiche = prix; prixPrecedent = prix;
+    }
+
+    // ---------- Le son ----------
+    let mode = null, minuteurVague = null;
+    if (D.son) {
+      $("s-titre").innerHTML = `${esc(D.son.titre[0])}<br><span>${esc(D.son.titre[1])}</span>`;
+      $("s-note").textContent = D.son.note; $("s-photo").src = A + D.son.photo;
+      $("modes").innerHTML = D.son.modes.map(m => `<button data-m="${m.id}">${esc(m.nom)}</button>`).join("");
+      $("vague").innerHTML = "<i></i>".repeat(36);
+      $("modes").querySelectorAll("button").forEach(b => b.onclick = () => { mode = D.son.modes.find(m => m.id === b.dataset.m); majSon(); });
+    }
+    function majSon() {
+      if (!D.son) return;
+      mode = mode || D.son.modes[0];
+      $("modes").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === mode.id));
+      $("son-texte").textContent = mode.texte; $("valve-texte").innerHTML = `<b>${esc(mode.court)}</b>${esc(mode.nom)}`;
+      $("clapet").style.transform = `rotate(${(1 - mode.niveau) * 90}deg)`;
+      $("son").classList.toggle("ferme", mode.niveau < .5);
+    }
+    function lancerVague() {
+      if (!D.son) return; arreterVague(); const i = [...$("vague").children]; let t = 0;
+      minuteurVague = setInterval(() => { t += .35; const n = mode ? mode.niveau : 1;
+        i.forEach((b, k) => { const base = Math.sin(k * .45 + t) * .5 + .5, br = Math.random(); b.style.height = Math.min(100, 6 + n * (base * 52 + br * 30) + (1 - n) * base * 10) + "%"; }); }, 160);
+    }
+    function arreterVague() { clearInterval(minuteurVague); }
+
+    // ---------- Performances ----------
+    if (D.perfs) {
+      $("f-titre").textContent = D.perfs.titre; $("f-intro").textContent = D.perfs.intro;
+      $("releves").innerHTML = D.perfs.releves.map(r => `<div class="releve-p"><p class="etiquette">${esc(D.nom)}</p><h3>${esc(r.titre)}</h3>
+        <div class="img"><img src="${A + r.image}" alt="${esc(r.titre)}"></div>
+        <div class="gains">${r.gains.map(([v, l]) => `<div><b>${esc(v)}</b><small>${esc(l)}</small></div>`).join("")}</div></div>`).join("");
+    }
+
+    // ---------- Veille (1 min 20) ----------
+    $("v-img").src = A + D.photos[0];
+    $("v-l1").textContent = D.veille.l1; $("v-l2").textContent = D.veille.l2; $("v-sous").textContent = D.veille.sous;
+    $("v-stats").innerHTML = D.veille.stats.map(([v, u, l]) => `<div><b>${esc(v)}<small>${esc(u)}</small></b><small>${esc(l)}</small></div>`).join("");
+    let minuteurVeille = null;
+    function veille() { $("veille").classList.remove("cachee"); }
+    function reveil() {
+      $("veille").classList.add("cachee");
+      D.options.forEach(o => S[o.id] = o.defaut || o.choix[0].id); prixPrecedent = null; mode = null; modeSitu = false;
+      maj(false); majSon(); vitrine(); ecranActuel = null; aller("e-produit");
+    }
+    $("veille").addEventListener("click", reveil);
+    const relancer = () => { clearTimeout(minuteurVeille); minuteurVeille = setTimeout(veille, 80000); };
+    ["pointerdown", "touchstart", "keydown"].forEach(ev => addEventListener(ev, relancer, { passive: true }));
+    window.calculProduit = () => prixDe(S);
+
+    // Grands titres : réduire la taille tant qu'ils dépassent (noms de modèles de longueurs différentes)
+    function ajuster(el, limite) {
+      el.style.fontSize = "";
+      let fs = parseFloat(getComputedStyle(el).fontSize), max = limite();
+      while (el.scrollWidth > max && fs > 16) { fs -= 2; el.style.fontSize = fs + "px"; }
+    }
+    const ajusterTout = () => {
+      ["t1", "t2"].forEach(k => ajuster($(k), () => $(k).parentElement.clientWidth));
+      ["v-l1", "v-l2"].forEach(k => ajuster($(k), () => innerWidth - 48));
+    };
+    document.fonts.ready.then(ajusterTout); document.fonts.load('900 40px "cofo-peshka-variable"').then(ajusterTout).catch(() => {}); setTimeout(ajusterTout, 1500); addEventListener("resize", ajusterTout);
+    const relancerAjuster = () => requestAnimationFrame(ajusterTout);
+    document.querySelectorAll(".onglet").forEach(o => o.addEventListener("click", relancerAjuster));
+    $("veille").addEventListener("click", relancerAjuster);
+
+    maj(false); majSon(); vitrine(); aller("e-produit"); veille();
+    if (location.hash === "#direct") reveil();
+  }
+})();
+</script>
+
+</body>
+</html>

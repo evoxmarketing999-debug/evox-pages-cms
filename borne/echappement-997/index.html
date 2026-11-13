@@ -6,7 +6,7 @@
 <title>Échappement 997 MKI — EVOX</title>
 <link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --noir: #11110E; --noir-2: #1A1A17; --noir-3: #24241F; --blanc: #FFFFFF; --studio: #EFEFEC;
@@ -380,12 +380,18 @@
   @keyframes flotte { to { transform: translateY(-10px) scale(1.02); } }
   @media (orientation: landscape) and (max-height: 560px) { .veille .v-studio { width: 30vh; margin-bottom: 1vh; } }
 </style>
+<link rel="stylesheet" href="../theme-clair.css?v=2026-11-13">
+<style>
+  .veille .v-studio { background: #fff !important; border-radius: 36px; box-shadow: var(--ombre) !important; width: min(30vh, 50vw) !important; margin-bottom: 2.4vh; }
+  .veille .v-studio::after { display: none; }
+  .veille .logo { margin-bottom: 2.4vh; } .veille .compteurs { margin-top: 2.4vh; } .veille .toucher { margin-top: 3.4vh; }
+</style>
 </head>
 <body>
 
 <div id="app">
   <header class="barre">
-    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
+    <img class="logo" src="assets/evox-logo-noir.svg" alt="EVOX Performance">
     <p class="titre etiquette">Échappement EVOX · Porsche 997 MKI</p>
     <div class="puce-prix" id="puce-prix"><small class="etiquette">Votre échappement</small><b id="puce-montant"></b></div>
   </header>
@@ -487,7 +493,7 @@
 <div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir l'échappement">
   <div class="fond" style="background: radial-gradient(ellipse at 50% 40%, #2A2A25 0%, #050504 70%); opacity: 1; animation: none;"></div>
   <div class="contenu">
-    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
+    <img class="logo" src="assets/evox-logo-noir.svg" alt="EVOX Performance">
     <div class="v-studio"><img src="assets/ligne-1.jpg" alt=""></div>
     <p class="grand cf"><span>997 MKI</span><span>Full EVOX</span></p>
     <p class="modele cf">Échappement inox · Porsche 997 MKI</p>

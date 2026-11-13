@@ -6,7 +6,7 @@
 <title>Pack Stage 2 / 340 — EVOX × Alpine A110</title>
 <link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --noir: #11110E; --noir-2: #1A1A17; --noir-3: #24241F; --blanc: #FFFFFF; --studio: #EFEFEC;
@@ -355,11 +355,18 @@
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   }
 </style>
+<link rel="stylesheet" href="../theme-clair.css?v=2026-11-13">
+<style>
+  .veille .v-studio { width: min(46vh, 70vw); margin: 0 auto 2vh; }
+  .veille .v-studio img { width: 100%; display: block; }
+  .veille .logo { margin-bottom: 2vh; }
+  @media (orientation: landscape) and (max-height: 560px) { .veille .v-studio { width: 32vh; margin-bottom: 0; } }
+</style>
 </head>
 <body>
 <div id="app">
   <header class="barre">
-    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
+    <img class="logo" src="assets/evox-logo-noir.svg" alt="EVOX Performance">
     <p class="titre etiquette">Pack Performance · Stage 2 / 340 · Alpine A110 II</p>
     <div class="puce-prix" id="puce-prix"><small class="etiquette">Votre pack</small><b id="puce-montant"></b></div>
   </header>
@@ -495,7 +502,8 @@
 <div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir le pack">
   <div class="fond"></div>
   <div class="contenu">
-    <img class="logo" src="assets/evox-logo.svg" alt="EVOX Performance">
+    <img class="logo" src="assets/evox-logo-noir.svg" alt="EVOX Performance">
+    <div class="v-studio"><img src="assets/pack.jpg" alt=""></div>
     <p class="grand cf"><span>Stage 2</span><span>/ 340</span></p>
     <p class="modele cf">Pack Performance · Alpine A110 II</p>
     <div class="compteurs cf">

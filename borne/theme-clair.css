@@ -1,0 +1,138 @@
+/* Thème clair EVOX — style épuré (esprit Apple) pour les univers de la borne (pack Stage 2, échappement 997…).
+   Chargé APRÈS le style de la page : il remplace les couleurs sombres par un fond clair et des cartes blanches.
+   Poppins pour les titres, Montserrat pour les textes, CoFo Peshka pour les détails techniques. Les murs de jantes ne l'utilisent pas. */
+:root {
+  --noir: #11110E; --noir-2: #FFFFFF; --noir-3: #F2F2F4; --blanc: #FFFFFF; --studio: #FFFFFF;
+  --gris: #6E6E73; --gris-2: #A1A1A6; --filet: #E5E5EA; --texte: #1D1D1F; --fond: #F5F5F7;
+  --ombre: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.06);
+}
+body { background: var(--fond); color: var(--texte); }
+.etiquette { color: var(--gris); }
+.etiquette.carre::before { border-radius: 50%; box-shadow: 0 0 0 1px rgba(17,17,14,.25); }
+
+/* ---------- Barre et onglets ---------- */
+#app { grid-template-rows: auto minmax(0, 1fr); position: relative; }
+.barre { padding-top: 14px; padding-bottom: 14px; background: rgba(245,245,247,.78); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.06); z-index: 5; }
+.barre .titre { font-family: "Poppins", sans-serif; text-transform: none; letter-spacing: -.01em; font-weight: 600; font-size: 13px; color: var(--texte); text-align: center; font-variation-settings: normal; }
+.puce-prix { background: #fff; border: 0; box-shadow: var(--ombre); }
+.puce-prix b { font-family: "Poppins", sans-serif; font-weight: 600; letter-spacing: -.01em; font-variation-settings: normal; }
+.puce-prix.flash { background: #fff; box-shadow: 0 0 0 3px var(--vert), var(--ombre); }
+.ecran { padding-bottom: 120px; }
+.onglets { position: absolute; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(620px, calc(100% - 32px)); padding: 5px; gap: 4px; border: 0; border-radius: 999px; z-index: 6;
+  background: rgba(255,255,255,.8); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 8px 30px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.05); }
+.onglet { border-radius: 999px; padding: 12px 8px; color: var(--gris); }
+.onglet span { font-family: "Poppins", sans-serif; text-transform: none; font-weight: 600; font-size: 14px; letter-spacing: -.01em; font-variation-settings: normal; }
+.onglet[aria-selected="true"] { background: var(--noir); color: #fff; }
+.onglet[aria-selected="true"] i { color: var(--vert); }
+
+/* ---------- Titres en Poppins ---------- */
+.pack h1 .s, .pack h1 .p { font-family: "Poppins", sans-serif; text-transform: none; font-weight: 700; letter-spacing: -.035em; font-variation-settings: normal; }
+.pack h1 .s { color: var(--texte); } .pack h1 .p { color: var(--gris-2); }
+.pack .chapo { font-family: "Poppins", sans-serif; font-weight: 500; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.38; letter-spacing: -.01em; color: var(--texte); }
+.compo-tete h2, .bloc h3, .fiche h3, .son h2, .compo-tete h2 span { font-family: "Poppins", sans-serif; text-transform: none; font-weight: 700; letter-spacing: -.03em; font-variation-settings: normal; }
+.compo-tete h2 span { color: var(--gris-2); }
+.total b, .recap .prix { font-family: "Poppins", sans-serif; font-weight: 600; letter-spacing: -.035em; font-variation-settings: normal; }
+
+/* ---------- Cartes blanches ---------- */
+.studio, .piece, .bloc, .jauge, .compo-pied, .piece-ligne, .points-p, .recap { box-shadow: var(--ombre); }
+.studio, .piece, .bloc, .jauge, .compo-pied { border-radius: 26px; }
+.chiffres span { background: #fff; border: 0; box-shadow: var(--ombre); font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-size: 11px; letter-spacing: .1em; font-variation-settings: "wght" 700, "wdth" 130, "slnt" 0; }
+.chiffres span.v { background: var(--noir); color: #fff; box-shadow: none; }
+.chiffres span.v::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 1px; }
+.piece-ligne { background: #fff; }
+.piece-ligne:active { background: var(--noir-3); }
+.piece-ligne .num { color: var(--noir); }
+.piece-ligne b { font-family: "Poppins", sans-serif; font-weight: 600; letter-spacing: -.01em; }
+.piece-ligne .fl { border-color: var(--filet); }
+.piece-ligne.option { background: #fff; border: 1px dashed #C7C7CC; box-shadow: none; }
+.legende-studio { color: var(--gris); }
+.point::before { background: #fff; box-shadow: 0 0 0 3px var(--noir); }
+.point b { color: var(--noir); }
+.point::after { border-color: var(--noir); }
+
+/* ---------- Composer ---------- */
+.piece h3 { font-family: "Poppins", sans-serif; font-weight: 600; letter-spacing: -.015em; }
+.piece.retire { box-shadow: inset 0 0 0 2px var(--filet); }
+.piece.retire .ph { background: repeating-linear-gradient(135deg, #F2F2F4 0 10px, #FAFAFB 10px 20px); }
+.seg::before { box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.finitions button { background: var(--noir-3); }
+.finitions button i { box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.finitions button[aria-pressed="true"] { border-color: var(--noir); color: var(--noir); background: #fff; }
+.bascule-on::after { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.piece.retire .bascule-on { background: #E5E5EA; } .piece.retire .bascule-on::after { background: #fff; }
+.bulle.moins { background: var(--noir); color: #fff; }
+.compte b { font-family: "Poppins", sans-serif; font-weight: 600; }
+.pile span { box-shadow: 0 0 0 3px #fff, 0 1px 3px rgba(0,0,0,.15); background-color: #fff; }
+.compo-pied .cta { background: var(--noir); color: #fff; border-radius: 999px; }
+.compo-pied .cta::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--vert); margin-right: 9px; vertical-align: 1px; }
+.inclus { background: var(--noir-3); }
+
+/* ---------- Performances ---------- */
+.jauge .fond { stroke: #EDEDF0; }
+.jauge .arc { stroke: var(--noir); }
+.jauge .val { color: var(--texte); }
+.lecture b.ch { color: var(--noir); }
+.lecture b.ch::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(17,17,14,.3); margin-right: 6px; vertical-align: 4px; }
+.graphe-banc .grille line { stroke: #ECECEF; }
+.graphe-banc .lib, .graphe-banc .lib.ch { fill: #8E8E93; }
+.graphe-banc .trait-ch { stroke: var(--noir); }
+.graphe-banc .trait-nm { stroke: #A1A1A6; opacity: 1; }
+.graphe-banc .pic circle { fill: #fff; stroke: var(--noir); }
+.graphe-banc .pic text { fill: var(--noir); }
+.graphe-banc #cur-l { stroke: rgba(0,0,0,.3); }
+.graphe-banc #cur-c { fill: var(--vert); stroke: var(--noir); }
+.graphe-banc #cur-n { fill: #fff; stroke: #8E8E93; }
+.legende-banc i[style*="var(--vert)"] { background: var(--noir) !important; }
+.legende-banc i[style*="#fff"] { background: #A1A1A6 !important; }
+.legende-banc .original { background: var(--noir); color: #fff; border-radius: 999px; }
+.segments button { background: var(--noir-3); }
+.segments button[aria-pressed="true"] { background: var(--noir); color: #fff; }
+.segments.temp button[aria-pressed="true"] { background: var(--vert); color: var(--noir); }
+.graphe .bande span { color: var(--noir); }
+.graphe .repere.evox::before { background: var(--noir); }
+.graphe .repere.evox b { background: var(--noir); color: #fff; }
+.verdict div { background: var(--noir-3); }
+.verdict b { color: var(--texte); }
+.verdict .ok b { color: #3E7A00; }
+.verdict .ko b { color: #D93A2E; }
+
+/* ---------- Fiche d'un élément ---------- */
+.voile { background: rgba(0,0,0,.25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.fiche { background: #fff; box-shadow: 0 -10px 40px rgba(0,0,0,.12); }
+.fiche .accroche { color: var(--texte); font-family: "Poppins", sans-serif; font-weight: 500; }
+.fiche dl div { background: var(--noir-3); }
+.fiche dt { color: var(--noir); }
+.galerie .points-g i { background: rgba(17,17,14,.2); }
+
+/* ---------- Le son : section sombre (comme les sections noires d'Apple) ---------- */
+#e-son { --noir-2: #1C1C1E; --noir-3: #2C2C2E; --gris: #A1A1A6; --gris-2: #6E6E73; --filet: rgba(255,255,255,.12); background: #000; color: #F5F5F7; }
+#e-son .son h2 span { color: #6E6E73; }
+#e-son .interrupteur button { color: #A1A1A6; }
+
+/* ---------- Veille claire ---------- */
+.veille { background: radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, var(--fond) 62%); }
+.veille .fond, .veille::after { display: none !important; }
+.veille .grand span { font-family: "Poppins", sans-serif; text-transform: none; font-weight: 700; letter-spacing: -.04em; font-variation-settings: normal !important; animation: none !important; color: var(--texte); white-space: nowrap; font-size: clamp(30px, min(8vw, 10vh), 120px); }
+.veille .grand span + span { color: var(--gris-2); }
+.veille .modele { color: var(--gris); letter-spacing: .26em; font-size: clamp(10px, 1.1vw, 12px); }
+.veille .compteurs > div { padding: 14px 22px; border-radius: 20px; background: #fff; box-shadow: var(--ombre); min-width: 120px; }
+.veille .compteurs b { color: var(--texte); }
+.veille .compteurs > div > small { font-family: "Montserrat", sans-serif; text-transform: none; letter-spacing: 0; color: var(--gris); font-size: 12px; }
+.veille .toucher { border: 0; background: var(--noir); color: #fff; font-family: "Poppins", sans-serif; text-transform: none; letter-spacing: -.01em; font-weight: 600; font-size: 15px; }
+.veille .v-studio { background: transparent !important; box-shadow: none !important; position: relative; }
+.veille .v-studio::after { content: ""; position: absolute; left: 18%; right: 18%; bottom: 4%; height: 8%; border-radius: 50%; background: radial-gradient(rgba(0,0,0,.16), transparent 70%); z-index: -1; }
+.veille .v-studio img { mix-blend-mode: multiply; }
+.graphe-banc .p2 text { fill: #6E6E73; } .graphe-banc .p2 circle { stroke: #8E8E93; }
+.veille .grand { line-height: 1.02; }
+.pack h1 { line-height: .96; }
+.veille .compteurs b { white-space: nowrap; }
+@media (max-width: 480px) { .veille .compteurs { gap: 12px; } .veille .compteurs > div { min-width: 0; padding: 12px 16px; } .veille .compteurs b { font-size: 28px; } }
+@media (orientation: landscape) and (max-height: 560px) {
+  .veille .v-studio { display: none !important; }
+  .veille .logo { margin-bottom: 1.6vh !important; }
+  .veille .grand span { font-size: clamp(26px, 10vh, 64px); }
+  .veille .compteurs { margin-top: 2vh !important; } .veille .compteurs > div { padding: 8px 16px; }
+  .veille .compteurs b { font-size: clamp(22px, 7vh, 34px); }
+  .veille .toucher { margin-top: 2.4vh !important; padding: 10px 20px; }
+}
+@media (max-width: 480px) { .onglet { padding: 10px 4px; } .onglet span { font-size: 12px; } }

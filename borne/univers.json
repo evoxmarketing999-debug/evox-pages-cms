@@ -28,6 +28,34 @@
       "sous": "997 MKI · ligne inox, ValveTronic ou SuperSport",
       "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/echappement-997/",
       "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/echappement-997/#direct"
+    },
+    {
+      "id": "gt3-race-titanium",
+      "nom": "Silencieux Race Titanium",
+      "sous": "Porsche 992 GT3 / GT3 RS",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=gt3-race-titanium",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=gt3-race-titanium#direct"
+    },
+    {
+      "id": "aventador",
+      "nom": "Silencieux ValveTronic",
+      "sous": "Lamborghini Aventador LP700",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=aventador",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=aventador#direct"
+    },
+    {
+      "id": "turbo-991",
+      "nom": "Silencieux-Catalyseurs Race",
+      "sous": "Porsche 991 Turbo",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=turbo-991",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=turbo-991#direct"
+    },
+    {
+      "id": "gruppe-m-a110",
+      "nom": "Admission carbone Gruppe M",
+      "sous": "Alpine A110 II",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=gruppe-m-a110",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=gruppe-m-a110#direct"
     }
   ]
 }
