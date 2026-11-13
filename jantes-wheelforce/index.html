@@ -119,6 +119,7 @@
   /* ---------- Technologies ---------- */
   .technos { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
   .techno { display: flex; gap: 22px; position: relative; overflow: hidden; padding-bottom: 8px; }
+  .techno > div:last-child { min-width: 0; } .techno .modeles { overflow-wrap: anywhere; }
   .techno .barre { width: 3px; background: var(--encre); flex: none; }
   .techno .modeles { font-size: 10px; letter-spacing: .16em; color: var(--doux); font-variation-settings: "wght" 650, "wdth" 150, "slnt" 0; }
   .techno h3 { font-size: clamp(20px, 2.2vw, 26px); line-height: 1.05; margin-top: 10px; font-variation-settings: "wght" 800, "wdth" 150, "slnt" 0; }
@@ -821,6 +822,7 @@
     .veille .v-chiffres { gap: 14px; } .veille .v-chiffres small { letter-spacing: .08em; white-space: nowrap; }
     .veille .v-chiffres b { font-size: clamp(22px, min(6vw, 8vh), 40px); }
   }
+  @media (max-width: 360px) { .veille .v-toucher { letter-spacing: .04em; padding: 11px 14px; font-size: 10px; gap: 10px; } .veille .v-chiffres { gap: 10px; } .veille .v-chiffres small { font-size: 9px; letter-spacing: .02em; } .veille .v-chiffres b { font-size: 22px; } }
   @media (prefers-reduced-motion: reduce) { .veille *, .veille { animation: none !important; } }
 </style>
 <div class="veille cachee" id="veille" role="button" aria-label="Touchez pour découvrir">

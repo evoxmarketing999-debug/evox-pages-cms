@@ -34,7 +34,7 @@
   .barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px var(--marge); background: rgba(245,245,247,.78);
     backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.06); z-index: 5; }
   .barre .logo { height: clamp(20px, 2.2vw, 26px); }
-  .barre .titre { flex: 1; min-width: 0; text-align: center; font-family: "Poppins"; font-weight: 600; font-size: 13px; letter-spacing: -.01em; color: var(--texte); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; }
+  .barre .titre { flex: 1; min-width: 0; text-align: center; font-family: "Poppins"; font-weight: 600; font-size: 13px; letter-spacing: -.01em; color: var(--texte); line-height: 1.25; text-wrap: balance; text-transform: none; }
   .puce-prix { display: flex; align-items: baseline; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--carte); box-shadow: var(--ombre); white-space: nowrap; transition: box-shadow .4s; }
   .puce-prix small { font-size: 10px; letter-spacing: .16em; color: var(--gris); }
   .puce-prix b { font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
@@ -56,6 +56,7 @@
   .onglet span { font-family: "Poppins"; font-weight: 600; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .onglet[aria-selected="true"] { background: var(--encre); color: #fff; }
   .onglet[aria-selected="true"] i { color: var(--vert); }
+  @media (max-width: 360px) { .onglet { padding: 10px 3px !important; } .onglet span { font-size: 11px !important; letter-spacing: -.02em; } }
 
   /* ---------- 01 · Le produit ---------- */
   .produit { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 64px); align-items: start; max-width: 1240px; margin: 0 auto; }
@@ -206,6 +207,7 @@
   .veille .compteurs > div > small { font-family: "Montserrat"; text-transform: none; letter-spacing: 0; }
 </style>
 
+<script src="../veille-vivante.js?v=2026-11-13"></script>
 </head>
 <body>
 
@@ -431,6 +433,7 @@
 
     // ---------- Veille (1 min 20) ----------
     $("v-img").src = A + D.photos[0];
+    if (window.VeilleVivante) VeilleVivante({ mot: D.veille.l1, images: D.photos.filter(p => /^p-/.test(p)).map(p => A + p), defile: [D.nom, ...D.chiffres.map(c => c[0]), D.vehicule] });
     $("v-l1").textContent = D.veille.l1; $("v-l2").textContent = D.veille.l2; $("v-sous").textContent = D.veille.sous;
     $("v-stats").innerHTML = D.veille.stats.map(([v, u, l]) => `<div><b>${esc(v)}<small>${esc(u)}</small></b><small>${esc(l)}</small></div>`).join("");
     let minuteurVeille = null;
@@ -453,7 +456,6 @@
     }
     const ajusterTout = () => {
       ["t1", "t2"].forEach(k => ajuster($(k), () => $(k).parentElement.clientWidth));
-      ["v-l1", "v-l2"].forEach(k => ajuster($(k), () => innerWidth - 48));
     };
     document.fonts.ready.then(ajusterTout); document.fonts.load('900 40px "cofo-peshka-variable"').then(ajusterTout).catch(() => {}); setTimeout(ajusterTout, 1500); addEventListener("resize", ajusterTout);
     const relancerAjuster = () => requestAnimationFrame(ajusterTout);
