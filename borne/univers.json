@@ -56,6 +56,13 @@
       "sous": "Alpine A110 II",
       "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=gruppe-m-a110",
       "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/produit/?id=gruppe-m-a110#direct"
+    },
+    {
+      "id": "eventuri",
+      "nom": "Eventuri",
+      "sous": "Admissions carbone · 140 pièces",
+      "url": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/eventuri/",
+      "visite": "https://evoxmarketing999-debug.github.io/evox-pages-cms/borne/eventuri/#direct"
     }
   ]
 }

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Eventuri — EVOX</title>
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Univers de la borne : catalogue EVENTURI (marque distribuée par EVOX). Données et prix dans catalogue.js, photos dans img/<id>.jpg -->
+<style>
+  :root {
+    --fond: #F5F5F7; --carte: #FFFFFF; --encre: #11110E; --texte: #1D1D1F; --gris: #6E6E73; --gris-2: #A1A1A6; --filet: #E5E5EA; --vert: #CCFF00;
+    --ease: cubic-bezier(.22, .8, .24, 1); --marge: clamp(16px, 3.6vw, 48px); --rayon: 26px;
+    --ombre: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(0,0,0,.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--fond); color: var(--texte); font-family: "Montserrat", sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden;
+    user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  img { display: block; max-width: 100%; -webkit-user-drag: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: inherit; }
+  button:focus:not(:focus-visible) { outline: none; }
+  button:focus-visible { outline: 2px solid var(--encre); outline-offset: 3px; }
+  .cf { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-variation-settings: "wght" 650, "wdth" 140, "slnt" 0; }
+  .etiquette { font-family: "cofo-peshka-variable", sans-serif; text-transform: uppercase; font-size: 11px; letter-spacing: .2em; color: var(--gris); font-variation-settings: "wght" 650, "wdth" 140, "slnt" 0; }
+  .etiquette.carre::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(17,17,14,.25); margin-right: 9px; vertical-align: 1px; }
+  h1, h2 { font-family: "Poppins"; font-weight: 700; letter-spacing: -.035em; line-height: 1.02; }
+  h2 { font-size: clamp(26px, min(3.6vw, 6vh), 46px); margin-top: 10px; }
+  h2 span { color: var(--gris-2); }
+
+  /* ---------- Cadre ---------- */
+  #app { height: 100svh; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); overflow: hidden; position: relative; }
+  .barre { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px var(--marge); background: rgba(245,245,247,.78);
+    backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,.06); z-index: 5; }
+  .barre .logo { height: clamp(20px, 2.2vw, 26px); }
+  .barre .titre { flex: 1; min-width: 0; text-align: center; font-family: "Poppins"; font-weight: 600; font-size: 13px; letter-spacing: -.01em; }
+  .puce { padding: 8px 14px; border-radius: 999px; background: var(--carte); box-shadow: var(--ombre); white-space: nowrap; font-family: "Poppins"; font-weight: 600; font-size: 14px; }
+  .puce small { font-family: "Montserrat"; font-weight: 500; font-size: 12px; color: var(--gris); margin-left: 4px; }
+  .ecrans { position: relative; overflow: hidden; }
+  .ecran { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: clamp(20px, 4vh, 44px) var(--marge) 120px; opacity: 0; visibility: hidden; transform: translateY(16px);
+    transition: opacity .55s var(--ease), transform .7s var(--ease), visibility 0s .7s; scrollbar-width: none; }
+  .ecran::-webkit-scrollbar { display: none; }
+  .ecran.actif { opacity: 1; visibility: visible; transform: none; transition: opacity .55s var(--ease), transform .7s var(--ease), visibility 0s; }
+  .bloc { max-width: 1240px; margin: 0 auto; }
+  .onglets { position: absolute; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 5px; border-radius: 999px; z-index: 6;
+    background: rgba(255,255,255,.8); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 8px 30px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.05); width: min(560px, calc(100% - 32px)); }
+  .onglet { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px; border-radius: 999px; color: var(--gris); transition: color .3s, background .3s; min-width: 0; }
+  .onglet i { font-style: normal; font-family: "cofo-peshka-variable"; font-size: 10px; letter-spacing: .1em; color: var(--gris-2); font-variation-settings: "wght" 700, "wdth" 140, "slnt" 0; }
+  .onglet span { font-family: "Poppins"; font-weight: 600; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; }
+  .onglet[aria-selected="true"] { background: var(--encre); color: #fff; }
+  .onglet[aria-selected="true"] i { color: var(--vert); }
+
+  /* ---------- 01 · La marque ---------- */
+  .marque { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+  .marque h1 { min-width: 0; } .marque > div { min-width: 0; }
+  .marque h1 span { display: block; white-space: nowrap; font-size: clamp(38px, min(6.4vw, 11vh), 100px); }
+  .marque h1 span + span { color: var(--gris-2); }
+  .chapo { margin-top: 18px; font-family: "Poppins"; font-weight: 500; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.42; letter-spacing: -.01em; max-width: 560px; }
+  .chiffres { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+  .chiffres span { padding: 9px 14px; border-radius: 999px; background: var(--carte); box-shadow: var(--ombre); font-family: "cofo-peshka-variable"; text-transform: uppercase; font-size: 11px; letter-spacing: .1em; font-variation-settings: "wght" 700, "wdth" 130, "slnt" 0; }
+  .chiffres span.v { background: var(--encre); color: #fff; box-shadow: none; }
+  .chiffres span.v::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--vert); margin-right: 8px; vertical-align: 1px; }
+  .cta { margin-top: 28px; display: inline-flex; align-items: center; gap: 10px; padding: 16px 26px; border-radius: 999px; background: var(--encre); color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 15px; }
+  .cta::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--vert); }
+  .mosaique { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .mosaique div { position: relative; aspect-ratio: 1; border-radius: var(--rayon); background: #fff; box-shadow: var(--ombre); overflow: hidden; }
+  .mosaique img { position: absolute; inset: 6%; width: 88%; height: 88%; object-fit: contain; opacity: 0; transform: scale(.94); transition: opacity .9s var(--ease), transform 1.2s var(--ease); }
+  .mosaique img.on { opacity: 1; transform: none; }
+  .familles { margin-top: clamp(28px, 5vh, 56px); }
+  .familles-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 12px; margin-top: 16px; }
+  .famille { display: flex; align-items: center; gap: 14px; padding: 12px 16px 12px 12px; border-radius: 22px; background: #fff; box-shadow: var(--ombre); min-width: 0; }
+  .famille img { width: 64px; height: 64px; object-fit: contain; flex: none; }
+  .famille b { display: block; font-family: "Poppins"; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+  .famille small { display: block; font-size: 12px; color: var(--gris); margin-top: 2px; }
+
+  /* ---------- 02 · Mon véhicule ---------- */
+  .etape { margin-top: 22px; }
+  .marques { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 10px; margin-top: 14px; }
+  .marques button { padding: 18px 16px; border-radius: 20px; background: #fff; box-shadow: var(--ombre); min-width: 0; }
+  .marques b { display: block; font-family: "Poppins"; font-weight: 700; font-size: 18px; letter-spacing: -.02em; overflow-wrap: anywhere; }
+  .marques small { display: block; font-size: 12px; color: var(--gris); margin-top: 3px; }
+  .retour { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: #fff; box-shadow: var(--ombre); font-family: "Poppins"; font-weight: 600; font-size: 14px; }
+  .puces { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .puces button { padding: 11px 16px; border-radius: 999px; background: #fff; box-shadow: var(--ombre); font-family: "Poppins"; font-weight: 600; font-size: 14px; letter-spacing: -.01em; }
+  .puces button small { font-family: "Montserrat"; font-weight: 500; font-size: 12px; color: var(--gris); margin-left: 6px; }
+  .puces button[aria-pressed="true"] { background: var(--encre); color: #fff; box-shadow: none; }
+  .puces button[aria-pressed="true"] small { color: var(--vert); }
+  .cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 14px; margin-top: 20px; }
+  .carte { display: flex; flex-direction: column; border-radius: var(--rayon); background: #fff; box-shadow: var(--ombre); overflow: hidden; min-width: 0; transition: transform .3s var(--ease); }
+  .carte:active { transform: scale(.98); }
+  .carte .ph { aspect-ratio: 1; padding: 6%; }
+  .carte .ph img { width: 100%; height: 100%; object-fit: contain; }
+  .carte .tx { padding: 2px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .carte .type { font-size: 10px; letter-spacing: .14em; color: var(--gris); }
+  .carte b { font-family: "Poppins"; font-weight: 600; font-size: 16px; letter-spacing: -.015em; line-height: 1.2; overflow-wrap: anywhere; }
+  .carte .prix { margin-top: auto; padding-top: 6px; font-family: "Poppins"; font-weight: 600; font-size: 17px; letter-spacing: -.02em; }
+  .carte .prix small { font-family: "Montserrat"; font-weight: 500; font-size: 11px; color: var(--gris); margin-left: 4px; }
+  .vide { margin-top: 20px; color: var(--gris); }
+
+  /* ---------- Fiche ---------- */
+  .voile { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity .4s, visibility 0s .4s; }
+  .voile.ouvert { opacity: 1; visibility: visible; transition: opacity .4s; }
+  .fiche { position: fixed; z-index: 21; left: 50%; top: 50%; width: min(980px, calc(100% - 32px)); max-height: calc(100svh - 40px); overflow-y: auto; transform: translate(-50%, -46%) scale(.98); opacity: 0; visibility: hidden;
+    background: #fff; border-radius: 30px; box-shadow: 0 30px 80px rgba(0,0,0,.25); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); transition: opacity .4s var(--ease), transform .5s var(--ease), visibility 0s .5s; scrollbar-width: none; }
+  .fiche.ouvert { opacity: 1; visibility: visible; transform: translate(-50%, -50%); transition: opacity .4s var(--ease), transform .5s var(--ease); }
+  .fiche .ph { padding: 6%; background: #fff; display: grid; place-items: center; }
+  .fiche .ph img { width: 100%; max-height: 62svh; object-fit: contain; }
+  .fiche .tx { padding: clamp(22px, 3.4vw, 40px); padding-left: 0; display: flex; flex-direction: column; min-width: 0; }
+  .fiche h3 { margin-top: 10px; font-family: "Poppins"; font-weight: 700; font-size: clamp(22px, 2.6vw, 32px); letter-spacing: -.03em; line-height: 1.08; overflow-wrap: anywhere; }
+  .fiche .veh { margin-top: 10px; font-size: 15px; color: var(--gris); }
+  .fiche .prix { margin-top: 22px; font-family: "Poppins"; font-weight: 700; font-size: clamp(30px, 3.4vw, 42px); letter-spacing: -.035em; }
+  .fiche .prix small { display: block; font-family: "Montserrat"; font-weight: 500; font-size: 12px; letter-spacing: 0; color: var(--gris); margin-top: 4px; }
+  .fiche .note { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: var(--fond); font-size: 14px; line-height: 1.5; }
+  .fiche .note::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 1px rgba(17,17,14,.3); margin-right: 8px; vertical-align: 1px; }
+  .fiche .assortis { margin-top: 22px; }
+  .fiche .assortis-liste { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+  .fiche .assortis-liste button { flex: none; width: 128px; padding: 8px; border-radius: 16px; background: var(--fond); }
+  .fiche .assortis-liste img { width: 100%; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply; }
+  .fiche .assortis-liste small { display: block; font-size: 11px; line-height: 1.3; margin-top: 4px; }
+  .fermer { position: absolute; right: 14px; top: 14px; width: 44px; height: 44px; border-radius: 50%; background: var(--fond); display: grid; place-items: center; font-size: 22px; z-index: 2; }
+
+  /* ---------- Veille ---------- */
+  .veille { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; cursor: pointer; overflow: hidden; transition: opacity .8s var(--ease), visibility 0s .8s; }
+  .veille.cachee { opacity: 0; visibility: hidden; pointer-events: none; }
+  .veille .contenu { text-align: center; padding: 24px; width: 100%; }
+  .veille .logo { height: clamp(22px, 2.6vw, 30px); margin: 0 auto 3vh; }
+  .veille .v-studio { width: min(40vh, 62vw); aspect-ratio: 1; margin: 0 auto 2vh; }
+  .veille .grand { font-family: "Poppins"; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+  .veille .grand span { display: block; white-space: nowrap; font-size: clamp(30px, min(8vw, 10vh), 120px); }
+  .veille .grand span + span { color: var(--gris-2); }
+  .veille .modele { margin-top: 2vh; font-size: clamp(10px, 1.1vw, 12px); letter-spacing: .26em; color: var(--gris); }
+  .veille .compteurs { display: flex; justify-content: center; gap: clamp(16px, 4vw, 56px); margin-top: 3.4vh; }
+  .veille .compteurs > div { min-width: 120px; padding: 14px 20px; border-radius: 20px; background: #fff; box-shadow: var(--ombre); }
+  .veille .compteurs b { display: block; font-family: "cofo-peshka-variable"; font-weight: normal; font-size: clamp(24px, 3.2vw, 40px); line-height: 1; font-variation-settings: "wght" 850, "wdth" 115, "slnt" 0; white-space: nowrap; }
+  .veille .compteurs > div > small { display: block; margin-top: 6px; font-size: 12px; color: var(--gris); }
+  .veille .toucher { margin-top: 4vh; display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; border-radius: 999px; background: var(--encre); color: #fff; font-family: "Poppins"; font-weight: 600; font-size: 15px; }
+  .veille .toucher i { width: 9px; height: 9px; border-radius: 50%; background: var(--vert); animation: clignote 1.4s ease-in-out infinite; }
+  @keyframes clignote { 50% { opacity: .25; transform: scale(.7); } }
+
+  /* ---------- Formats ---------- */
+  @media (orientation: portrait), (max-width: 760px) {
+    .marque { grid-template-columns: minmax(0, 1fr); }
+    .mosaique { order: -1; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .mosaique div { border-radius: 18px; }
+    .fiche { grid-template-columns: minmax(0, 1fr); }
+    .fiche .ph { padding: 8% 12% 0; } .fiche .ph img { max-height: 36svh; }
+    .fiche .tx { padding-left: clamp(22px, 3.4vw, 40px); }
+  }
+  @media (max-width: 760px) {
+    .barre .titre { display: none; }
+    .onglet i { display: none; } .onglet span { font-size: 13px; }
+    .cartes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .carte .tx { padding: 0 12px 14px; } .carte b { font-size: 14px; } .carte .prix { font-size: 15px; }
+    .marques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 420px) {
+    .onglet { padding: 11px 4px; } .onglet span { font-size: 12px; }
+    .puce small { display: none; }
+    .veille .compteurs > div { min-width: 0; padding: 12px 14px; }
+    .familles-grille { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 340px) { .cartes { grid-template-columns: minmax(0, 1fr); } .onglet span { font-size: 11px; } }
+  @media (orientation: landscape) and (max-height: 560px) {
+    .ecran { padding-bottom: 90px; }
+    .fiche { max-height: calc(100svh - 20px); } .fiche .ph img { max-height: 70svh; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; } }
+</style>
+<script src="../veille-vivante.js?v=2026-11-13"></script>
+</head>
+<body>
+
+<div id="app">
+  <header class="barre">
+    <img class="logo" src="../produit/evox-logo-noir.svg" alt="EVOX Performance">
+    <p class="titre">Eventuri · Admissions et pièces carbone</p>
+    <p class="puce"><span id="nb-pieces">140</span><small>pièces</small></p>
+  </header>
+
+  <main class="ecrans">
+    <section class="ecran" id="e-marque" aria-label="La marque">
+      <div class="bloc">
+        <div class="marque">
+          <div>
+            <p class="etiquette carre">Marque distribuée par EVOX</p>
+            <h1><span>Eventuri.</span><span>Admissions carbone.</span></h1>
+            <p class="chapo">Fondée par une équipe d’ingénieurs et de passionnés issus de l’aéronautique et du tuning. Leur objectif : concevoir des systèmes d’admission qui offrent de réels gains, puis publier de véritables chiffres.</p>
+            <div class="chiffres" id="chiffres"></div>
+            <button class="cta" data-aller="e-vehicule">Trouver mon véhicule</button>
+          </div>
+          <div class="mosaique" id="mosaique"></div>
+        </div>
+        <div class="familles">
+          <p class="etiquette">La gamme</p>
+          <div class="familles-grille" id="familles"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ecran" id="e-vehicule" aria-label="Mon véhicule">
+      <div class="bloc" id="vehicule"></div>
+    </section>
+
+    <section class="ecran" id="e-catalogue" aria-label="Catalogue">
+      <div class="bloc">
+        <p class="etiquette carre">Catalogue complet</p>
+        <h2>Toute la gamme, <span>par famille.</span></h2>
+        <div class="puces" id="filtres"></div>
+        <div class="cartes" id="catalogue"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="onglets" role="tablist" aria-label="Sections">
+    <button class="onglet" role="tab" data-ecran="e-marque"><i>01</i><span>La marque</span></button>
+    <button class="onglet" role="tab" data-ecran="e-vehicule"><i>02</i><span>Mon véhicule</span></button>
+    <button class="onglet" role="tab" data-ecran="e-catalogue"><i>03</i><span>Catalogue</span></button>
+  </nav>
+</div>
+
+<div class="voile" id="voile"></div>
+<div class="fiche" id="fiche" role="dialog" aria-modal="true" aria-label="Fiche pièce">
+  <button class="fermer" id="fermer" aria-label="Fermer">×</button>
+  <div class="ph"><img id="f-img" alt=""></div>
+  <div class="tx">
+    <p class="etiquette carre" id="f-type"></p>
+    <h3 id="f-nom"></h3>
+    <p class="veh" id="f-veh"></p>
+    <p class="prix" id="f-prix"></p>
+    <p class="note">Compatibilité exacte, disponibilité et montage : demandez à l’équipe EVOX.</p>
+    <div class="assortis" id="f-assortis"></div>
+  </div>
+</div>
+
+<div class="veille" id="veille" role="button" aria-label="Touchez pour découvrir Eventuri">
+  <div class="contenu">
+    <img class="logo" src="../produit/evox-logo-noir.svg" alt="EVOX Performance">
+    <div class="v-studio"><img src="img/1956.jpg" alt=""></div>
+    <p class="grand"><span>Eventuri</span><span>Admissions carbone</span></p>
+    <p class="modele cf">Marque distribuée par EVOX Performance</p>
+    <div class="compteurs" id="v-stats"></div>
+    <p class="toucher"><i></i>Touchez pour découvrir</p>
+  </div>
+</div>
+
+<script src="catalogue.js?v=2026-11-13"></script>
+<script>
+(() => {
+  const C = window.EVENTURI, P = C.pieces, T = C.types, $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const euros = n => n.toLocaleString("fr-FR").replace(/\s/g, " ") + " €";
+  const img = id => `img/${id}.jpg`;
+  const ORDRE_TYPES = ["admission", "cache", "inlet", "pipe", "plenum", "conduit", "couvercle"];
+  const marques = [...new Set(P.map(p => p.marque))].sort((a, b) => P.filter(p => p.marque === b).length - P.filter(p => p.marque === a).length || a.localeCompare(b));
+  const parType = t => P.filter(p => p.type === t);
+
+  // ---------- 01 · La marque ----------
+  $("nb-pieces").textContent = P.length;
+  $("chiffres").innerHTML = [[P.length + " pièces", true], [marques.length + " constructeurs", false], ["Carbone", false], ["Prix TTC EVOX", false]]
+    .map(([t, v]) => `<span class="${v ? "v" : ""}">${esc(t)}</span>`).join("");
+  const vitrine = ["1956", "1987", "2005", "3830", "2009", "1999", "2001", "1977"];
+  $("mosaique").innerHTML = [0, 1, 2, 3].map(k => `<div>${[vitrine[k], vitrine[k + 4]].map((id, j) => `<img src="${img(id)}" alt="" class="${j ? "" : "on"}">`).join("")}</div>`).join("");
+  let tour = 0;
+  setInterval(() => { const d = $("mosaique").children[tour % 4]; d.querySelectorAll("img").forEach(i => i.classList.toggle("on")); tour++; }, 2600);
+  $("familles").innerHTML = ORDRE_TYPES.filter(t => parType(t).length).map(t => {
+    const l = parType(t), min = Math.min(...l.map(p => p.prix));
+    return `<button class="famille" data-type="${t}"><img src="${img(l[0].id)}" alt=""><span><b>${esc(T[t])}</b><small>${l.length} pièce${l.length > 1 ? "s" : ""} · dès ${euros(min)}</small></span></button>`;
+  }).join("");
+  $("familles").addEventListener("click", e => { const b = e.target.closest("[data-type]"); if (b) { filtre = b.dataset.type; majCatalogue(); aller("e-catalogue"); } });
+
+  // ---------- Cartes ----------
+  const carte = p => `<button class="carte" data-id="${p.id}"><div class="ph"><img src="${img(p.id)}" alt="" loading="lazy"></div>
+    <div class="tx"><span class="type cf">${esc(T[p.type])}</span><b>${esc(p.marque)} ${esc(p.vehicule)}</b><span class="prix">${euros(p.prix)}<small>TTC</small></span></div></button>`;
+  const trier = l => l.slice().sort((a, b) => ORDRE_TYPES.indexOf(a.type) - ORDRE_TYPES.indexOf(b.type) || a.vehicule.localeCompare(b.vehicule, "fr", { numeric: true }));
+
+  // ---------- 02 · Mon véhicule ----------
+  let choixMarque = null, choixFamille = null;
+  function majVehicule() {
+    const v = $("vehicule");
+    if (!choixMarque) {
+      v.innerHTML = `<p class="etiquette carre">Étape 1 sur 2</p><h2>Quelle est <span>votre voiture ?</span></h2>
+        <div class="marques">${marques.map(m => { const n = P.filter(p => p.marque === m).length; return `<button data-marque="${esc(m)}"><b>${esc(m)}</b><small>${n} pièce${n > 1 ? "s" : ""}</small></button>`; }).join("")}</div>`;
+      return;
+    }
+    const l = P.filter(p => p.marque === choixMarque);
+    const fams = [...new Set(l.map(p => p.famille))].sort((a, b) => a.localeCompare(b, "fr", { numeric: true }));
+    if (!fams.includes(choixFamille)) choixFamille = fams[0];
+    const res = trier(l.filter(p => p.famille === choixFamille));
+    v.innerHTML = `<button class="retour" data-retour>‹ Toutes les marques</button>
+      <div class="etape"><p class="etiquette carre">Étape 2 sur 2</p><h2>${esc(choixMarque)}<span> · choisissez le modèle</span></h2></div>
+      <div class="puces">${fams.map(f => { const n = l.filter(p => p.famille === f).length; return `<button data-famille="${esc(f)}" aria-pressed="${f === choixFamille}">${esc(f)}<small>${n}</small></button>`; }).join("")}</div>
+      <div class="cartes">${res.map(carte).join("")}</div>`;
+  }
+  $("vehicule").addEventListener("click", e => {
+    const m = e.target.closest("[data-marque]"), f = e.target.closest("[data-famille]"), r = e.target.closest("[data-retour]"), c = e.target.closest("[data-id]");
+    if (m) { choixMarque = m.dataset.marque; choixFamille = null; majVehicule(); $("e-vehicule").scrollTop = 0; }
+    else if (f) { choixFamille = f.dataset.famille; majVehicule(); }
+    else if (r) { choixMarque = null; majVehicule(); $("e-vehicule").scrollTop = 0; }
+    else if (c) ouvrir(c.dataset.id);
+  });
+
+  // ---------- 03 · Catalogue ----------
+  let filtre = "tous";
+  function majCatalogue() {
+    $("filtres").innerHTML = [["tous", "Tout", P.length], ...ORDRE_TYPES.filter(t => parType(t).length).map(t => [t, T[t], parType(t).length])]
+      .map(([k, l, n]) => `<button data-filtre="${k}" aria-pressed="${k === filtre}">${esc(l)}<small>${n}</small></button>`).join("");
+    const l = filtre === "tous" ? P : parType(filtre);
+    $("catalogue").innerHTML = l.slice().sort((a, b) => a.marque.localeCompare(b.marque) || ORDRE_TYPES.indexOf(a.type) - ORDRE_TYPES.indexOf(b.type) || a.vehicule.localeCompare(b.vehicule, "fr", { numeric: true })).map(carte).join("");
+  }
+  $("filtres").addEventListener("click", e => { const b = e.target.closest("[data-filtre]"); if (b) { filtre = b.dataset.filtre; majCatalogue(); } });
+  $("catalogue").addEventListener("click", e => { const c = e.target.closest("[data-id]"); if (c) ouvrir(c.dataset.id); });
+
+  // ---------- Fiche ----------
+  function ouvrir(id) {
+    const p = P.find(x => x.id === id); if (!p) return;
+    $("f-img").src = img(p.id); $("f-type").textContent = T[p.type]; $("f-nom").textContent = p.nom.replace(/^EVENTURI\s+/i, "Eventuri ");
+    $("f-veh").textContent = `${p.marque} ${p.vehicule}`;
+    $("f-prix").innerHTML = `${euros(p.prix)}<small>Prix TTC relevé sur evox-performance.com</small>`;
+    const autres = trier(P.filter(x => x.id !== p.id && x.marque === p.marque && x.famille === p.famille));
+    $("f-assortis").innerHTML = autres.length ? `<p class="etiquette">Pour le même modèle</p><div class="assortis-liste">${autres.map(x => `<button data-id="${x.id}"><img src="${img(x.id)}" alt=""><small>${esc(T[x.type])} · ${esc(x.vehicule)}</small></button>`).join("")}</div>` : "";
+    $("fiche").scrollTop = 0; $("fiche").classList.add("ouvert"); $("voile").classList.add("ouvert");
+  }
+  const fermer = () => { $("fiche").classList.remove("ouvert"); $("voile").classList.remove("ouvert"); };
+  $("fermer").addEventListener("click", fermer); $("voile").addEventListener("click", fermer);
+  $("f-assortis").addEventListener("click", e => { const c = e.target.closest("[data-id]"); if (c) ouvrir(c.dataset.id); });
+
+  // ---------- Navigation ----------
+  let ecranActuel = null;
+  function aller(e) {
+    if (e === ecranActuel) return; ecranActuel = e;
+    document.querySelectorAll(".ecran").forEach(s => s.classList.toggle("actif", s.id === e));
+    document.querySelectorAll(".onglet").forEach(o => o.setAttribute("aria-selected", o.dataset.ecran === e));
+    $(e).scrollTop = 0;
+  }
+  window.allerEcran = aller;
+  document.querySelectorAll(".onglet").forEach(o => o.addEventListener("click", () => { if (o.dataset.ecran === "e-catalogue" && ecranActuel !== "e-catalogue") { filtre = "tous"; majCatalogue(); } aller(o.dataset.ecran); }));
+  document.querySelectorAll("[data-aller]").forEach(b => b.addEventListener("click", () => aller(b.dataset.aller)));
+
+  // ---------- Veille (1 min 20) ----------
+  $("v-stats").innerHTML = [[P.length, "Pièces carbone"], [marques.length, "Constructeurs"]].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join("");
+  VeilleVivante({ mot: "Eventuri", images: ["1956", "1987", "2005", "3830", "2009", "1970"].map(img),
+    defile: ["Admissions carbone Eventuri", P.length + " pièces", ...marques] });
+  let minuteur = null;
+  const veille = () => { fermer(); $("veille").classList.remove("cachee"); };
+  function reveil() { $("veille").classList.add("cachee"); choixMarque = null; filtre = "tous"; majVehicule(); majCatalogue(); ecranActuel = null; aller("e-marque"); }
+  $("veille").addEventListener("click", reveil);
+  const relancer = () => { clearTimeout(minuteur); minuteur = setTimeout(veille, 80000); };
+  ["pointerdown", "touchstart", "keydown"].forEach(ev => addEventListener(ev, relancer, { passive: true }));
+  relancer();
+
+  // Grands titres ajustés à la largeur disponible
+  function ajuster() {
+    document.querySelectorAll(".marque h1 span").forEach(sp => {
+      sp.style.fontSize = ""; const max = sp.parentElement.clientWidth; let fs = parseFloat(getComputedStyle(sp).fontSize);
+      while (sp.scrollWidth > max + 1 && fs > 18) { fs -= 2; sp.style.fontSize = fs + "px"; }
+    });
+  }
+  addEventListener("resize", ajuster); document.fonts && document.fonts.ready.then(ajuster); setTimeout(ajuster, 1200);
+  majVehicule(); majCatalogue(); aller("e-marque"); ajuster();
+  if (location.hash === "#direct") $("veille").classList.add("cachee");
+})();
+</script>
+</body>
+</html>
