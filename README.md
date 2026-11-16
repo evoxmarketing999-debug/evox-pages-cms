@@ -7,6 +7,12 @@ Pages du site evox-performance.com (PrestaShop).
 - `index.html` : page intégrée au site en iframe (https://evoxmarketing999-debug.github.io/evox-pages-cms/suivez-evox/)
 - `code-prestashop.html` + `apercu-version-tableaux.html` : ancienne version sans iframe, en tableaux, à coller directement dans la page CMS
 
+## studio-evox/ — « Studio EVOX » (showroom, magasin, atelier)
+
+- `index.html` : page intégrée au site en iframe (https://evoxmarketing999-debug.github.io/evox-pages-cms/studio-evox/)
+- `integration/` : CSS isolé (`.evox-studio`) et petit script facultatif
+- Sources, générateur des photos (`photos.json` + `build.mjs`) et guide : sur le T7, `Site web/Pages CMS/Studio EVOX/`. Les photos s'ajouteront dans `studio-evox/images/` après `node build.mjs`.
+
 ## jantes-wheelforce/ — Gamme WheelForce
 
 - `index.html` : landing au style du mur Porsche (https://evoxmarketing999-debug.github.io/evox-pages-cms/jantes-wheelforce/), cible du QR code de la fiche A4

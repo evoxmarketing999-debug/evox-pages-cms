@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio EVOX | Showroom, magasin et atelier en Essonne</title>
+<meta name="description" content="Découvrez le Studio EVOX à Saint-Pierre-du-Perray : showroom, magasin et atelier dédiés à votre passion automobile. Adresse, horaires et contact.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://use.typekit.net/yqa3sik.css">
+<link rel="stylesheet" href="integration/evox-studio.css">
+<style>
+  html, body { margin: 0; background: #0E0E0C; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+<!-- ============================================================
+     STUDIO EVOX — page CMS
+     Racine isolée : tous les styles sont limités à .evox-studio
+     Repères photo : chaque emplacement porte data-photo="01" à "08"
+     (voir photos.json, ne pas modifier ces blocs à la main :
+     lancer « node build.mjs » après avoir déposé les photos)
+     ============================================================ -->
+<div class="evox-studio" lang="fr">
+
+  <!-- A — OUVERTURE ===================================== -->
+  <section class="es-hero" aria-labelledby="es-titre">
+    <figure class="es-media es-media--hero" data-photo="01">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 01 : Vue large du Studio (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>01</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">Vue large du Studio</span>
+          <span class="es-ph__hint">Intérieur, volumes et un véhicule · zone calme à gauche pour le texte</span>
+          <span class="es-ph__spec">16:9 · 2400 × 1350 · mobile 4:5 · 1200 × 1500 · 01-studio-hero.webp</span>
+        </span>
+      </div>
+    </figure>
+    <div class="es-hero__veil" aria-hidden="true"></div>
+    <div class="es-hero__content es-wrap">
+      <div class="es-hero__text">
+        <p class="es-kicker">Atelier <span aria-hidden="true">·</span> Showroom <span aria-hidden="true">·</span> Magasin</p>
+        <h1 class="es-hero__title" id="es-titre">Studio EVOX</h1>
+        <p class="es-hero__lead">Un lieu pour vivre votre passion automobile</p>
+        <p class="es-hero__body">Découvrez notre univers, échangez avec notre équipe et donnez vie à votre projet dans un lieu qui réunit showroom, magasin et atelier</p>
+        <div class="es-actions">
+          <a class="es-btn es-btn--accent" href="#es-visite">Préparer ma visite</a>
+          <a class="es-btn es-btn--ghost" href="#es-lieu">Découvrir le Studio</a>
+        </div>
+        <p class="es-hero__place"><span class="es-dot" aria-hidden="true"></span>Saint-Pierre-du-Perray <span aria-hidden="true">·</span> Essonne</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- B — PRÉSENTATION DU LIEU =========================== -->
+  <section class="es-intro es-wrap" id="es-lieu" aria-labelledby="es-lieu-titre">
+    <p class="es-label es-reveal"><span class="es-dot" aria-hidden="true"></span>Le Studio</p>
+    <h2 class="es-intro__title es-reveal" id="es-lieu-titre">La passion automobile se partage ici</h2>
+    <p class="es-intro__text es-reveal">Au Studio EVOX, chaque projet commence par un échange. Venez découvrir les pièces, apprécier les finitions et discuter de vos envies avec notre équipe. Du premier conseil à l’installation, nous vous accompagnons pour construire un projet cohérent avec votre véhicule et votre façon de le vivre</p>
+  </section>
+
+  <!-- C — LES TROIS ESPACES ============================== -->
+  <div class="es-spaces es-wrap">
+
+    <section class="es-seq" aria-labelledby="es-seq1-titre">
+      <figure class="es-media es-media--4x3 es-seq__media es-reveal" data-photo="02">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 02 : Le showroom (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>02</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">Le showroom</span>
+          <span class="es-ph__hint">Véhicule dans son environnement et éléments d'exposition</span>
+          <span class="es-ph__spec">4:3 · 1600 × 1200 · 02-showroom.webp</span>
+        </span>
+      </div>
+      </figure>
+      <div class="es-seq__text es-reveal">
+        <p class="es-label"><span class="es-num">01</span>Le showroom</p>
+        <h2 class="es-h2" id="es-seq1-titre">Voir la passion prendre forme</h2>
+        <p class="es-p">Découvrez l’univers EVOX à travers les pièces et les projets présentés au Studio. Approchez les matières, observez les détails et trouvez l’inspiration pour votre propre automobile</p>
+      </div>
+    </section>
+
+    <section class="es-seq es-seq--flip" aria-labelledby="es-seq2-titre">
+      <figure class="es-media es-media--4x3 es-seq__media es-reveal" data-photo="03">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 03 : Le magasin (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>03</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">Le magasin</span>
+          <span class="es-ph__hint">Meubles de présentation, mur de jantes ou pièces, à hauteur de regard</span>
+          <span class="es-ph__spec">4:3 · 1600 × 1200 · 03-magasin.webp</span>
+        </span>
+      </div>
+      </figure>
+      <div class="es-seq__text es-reveal">
+        <p class="es-label"><span class="es-num">02</span>Le magasin</p>
+        <h2 class="es-h2" id="es-seq2-titre">Choisir avec le bon conseil</h2>
+        <p class="es-p">Échappement, admission, châssis, freinage ou accessoires : échangez avec notre équipe pour identifier les solutions adaptées à votre véhicule, à votre usage et à vos envies</p>
+      </div>
+    </section>
+
+    <section class="es-seq" aria-labelledby="es-seq3-titre">
+      <figure class="es-media es-media--4x3 es-seq__media es-reveal" data-photo="04">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 04 : L'atelier (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>04</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">L'atelier</span>
+          <span class="es-ph__hint">Intervention réelle sur un véhicule, atelier ordonné</span>
+          <span class="es-ph__spec">4:3 · 1600 × 1200 · 04-atelier.webp</span>
+        </span>
+      </div>
+      </figure>
+      <div class="es-seq__text es-reveal">
+        <p class="es-label"><span class="es-num">03</span>L’atelier</p>
+        <h2 class="es-h2" id="es-seq3-titre">Donner vie à votre projet</h2>
+        <p class="es-p">Le Studio réunit le conseil, le choix des pièces et leur installation au même endroit. Nous étudions avec vous les possibilités pour votre automobile et préparons les prochaines étapes de votre projet</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- D — LA RENCONTRE ET LE CONSEIL ===================== -->
+  <section class="es-meet" aria-labelledby="es-meet-titre">
+    <div class="es-meet__inner es-wrap">
+      <figure class="es-media es-media--4x3 es-meet__media es-reveal" data-photo="05">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 05 : L'accueil (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>05</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">L'accueil</span>
+          <span class="es-ph__hint">Salon, bar/bureau ou échange entre l'équipe et un visiteur</span>
+          <span class="es-ph__spec">4:3 · 1600 × 1200 · 05-accueil.webp</span>
+        </span>
+      </div>
+      </figure>
+      <div class="es-meet__text es-reveal">
+        <p class="es-label"><span class="es-dot" aria-hidden="true"></span>Rencontre et conseil</p>
+        <h2 class="es-h2" id="es-meet-titre">Votre projet commence par une rencontre</h2>
+        <p class="es-p">Une envie précise, une question technique ou simplement la curiosité de découvrir le Studio ? Prenons le temps d’en parler. Notre équipe vous accueille pour comprendre vos attentes et vous conseiller dans vos choix</p>
+        <div class="es-actions">
+          <a class="es-btn es-btn--light" href="https://www.evox-performance.com/fr/nous-contacter" target="_top">Parlons de votre projet<span class="es-arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E — QUELQUES PROJETS EVOX ========================== -->
+  <section class="es-projects es-wrap" aria-labelledby="es-projets-titre">
+    <div class="es-projects__head es-reveal">
+      <p class="es-label"><span class="es-dot" aria-hidden="true"></span>Projets EVOX</p>
+      <h2 class="es-h2 es-h2--xl" id="es-projets-titre">Des projets qui expriment notre passion</h2>
+      <p class="es-p es-projects__intro">Deux regards sur la personnalisation et la performance, avec la même attention portée aux détails</p>
+    </div>
+    <figure class="es-project es-project--a es-reveal">
+      <div class="es-media es-media--3x2" data-photo="06">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 06 : BMW M3 Touring EVOX (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>06</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">BMW M3 Touring EVOX</span>
+          <span class="es-ph__hint">Vue trois-quarts, silhouette et teinte</span>
+          <span class="es-ph__spec">3:2 · 1800 × 1200 · 06-m3-touring.webp</span>
+        </span>
+      </div>
+      </div>
+      <figcaption class="es-caption"><strong>BMW M3 Touring</strong> <span aria-hidden="true">—</span> Le caractère, jusque dans les détails</figcaption>
+    </figure>
+    <figure class="es-project es-project--b es-reveal">
+      <div class="es-media es-media--3x2" data-photo="07">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 07 : Alpine A110 EVOX (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>07</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">Alpine A110 EVOX</span>
+          <span class="es-ph__hint">La voiture et sa préparation</span>
+          <span class="es-ph__spec">3:2 · 1800 × 1200 · 07-alpine-a110.webp</span>
+        </span>
+      </div>
+      </div>
+      <figcaption class="es-caption"><strong>Alpine A110</strong> <span aria-hidden="true">—</span> La passion de la performance</figcaption>
+    </figure>
+  </section>
+
+  <!-- F — PRÉPARER SA VISITE ============================= -->
+  <section class="es-visit" id="es-visite" aria-labelledby="es-visite-titre">
+    <div class="es-visit__inner es-wrap">
+      <div class="es-visit__info">
+        <p class="es-label"><span class="es-dot" aria-hidden="true"></span>Préparer sa visite</p>
+        <h2 class="es-h2 es-h2--xl" id="es-visite-titre">Rendez-vous au Studio EVOX</h2>
+
+        <dl class="es-facts">
+          <div class="es-fact">
+            <dt>Adresse</dt>
+            <dd><address>16 rue Clément Ader<br>91280 Saint-Pierre-du-Perray</address></dd>
+          </div>
+          <div class="es-fact">
+            <dt>Horaires d’ouverture du Studio</dt>
+            <dd>
+              <span class="es-hours"><span>Du mardi au vendredi</span><span>14h–18h</span></span>
+              <span class="es-hours"><span>Le samedi</span><span>10h–12h et 14h–16h</span></span>
+            </dd>
+          </div>
+          <div class="es-fact">
+            <dt>Contact</dt>
+            <dd>
+              <a class="es-link" href="tel:+33186952393">01 86 95 23 93</a><br>
+              <a class="es-link" href="mailto:contact@evox-performance.com">contact@evox-performance.com</a>
+            </dd>
+          </div>
+        </dl>
+
+        <div class="es-actions">
+          <a class="es-btn es-btn--dark" href="https://www.google.com/maps/dir/?api=1&amp;destination=16%20rue%20Cl%C3%A9ment%20Ader%2C%2091280%20Saint-Pierre-du-Perray" target="_blank" rel="noopener">Itinéraire<span class="es-arrow" aria-hidden="true">↗</span><span class="es-sr"> (Google Maps, nouvel onglet)</span></a>
+          <a class="es-btn es-btn--outline" href="https://www.evox-performance.com/fr/nous-contacter" target="_top">Nous contacter</a>
+        </div>
+      </div>
+      <figure class="es-media es-media--4x3 es-visit__media" data-photo="08">
+      <div class="es-ph" role="img" aria-label="Emplacement photo 08 : La façade du Studio (maquette)">
+        <span class="es-ph__num"><span class="es-ph__tag">Photo</span>08</span>
+        <span class="es-ph__meta">
+          <span class="es-ph__title">La façade du Studio</span>
+          <span class="es-ph__hint">Entrée clairement identifiable, enseigne visible</span>
+          <span class="es-ph__spec">4:3 · 1600 × 1200 · 08-facade.webp</span>
+        </span>
+      </div>
+      </figure>
+    </div>
+    <div class="es-wrap"><p class="es-signoff">Au plaisir de vous accueillir au Studio</p></div>
+  </section>
+
+</div>
+
+<script src="integration/evox-studio.js" defer></script>
+</body>
+</html>
